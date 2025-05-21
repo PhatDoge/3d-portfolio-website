@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@hookform/resolvers": "^5.0.1",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
     "@react-three/drei": "^9.109.2",
     "@react-three/fiber": "^8.16.8",
     "class-variance-authority": "^0.7.1",
@@ -21,12 +24,14 @@
     "maath": "^0.10.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.56.4",
     "react-router-dom": "^6.25.1",
     "react-tilt": "^1.0.2",
     "react-vertical-timeline-component": "^3.6.0",
     "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.167.0"
+    "three": "^0.167.0",
+    "zod": "^3.25.17"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

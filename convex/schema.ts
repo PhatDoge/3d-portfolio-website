@@ -6,4 +6,8 @@ export default defineSchema({
     text: v.string(),
     isCompleted: v.boolean(),
   }),
+  header: defineTable({
+    name: v.string(),
+    description: v.string(),
+  }),
 });

@@ -1,10 +1,14 @@
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { Loader2Icon } from "lucide-react";
 
 const HeroText = () => {
-  const tasks = useQuery(api.tasks.get);
+  const details = useQuery(api.header.getHeader);
+  if (!details || details.length === 0) return <Loader2Icon />;
   return (
-    <div>{tasks?.map(({ _id, text }) => <div key={_id}>{text}</div>)} </div>
+    <div>
+      Hola, soy <span className="text-[#915EFF]">{details[0].name}</span>
+    </div>
   );
 };
 
