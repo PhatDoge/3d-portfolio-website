@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Input } from "../../src/components/ui/input";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -12,11 +12,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Textarea } from "./ui/textarea";
+} from "../ui/form";
+import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api"; // adjust path as needed
+import { api } from "../../../convex/_generated/api"; // adjust path as needed
 
 const formSchema = z.object({
   name: z
