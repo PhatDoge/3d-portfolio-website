@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as header from "../header.js";
 import type * as introduction from "../introduction.js";
+import type * as projects from "../projects.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,6 +28,7 @@ import type * as introduction from "../introduction.js";
 declare const fullApi: ApiFromModules<{
   header: typeof header;
   introduction: typeof introduction;
+  projects: typeof projects;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

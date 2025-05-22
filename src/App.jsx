@@ -14,6 +14,7 @@ import {
 import Dashboard from "./components/backend/Dashboard";
 import LeftSidebar from "./components/backend/Sidebar";
 import Introduction from "./components/backend/Introduction";
+import ProjectCard from "./components/backend/ProjectCard";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -100,6 +101,15 @@ const App = () => {
           element={
             <DashboardLayout>
               <Introduction />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
+          path="/project-card"
+          element={
+            <DashboardLayout>
+              <ProjectCard />
             </DashboardLayout>
           }
         />

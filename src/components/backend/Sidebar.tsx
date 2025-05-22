@@ -15,6 +15,12 @@ const sidebarLinks = [
     path: "/introduction",
     icon: "/src/assets/dashboard/introduction.png",
   },
+  {
+    id: "project-card",
+    title: "Project Card",
+    path: "/project-card",
+    icon: "/src/assets/dashboard/project.png",
+  },
 ];
 
 const LeftSidebar = () => {

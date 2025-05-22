@@ -52,6 +52,10 @@ export const sidebarLinks = [
     id: "documents",
     title: "Documentos",
   },
+  {
+    id: "project-card",
+    title: "Project Card",
+  },
 ];
 
 const services = [

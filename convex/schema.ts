@@ -12,4 +12,12 @@ export default defineSchema({
     description: v.string(),
     title: v.string(),
   }),
+  projects: defineTable({
+    image: v.string(), // Storage ID for the uploaded image
+    cardTitle: v.string(),
+    cardDescription: v.string(),
+    tag: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  }),
 });
