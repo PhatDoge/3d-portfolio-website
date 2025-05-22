@@ -6,7 +6,7 @@ const sidebarLinks = [
   {
     id: "dashboard",
     title: "Usuario",
-    path: "/Dashboard",
+    path: "/dashboard",
     icon: "/src/assets/dashboard/programmer.png",
   },
   {
@@ -17,7 +17,7 @@ const sidebarLinks = [
   },
   {
     id: "project-card",
-    title: "Project Card",
+    title: "Proyectos",
     path: "/project-card",
     icon: "/src/assets/dashboard/project.png",
   },

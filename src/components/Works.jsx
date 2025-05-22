@@ -53,7 +53,30 @@ const textVariant = (delay) => {
   };
 };
 
-// ProjectCard component - Updated to use Convex data structure
+// Array of predefined colors for tags
+const tagColors = [
+  "text-blue-400",
+  "text-green-400",
+  "text-purple-400",
+  "text-pink-400",
+  "text-yellow-400",
+  "text-red-400",
+  "text-indigo-400",
+  "text-cyan-400",
+  "text-orange-400",
+  "text-emerald-400",
+  "text-violet-400",
+  "text-rose-400",
+];
+
+// Function to get color for each tag consistently
+const getTagColor = (tagName, index) => {
+  // Use a combination of tag name and index to ensure consistent coloring
+  const colorIndex = (tagName.length + index) % tagColors.length;
+  return tagColors[colorIndex];
+};
+
+// ProjectCard component - Updated to handle comma-separated tags with different colors
 const ProjectCard = ({
   index,
   cardTitle,
@@ -62,11 +85,17 @@ const ProjectCard = ({
   imageUrl,
   _id,
 }) => {
-  // Parse tags if they're comma-separated or handle single tag
+  // Parse tags from comma-separated string
   const parsedTags =
-    typeof tag === "string" ?
-      tag.split(",").map((t) => ({ name: t.trim(), color: "text-blue-500" }))
-    : [{ name: tag, color: "text-blue-500" }];
+    tag ?
+      tag
+        .split(",")
+        .map((t, tagIndex) => ({
+          name: t.trim(),
+          color: getTagColor(t.trim(), tagIndex),
+        }))
+        .filter((tagItem) => tagItem.name) // Remove empty tags
+    : [];
 
   return (
     <motion.div
@@ -112,12 +141,12 @@ const ProjectCard = ({
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {parsedTags.map((tagItem, tagIndex) => (
-            <p
+            <span
               key={`${_id}-tag-${tagIndex}`}
-              className={`text-[14px] ${tagItem.color}`}
+              className={`text-[14px] ${tagItem.color} bg-black-200 px-2 py-1 rounded-md border border-gray-600 hover:bg-gray-700 transition-colors duration-200`}
             >
               #{tagItem.name}
-            </p>
+            </span>
           ))}
         </div>
       </Tilt>
