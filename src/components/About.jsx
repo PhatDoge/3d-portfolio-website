@@ -6,6 +6,8 @@ import { styles } from "../styles";
 import { services } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 const ServiceCard = ({ index, title, icon }) => {
   return (
@@ -33,23 +35,39 @@ const ServiceCard = ({ index, title, icon }) => {
 };
 
 const About = () => {
+  const introductions = useQuery(api.introduction.getIntroductions);
+
+  // Handle loading state
+  if (!introductions) {
+    return (
+      <div className="h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
+  const introduction = introductions[0];
   return (
     <>
       <motion.div variants={textVariant()}>
-        <p className={`${styles.sectionSubText} text-center`}>Introducción</p>
-        <h2 className={`${styles.heroHeadText} text-center`}>Resumen.</h2>
+        <p className={`${styles.sectionSubText} text-center`}>
+          {introduction.header}
+        </p>
+        <h2 className={`${styles.heroHeadText} text-center`}>
+          {introduction.title}
+        </h2>
       </motion.div>
       <div className="w-full flex justify-center items-center text-center">
         <motion.p
           variants={fadeIn("", "", 0.1, 1)}
           className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px] "
         >
-          Soy un desarrollador web con experiencia en HTML, CSS y JavaScript,
+          {introduction.description}
+          {/* Soy un desarrollador web con experiencia en HTML, CSS y JavaScript,
           además de framworks como React, Node.js, Three.js y Tailwind CSS. Soy
           un aprendiz rápido y disfruto colaborando con otros. Además de mis
           habilidades técnicas, destaco por mi capacidad para trabajar bien con
           personas, siendo comunicativo y colaborativo. Mi enfoque es crear
-          soluciones atractivas, funcionales y accesibles para los usuarios.
+          soluciones atractivas, funcionales y accesibles para los usuarios. */}
         </motion.p>
       </div>
 

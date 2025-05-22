@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PropTypes from "prop-types";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import {
   About,
@@ -11,8 +11,9 @@ import {
   Tech,
   Works,
 } from "./components";
-import LeftSidebar from "./components/backend/Sidebar";
 import Dashboard from "./components/backend/Dashboard";
+import LeftSidebar from "./components/backend/Sidebar";
+import Introduction from "./components/backend/Introduction";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -93,6 +94,15 @@ const App = () => {
           }
         />
         */}
+
+        <Route
+          path="/introduction"
+          element={
+            <DashboardLayout>
+              <Introduction />
+            </DashboardLayout>
+          }
+        />
 
         {/* Catch-all route for 404 */}
         <Route

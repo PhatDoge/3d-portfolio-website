@@ -5,54 +5,45 @@ import { useLocation, useNavigate } from "react-router-dom";
 const sidebarLinks = [
   {
     id: "dashboard",
-    title: "Dashboard",
-    path: "/dashboard",
-    icon: "/assets/icons/dashboard.svg", // You'll need to add the actual icon path
+    title: "Usuario",
+    path: "/Dashboard",
+    icon: "/src/assets/dashboard/programmer.png",
   },
   {
-    id: "documents",
-    title: "Documentos",
-    path: "/documents",
-    icon: "/assets/icons/documents.svg", // You'll need to add the actual icon path
+    id: "introduction",
+    title: "Introducción",
+    path: "/introduction",
+    icon: "/src/assets/dashboard/introduction.png",
   },
 ];
 
-const LeftSidebar = ({ params = { userId: "" } }) => {
+const LeftSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const path = location.pathname;
 
   // If the current path is "/" or the specific patient register path, return null to hide the sidebar
-  if (
-    path === "/" ||
-    path.match(/^\/patients\/[^/]+\/register$/) ||
-    path.match(/^\/patients\/[^/]+\/new-appointment$/) ||
-    path.match(/^\/patients\/[^/]+\/new-appointment\/success$/)
-  ) {
-    return null;
-  }
+
+  const handleLinkClick = (linkPath) => {
+    navigate(linkPath);
+  };
 
   const logout = () => {
     localStorage.removeItem("accessKey");
     navigate("/"); // Redirect to the homepage
   };
 
-  const handleLinkClick = (linkPath) => {
-    navigate(linkPath);
-  };
-
   return (
     <section className="bg-slate-800 border-gray-500 sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto p-6 pt-10 shadow max-sm:hidden lg:w-[240px]">
       <div
         onClick={() => navigate("/")}
-        className="flex items-center gap-3 mb-8 cursor-pointer"
+        className="flex items-center justify-center gap-3 mb-8 cursor-pointer"
       >
         <img
-          src="/assets/icons/logo-full.svg"
-          height={32}
-          width={162}
+          src="/src/assets/dashboard/alonso_logo.png"
+          height={120}
+          width={120}
           alt="logo"
-          className="h-8"
         />
       </div>
 
@@ -90,7 +81,7 @@ const LeftSidebar = ({ params = { userId: "" } }) => {
       </div>
 
       {/* Logout Button */}
-      <button
+      {/* <button
         onClick={logout}
         className="flex items-center gap-4 p-4 mt-4 rounded-lg bg-red-600 text-white hover:bg-red-700"
       >
@@ -102,7 +93,7 @@ const LeftSidebar = ({ params = { userId: "" } }) => {
           className="opacity-75"
         />
         <p className="font-medium">Cerrar sesión</p>
-      </button>
+      </button> */}
     </section>
   );
 };

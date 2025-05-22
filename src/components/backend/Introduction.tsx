@@ -1,9 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React from "react";
 
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -14,54 +12,60 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api"; // adjust path as needed
 
 const formSchema = z.object({
-  name: z
+  title: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters." })
+    .min(2, { message: "Title must be at least 2 characters." })
+    .max(50),
+  header: z
+    .string()
+    .min(2, { message: "Header must be at least 2 characters." })
     .max(50),
   description: z
     .string()
     .min(2, { message: "Description must be at least 2 characters." })
-    .max(100),
+    .max(1000),
 });
 
-const Dashboard = () => {
+const Introduction = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      title: "",
+      header: "",
       description: "",
     },
   });
 
-  const createHeader = useMutation(api.header.createHeader); // <- adjust path as needed
+  const createIntroduction = useMutation(api.introduction.createIntroduction); // <- adjust path as needed
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const id = await createHeader(values);
-      console.log("Header created with ID:", id);
+      const id = await createIntroduction(values);
+      console.log("introduction created with ID:", id);
       form.reset();
       window.location.href = "/"; // navigate to the root route
     } catch (error) {
-      console.error("Failed to create header:", error);
+      console.error("Failed to create introduction:", error);
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 mt-4">
-      <div className="w-full md:w-1/2 max-w-md px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
+    <div className="min-h-screen flex items-center justify-center p-4 mt-4 bg-gray-900">
+      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
         <Card className="backdrop-blur-sm bg-gray-900/80 border-gray-700 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
               <span className="orange-text-gradient">Cambia tu</span>{" "}
-              <span className="green-text-gradient">cabezera</span>
+              <span className="green-text-gradient">introducción</span>
             </CardTitle>
           </CardHeader>
 
@@ -74,17 +78,39 @@ const Dashboard = () => {
                 <div className="mt-5">
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="header"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Nombre
+                          Cabezera
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa tu Nombre"
+                            placeholder="Ingresa tu Cabezera"
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="mt-5">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-200 font-medium">
+                          Titulo
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Ingresa tu Titulo"
+                            className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -100,11 +126,11 @@ const Dashboard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Descripción
+                          Resumen
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Ingresa tu Descripción"
+                            placeholder="Ingresa tu Resumen"
                             className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
                             {...field}
                           />
@@ -132,4 +158,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Introduction;
