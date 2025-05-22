@@ -43,6 +43,17 @@ export const navLinks = [
   },
 ];
 
+export const sidebarLinks = [
+  {
+    id: "dashboard",
+    title: "Dashboard",
+  },
+  {
+    id: "documents",
+    title: "Documentos",
+  },
+];
+
 const services = [
   {
     title: "Desarrollador Web",
