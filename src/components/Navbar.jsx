@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { styles } from "../styles";
+import { close, menu } from "../assets";
 import { navLinks } from "../constants";
-import { menu, close } from "../assets";
+import { styles } from "../styles";
 
 import logo from "../assets/logo.png";
 const Navbar = () => {

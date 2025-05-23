@@ -138,3 +138,28 @@ export const getProjectsByTag = query({
     return projectsWithImages;
   },
 });
+
+// // Save title, header, and description for a project
+export const createProjectHeader = mutation({
+  args: {
+    image: v.string(), // This will be the storage ID from Convex file storage
+    cardTitle: v.string(),
+    cardDescription: v.string(),
+    tag: v.string(),
+  },
+  handler: async (ctx, { image, cardTitle, cardDescription, tag }) => {
+    try {
+      const newProjectId = await ctx.db.insert("projectdetails", {
+        image,
+        cardTitle,
+        cardDescription,
+        tag,
+        createdAt: Date.now(),
+      });
+      return newProjectId;
+    } catch (error) {
+      console.error("Error creating project:", error);
+      return null;
+    }
+  },
+});

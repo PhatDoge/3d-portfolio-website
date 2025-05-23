@@ -20,4 +20,9 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
   }),
+  projectdetails: defineTable({
+    title: v.string(),
+    header: v.string(),
+    description: v.string(),
+  }),
 });

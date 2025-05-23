@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import ProjectDetails from "./ProjectDetails";
 
 const formSchema = z.object({
   image: z.string().min(1, { message: "Please select an image." }),
@@ -161,12 +162,18 @@ const ProjectCard = () => {
 
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
+              <div className=" mt-5">
+                <ProjectDetails />
+              </div>
               <span className="orange-text-gradient">Crear</span>{" "}
               <span className="green-text-gradient">Proyecto</span>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="relative z-10">
+            {/* Project Details Section */}
+
+            {/* Project Card Form */}
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
