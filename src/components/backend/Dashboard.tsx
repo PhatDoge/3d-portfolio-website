@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api"; // adjust path as needed
+import PasskeyModal from "../PassKeyModal";
 
 const formSchema = z.object({
   name: z
