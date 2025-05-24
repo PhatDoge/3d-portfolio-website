@@ -1,38 +1,31 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// Import your assets
-import programmerIcon from "/src/assets/dashboard/programmer.png";
-import introductionIcon from "/src/assets/dashboard/introduction.png";
-import projectIcon from "/src/assets/dashboard/project.png";
-import experienceIcon from "/src/assets/dashboard/experience.png";
-import alonsoLogo from "/src/assets/dashboard/alonso_logo.png";
-
 // Constants for sidebar links
 const sidebarLinks = [
   {
     id: "dashboard",
     title: "Usuario",
     path: "/dashboard",
-    icon: programmerIcon,
+    icon: "/src/assets/backend/programmer.png",
   },
   {
     id: "introduction",
     title: "Introducción",
     path: "/introduction",
-    icon: introductionIcon,
+    icon: "/src/assets/backend/introduction.png",
   },
   {
     id: "project-card",
     title: "Proyectos",
     path: "/project-card",
-    icon: projectIcon,
+    icon: "/src/assets/backend/project.png",
   },
   {
     id: "experience",
     title: "Experiencia",
     path: "/experience",
-    icon: experienceIcon,
+    icon: "/src/assets/backend/experience.png",
   },
 ];
 
@@ -41,13 +34,15 @@ const LeftSidebar = () => {
   const navigate = useNavigate();
   const path = location.pathname;
 
+  // If the current path is "/" or the specific patient register path, return null to hide the sidebar
+
   const handleLinkClick = (linkPath) => {
     navigate(linkPath);
   };
 
   const logout = () => {
     localStorage.removeItem("accessKey");
-    navigate("/");
+    navigate("/"); // Redirect to the homepage
   };
 
   return (
@@ -56,7 +51,12 @@ const LeftSidebar = () => {
         onClick={() => navigate("/")}
         className="flex items-center justify-center gap-3 mb-8 cursor-pointer"
       >
-        <img src={alonsoLogo} height={120} width={120} alt="logo" />
+        <img
+          src="/src/assets/dashboard/alonso_logo.png"
+          height={120}
+          width={120}
+          alt="logo"
+        />
       </div>
 
       <div className="flex flex-1 flex-col gap-6">
@@ -91,6 +91,21 @@ const LeftSidebar = () => {
           );
         })}
       </div>
+
+      {/* Logout Button */}
+      {/* <button
+        onClick={logout}
+        className="flex items-center gap-4 p-4 mt-4 rounded-lg bg-red-600 text-white hover:bg-red-700"
+      >
+        <img
+          src="/assets/icons/logout.svg"
+          alt="logout"
+          width={20}
+          height={20}
+          className="opacity-75"
+        />
+        <p className="font-medium">Cerrar sesión</p>
+      </button> */}
     </section>
   );
 };
