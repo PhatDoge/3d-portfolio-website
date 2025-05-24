@@ -25,4 +25,11 @@ export default defineSchema({
     header: v.string(),
     description: v.string(),
   }),
+  workExperience: defineTable({
+    icon: v.string(), // Storage ID for company icon/logo
+    workplace: v.string(), // Company name
+    workTitle: v.string(), // Job position title
+    description: v.string(), // Bullet-separated responsibilities (using " • ")
+    dateRange: v.string(), // Date period with dash (e.g., "Julio 2016 - Abril 2017")
+  }),
 });

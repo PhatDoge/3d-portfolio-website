@@ -103,7 +103,8 @@ const ProjectCard = ({
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% of the element is visible
-      className="w-full xs:w-[100%] sm:w-[100%] md:w-[80%] lg:w-[45%] xl:w-[30%] p-4"
+      // className="w-full xs:w-[100%] sm:w-[100%] md:w-[80%] lg:w-[45%] xl:w-[30%] p-4"
+      className="w-full p-4"
     >
       <Tilt
         options={{ max: 45, scale: 1, speed: 450 }}
@@ -158,7 +159,8 @@ const LoadingCard = ({ index }) => (
     variants={fadeIn("up", "spring", index * 0.2, 0.5)}
     initial="hidden"
     animate="show"
-    className="w-full xs:w-[100%] sm:w-[100%] md:w-[80%] lg:w-[45%] xl:w-[30%] p-4"
+    // className="w-full xs:w-[100%] sm:w-[100%] md:w-[80%] lg:w-[45%] xl:w-[30%] p-4"
+    className="w-full p-4"
   >
     <div className="bg-tertiary p-5 rounded-2xl animate-pulse">
       <div className="w-full h-[230px] bg-gray-600 rounded-2xl mb-5"></div>
@@ -209,7 +211,7 @@ const Works = () => {
         </motion.p>
       </div>
 
-      <div className="mt-20 flex flex-col sm:flex-row flex-wrap gap-7 justify-center items-center">
+      <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 justify-center items-center">
         {projects === undefined ?
           // Loading state - show skeleton cards
           Array.from({ length: 3 }).map((_, index) => (

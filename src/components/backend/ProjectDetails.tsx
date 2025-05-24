@@ -58,85 +58,91 @@ const ProjectDetails = () => {
   }
 
   return (
-    <div className="bg-[#18181b] border border-gray-700 rounded-xl p-6 shadow-lg max-w-xl mx-auto mb-8">
+    <div className="w-full mt-5">
       {/* Section Header */}
-      <div className="pb-4 border-b border-gray-700/50 mb-5">
-        <h3 className="text-xl font-semibold">
+      <div className="text-center pb-4 mb-6">
+        <h3 className="text-2xl font-bold">
           <span className="orange-text-gradient">Detalles</span>{" "}
           <span className="green-text-gradient">Personales</span>
         </h3>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Header Field */}
-          <FormField
-            control={form.control}
-            name="header"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-200 font-normal text-left block mb-1">
-                  Cabezera
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Ingresa tu Cabezera"
-                    {...field}
-                    className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
-                  />
-                </FormControl>
-                <FormMessage className="text-red-400 mt-1" />
-              </FormItem>
-            )}
-          />
+          <div className="mt-5">
+            <FormField
+              control={form.control}
+              name="header"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-200 font-medium">
+                    Cabezera
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Ingresa tu Cabezera"
+                      {...field}
+                      className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-400" />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Title Field */}
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-200 font-normal text-left block mb-1">
-                  Titulo
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Ingresa tu Titulo"
-                    className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-400 mt-1" />
-              </FormItem>
-            )}
-          />
+          <div className="mt-5">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-200 font-medium">
+                    Titulo
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Ingresa tu Titulo"
+                      className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-400" />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Description Field */}
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-200 font-normal text-left block mb-1">
-                  Resumen
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Ingresa tu Resumen"
-                    className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-400 mt-1" />
-              </FormItem>
-            )}
-          />
+          <div className="mt-5">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-200 font-medium">
+                    Resumen
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Ingresa tu Resumen"
+                      className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-400" />
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Submit Button */}
-          <div className="flex items-center justify-center pt-2 mt-5">
+          <div className="flex items-center justify-center mt-5">
             <Button
               type="submit"
-              className="px-6 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0"
+              className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0"
             >
               Guardar Detalles
             </Button>

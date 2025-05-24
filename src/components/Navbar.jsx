@@ -14,6 +14,12 @@ const Navbar = () => {
     <nav
       className={`${styles.paddingX} w-full flex items-center py-5 fixed top-0 z-20 bg-primary `}
     >
+      <a
+        href="/dashboard"
+        className="text-purple-400/50 absolute top-3 right-3 text-xs"
+      >
+        admin
+      </a>
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <Link
           to="/"

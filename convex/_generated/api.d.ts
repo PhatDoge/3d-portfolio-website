@@ -17,6 +17,7 @@ import type * as header from "../header.js";
 import type * as introduction from "../introduction.js";
 import type * as projectdetails from "../projectdetails.js";
 import type * as projects from "../projects.js";
+import type * as workExperience from "../workExperience.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   introduction: typeof introduction;
   projectdetails: typeof projectdetails;
   projects: typeof projects;
+  workExperience: typeof workExperience;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

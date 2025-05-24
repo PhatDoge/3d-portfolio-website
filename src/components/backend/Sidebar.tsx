@@ -21,6 +21,12 @@ const sidebarLinks = [
     path: "/project-card",
     icon: "/src/assets/dashboard/project.png",
   },
+  {
+    id: "experience",
+    title: "Experiencia",
+    path: "/experience",
+    icon: "/src/assets/dashboard/experience.png",
+  },
 ];
 
 const LeftSidebar = () => {

@@ -15,6 +15,7 @@ import Dashboard from "./components/backend/Dashboard";
 import LeftSidebar from "./components/backend/Sidebar";
 import Introduction from "./components/backend/Introduction";
 import ProjectCard from "./components/backend/ProjectCard";
+import WorkExperience from "./components/backend/Experience";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -74,15 +75,15 @@ const App = () => {
           }
         />
 
-        {/* Documents route (add this if you have a Documents component) */}
-        {/* <Route
-          path="/documents"
+        {/* experience route */}
+        <Route
+          path="/experience"
           element={
             <DashboardLayout>
-              <Documents />
+              <WorkExperience />
             </DashboardLayout>
           }
-        /> */}
+        />
 
         {/* Add more dashboard routes as needed */}
         {/* 
@@ -110,6 +111,15 @@ const App = () => {
           element={
             <DashboardLayout>
               <ProjectCard />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
+          path="/experience"
+          element={
+            <DashboardLayout>
+              <WorkExperience />
             </DashboardLayout>
           }
         />

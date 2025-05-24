@@ -161,13 +161,12 @@ const ProjectCard = () => {
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
           <CardHeader className="relative z-10 text-center pb-8">
-            <CardTitle className="text-3xl font-bold mb-2">
-              <div className=" mt-5">
-                <ProjectDetails />
-              </div>
-              <span className="orange-text-gradient">Crear</span>{" "}
-              <span className="green-text-gradient">Proyecto</span>
-            </CardTitle>
+            <div className="text-center pb-4 mb-6">
+              <h3 className="text-2xl font-bold">
+                <span className="orange-text-gradient">Crear</span>{" "}
+                <span className="green-text-gradient">Proyecto</span>
+              </h3>
+            </div>
           </CardHeader>
 
           <CardContent className="relative z-10">
@@ -317,6 +316,9 @@ const ProjectCard = () => {
                   >
                     {isUploading ? "Creando proyecto..." : "Crear Proyecto"}
                   </Button>
+                </div>
+                <div>
+                  <ProjectDetails />
                 </div>
               </form>
             </Form>
