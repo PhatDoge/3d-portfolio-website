@@ -27,12 +27,39 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Improved scroll function with loading state handling
+  const handleSmoothScroll = (elementId, linkTitle) => {
+    setActive(linkTitle);
+
+    // Small delay to allow React state updates and content loading
+    setTimeout(() => {
+      const element = document.getElementById(elementId);
+      if (element) {
+        // Check if the element has content loaded
+        const hasContent = element.offsetHeight > 100; // Minimum expected height
+
+        if (hasContent) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        } else {
+          // If content isn't loaded, wait a bit more and try again
+          setTimeout(() => {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }, 500);
+        }
+      }
+    }, 100);
+  };
+
   return (
     <nav
       className={`${styles.paddingX} w-full flex items-center py-5 fixed top-0 z-20 transition-all duration-300 ${
-        scrolled ?
-          "bg-primary/80 backdrop-blur-md border-b border-white/10"
-        : "bg-primary"
+        scrolled ? "bg-primary/80 backdrop-blur-md" : "bg-primary"
       }`}
     >
       <a
@@ -68,8 +95,11 @@ const Navbar = () => {
               key={link.id}
               className={`${
                 active === link.title ? "text-white" : "text-secondary"
-              } hover:text-white text-[18px] font-medium cursor-pointer`}
-              onClick={() => setActive(link.title)}
+              } hover:text-white text-[18px] font-medium cursor-pointer transition-colors duration-200`}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSmoothScroll(link.id, link.title);
+              }}
             >
               <a href={`#${link.id}`}>{link.title}</a>
             </li>
@@ -94,10 +124,11 @@ const Navbar = () => {
                   key={link.id}
                   className={`${
                     active === link.title ? "text-white" : "text-secondary"
-                  }font-poppins font-medium cursor-pointer text-[16px]`}
-                  onClick={() => {
-                    setToggle(!toggle);
-                    setActive(link.title);
+                  } font-poppins font-medium cursor-pointer text-[16px] transition-colors duration-200`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setToggle(false);
+                    handleSmoothScroll(link.id, link.title);
                   }}
                 >
                   <a href={`#${link.id}`}>{link.title}</a>

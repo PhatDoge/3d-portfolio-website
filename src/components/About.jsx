@@ -18,6 +18,9 @@ const ServiceCard = ({ index, title, icon }) => {
     <Tilt className="xs:w-[250px] w-full mx-auto">
       <motion.div
         variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
         className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
       >
         <div className="card-container relative w-full min-h-[280px] perspective-1000">
@@ -65,6 +68,17 @@ ServiceCard.propTypes = {
 };
 
 const About = () => {
+  const introductions = useQuery(api.introduction.getIntroductions);
+
+  // Handle loading state
+  if (!introductions) {
+    return (
+      <div className="h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -95,20 +109,15 @@ const About = () => {
     ],
   };
 
-  const introductions = useQuery(api.introduction.getIntroductions);
-
-  // Handle loading state
-  if (!introductions) {
-    return (
-      <div className="h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
-  }
   const introduction = introductions[0];
   return (
-    <>
-      <motion.div variants={textVariant()}>
+    <section id="about" className="min-h-screen w-full relative">
+      <motion.div
+        variants={textVariant()}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+      >
         <p className={`${styles.sectionSubText} text-center`}>
           {introduction.header}
         </p>
@@ -119,7 +128,10 @@ const About = () => {
       <div className="w-full flex justify-center items-center text-center">
         <motion.p
           variants={fadeIn("", "", 0.1, 1)}
-          className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px] "
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
           {introduction.description}
         </motion.p>
@@ -185,7 +197,7 @@ const About = () => {
           background-clip: padding-box;
         }
       `}</style>
-    </>
+    </section>
   );
 };
 
