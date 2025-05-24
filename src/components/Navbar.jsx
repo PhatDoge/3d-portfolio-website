@@ -48,18 +48,6 @@ const Navbar = () => {
     }
   };
 
-  // Handle logout
-  const handleLogout = () => {
-    try {
-      localStorage.removeItem("accessKey");
-      navigate("/");
-      // Optional: show a success message
-      console.log("Logged out successfully");
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
-
   // Handle admin link click
   const handleAdminClick = (e) => {
     e.preventDefault();
@@ -146,16 +134,6 @@ const Navbar = () => {
         >
           admin
         </a>
-
-        {/* Logout button - only show if user is authenticated */}
-        {checkAuthStatus() && (
-          <button
-            onClick={handleLogout}
-            className="text-red-400/70 absolute bottom-3 right-3 text-xs hover:text-red-400 transition-colors duration-200 cursor-pointer"
-          >
-            logout
-          </button>
-        )}
 
         <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
           <Link

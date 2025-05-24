@@ -186,7 +186,7 @@ const WorkExperience = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 mt-4">
-      <div className="w-full md:w-1/2 max-w-md px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
+      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
         <Card className="backdrop-blur-sm bg-gray-900/80 border-gray-700 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
