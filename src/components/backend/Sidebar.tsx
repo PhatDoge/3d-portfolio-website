@@ -7,25 +7,25 @@ const sidebarLinks = [
     id: "dashboard",
     title: "Usuario",
     path: "/dashboard",
-    icon: "/src/assets/backend/programmer.png",
+    icon: "/src/assets/dashboard/programmer.png",
   },
   {
     id: "introduction",
     title: "Introducción",
     path: "/introduction",
-    icon: "/src/assets/backend/introduction.png",
+    icon: "/src/assets/dashboard/introduction.png",
   },
   {
     id: "project-card",
     title: "Proyectos",
     path: "/project-card",
-    icon: "/src/assets/backend/project.png",
+    icon: "/src/assets/dashboard/project.png",
   },
   {
     id: "experience",
     title: "Experiencia",
     path: "/experience",
-    icon: "/src/assets/backend/experience.png",
+    icon: "/src/assets/dashboard/experience.png",
   },
 ];
 
