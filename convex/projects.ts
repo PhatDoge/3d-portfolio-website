@@ -9,13 +9,18 @@ export const createProject = mutation({
     cardTitle: v.string(),
     cardDescription: v.string(),
     tag: v.string(),
+    githubLink: v.string(),
   },
-  handler: async (ctx, { image, cardTitle, cardDescription, tag }) => {
+  handler: async (
+    ctx,
+    { image, cardTitle, cardDescription, tag, githubLink }
+  ) => {
     try {
       const newProjectId = await ctx.db.insert("projects", {
         image,
         cardTitle,
         cardDescription,
+        githubLink,
         tag,
         createdAt: Date.now(),
       });

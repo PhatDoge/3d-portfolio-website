@@ -15,7 +15,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api"; // adjust path as needed
+import { api } from "../../../convex/_generated/api";
 
 const formSchema = z.object({
   title: z

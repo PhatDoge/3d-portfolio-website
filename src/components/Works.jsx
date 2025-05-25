@@ -81,6 +81,7 @@ const ProjectCard = ({
   index,
   cardTitle,
   cardDescription,
+  githubLink,
   tag,
   imageUrl,
   _id,
@@ -126,11 +127,20 @@ const ProjectCard = ({
               }}
               className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
             >
-              <img
-                src={github}
-                alt="github"
-                className="w-1/2 h-1/2 object-contain"
-              />
+              {githubLink && (
+                <a
+                  href={githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
+                >
+                  <img
+                    src={github}
+                    alt="github"
+                    className="w-1/2 h-1/2 object-contain"
+                  />
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -192,7 +202,7 @@ const Works = () => {
         viewport={{ once: true, amount: 0.2 }}
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          {details?.header || "Mis Proyectos (cabezera)."}
+          {details?.header || "Mis Proyectos (header)."}
         </p>
         <h2 className={`${styles.sectionHeadText} text-center`}>
           {details?.title || "Mis Proyectos (title)."}

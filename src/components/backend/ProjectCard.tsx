@@ -14,6 +14,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 import { Textarea } from "../ui/textarea";
 
 import { useMutation, useQuery } from "convex/react";
@@ -32,6 +43,7 @@ const formSchema = z.object({
     .min(2, { message: "Card description must be at least 2 characters." })
     .max(500),
   tag: z.string().min(2, { message: "At least one tag is required." }),
+  githubLink: z.string().url({ message: "Please enter a valid GitHub URL." }),
 });
 
 const ProjectCard = () => {
@@ -51,6 +63,7 @@ const ProjectCard = () => {
       cardTitle: "",
       cardDescription: "",
       tag: "",
+      githubLink: "",
     },
   });
 
@@ -183,16 +196,12 @@ const ProjectCard = () => {
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    if (
-      window.confirm("¿Estás seguro de que quieres eliminar este proyecto?")
-    ) {
-      try {
-        await deleteProject({ id: projectId as any });
-        console.log("Project deleted successfully");
-      } catch (error) {
-        console.error("Failed to delete project:", error);
-        alert("Error al eliminar el proyecto. Inténtalo de nuevo.");
-      }
+    try {
+      await deleteProject({ id: projectId as any });
+      console.log("Project deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+      alert("Error al eliminar el proyecto. Inténtalo de nuevo.");
     }
   };
 
@@ -281,6 +290,29 @@ const ProjectCard = () => {
                   />
                 </div>
 
+                {/* Card GithubLink Field */}
+                <div className="mt-5">
+                  <FormField
+                    control={form.control}
+                    name="githubLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-200 font-medium">
+                          Enlace de GitHub
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Ingresa el enlace de GitHub"
+                            {...field}
+                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 {/* Card Description Field */}
                 <div className="mt-5">
                   <FormField
@@ -359,11 +391,12 @@ const ProjectCard = () => {
                     {isUploading ? "Creando proyecto..." : "Crear Proyecto"}
                   </Button>
                 </div>
-                <div>
-                  <ProjectDetails />
-                </div>
               </form>
             </Form>
+            {/* Add ProjectDetails HERE - outside the project form container */}
+            <div className="w-full max-w-2xl px-6 py-10 mt-8 ...">
+              <ProjectDetails />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -518,27 +551,54 @@ const ProjectCard = () => {
                           </Button>
 
                           {/* Delete Button */}
-                          <Button
-                            onClick={() => handleDeleteProject(project._id)}
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 h-8 w-8"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 h-8 w-8"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
+                                </svg>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="border border-gray-700 bg-gray-900">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-gray-200">
+                                  ¿Eliminar proyecto?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-400">
+                                  Esta acción no se puede deshacer. El proyecto
+                                  será eliminado permanentemente.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
+                                  Cancelar
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="bg-red-600 text-white hover:bg-red-700"
+                                  onClick={() =>
+                                    handleDeleteProject(project._id)
+                                  }
+                                >
+                                  Eliminar
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </td>
                     </tr>
