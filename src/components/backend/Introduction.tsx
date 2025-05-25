@@ -15,8 +15,8 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api"; // adjust path as needed
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const formSchema = z.object({
   title: z
@@ -33,24 +33,23 @@ const formSchema = z.object({
     .max(1000),
 });
 
-const Introduction = () => {
+// Separate form component that only renders when data is available
+const IntroductionForm = ({ data, createIntroduction }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      header: "",
-      description: "",
+      title: data[0]?.title || "",
+      header: data[0]?.header || "",
+      description: data[0]?.description || "",
     },
   });
-
-  const createIntroduction = useMutation(api.introduction.createIntroduction); // <- adjust path as needed
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const id = await createIntroduction(values);
       console.log("introduction created with ID:", id);
       form.reset();
-      window.location.href = "/"; // navigate to the root route
+      window.location.href = "/";
     } catch (error) {
       console.error("Failed to create introduction:", error);
     }
@@ -155,6 +154,26 @@ const Introduction = () => {
         </Card>
       </div>
     </div>
+  );
+};
+
+// Main component that handles data loading
+const Introduction = () => {
+  const data = useQuery(api.introduction.getIntroductions);
+  const createIntroduction = useMutation(api.introduction.createIntroduction);
+
+  // Show loading state while data is being fetched
+  if (data === undefined) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Render the form only when data is available
+  return (
+    <IntroductionForm data={data} createIntroduction={createIntroduction} />
   );
 };
 
