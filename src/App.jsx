@@ -40,12 +40,12 @@ const HomeLayout = ({ children }) => {
         <Navbar />
         <Hero />
       </div>
-      <div className="bg-gray-900">
-        <About />
-        <Experience />
-        <Tech />
-        <Works />
-      </div>
+
+      <About />
+      <Experience />
+      <Tech />
+      <Works />
+
       {/* <Feedbacks /> */}
       <div className="relative z-0">
         <Contact />
