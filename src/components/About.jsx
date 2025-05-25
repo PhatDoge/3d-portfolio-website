@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 
 const ServiceCard = ({ index, title, icon }) => {
   return (
-    <Tilt className="xs:w-[250px] w-full mx-auto">
+    <Tilt className="xs:w-[250px] w-full mx-auto my-4">
       <motion.div
         variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
         initial="hidden"
@@ -24,7 +24,16 @@ const ServiceCard = ({ index, title, icon }) => {
         className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
       >
         <div className="card-container relative w-full min-h-[280px] perspective-1000">
-          <div className="card-inner relative w-full h-full transition-transform duration-700 transform-style-preserve-3d hover:rotate-y-180">
+          <div className="card-inner relative w-full h-full transition-all duration-700 transform-style-preserve-3d hover:rotate-y-180 hover:scale-95">
+            {/* 
+              CUSTOMIZATION AREA - Card Dimensions & Appearance:
+              - Change 'min-h-[280px]' to adjust card height
+              - Modify 'rounded-[20px]' for different border radius
+              - Adjust 'hover:scale-95' value (0.9 = smaller, 1.05 = bigger)
+              - Change 'duration-700' for faster/slower animations
+              - Modify padding values 'py-5 px-12' and 'py-4 px-6' for spacing
+            */}
+
             {/* Front side */}
             <div className="card-face card-front absolute inset-0 bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col backface-hidden">
               <img
