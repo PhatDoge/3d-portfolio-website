@@ -123,8 +123,10 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`${styles.paddingX} w-full flex items-center py-5 fixed top-0 z-20 transition-all duration-300 ${
-          scrolled ? "bg-primary/80 backdrop-blur-md" : "bg-primary"
+        className={`${styles.paddingX}  w-full flex items-center py-5 fixed top-0 z-20 transition-all duration-300 ${
+          scrolled ?
+            "bg-primary/90 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
         }`}
       >
         <a
@@ -132,7 +134,11 @@ const Navbar = () => {
           onClick={handleAdminClick}
           className="text-purple-400/50 absolute top-3 right-3 text-xs hover:text-purple-400 transition-colors duration-200 cursor-pointer"
         >
-          admin
+          <img
+            src="/assets/dashboard/admin.png"
+            alt="admin"
+            className="w-6 h-6 relative top-3 right-7"
+          />
         </a>
 
         <div className="w-full flex justify-between items-center max-w-7xl mx-auto">

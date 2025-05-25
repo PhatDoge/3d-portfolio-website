@@ -33,6 +33,10 @@ const formSchema = z.object({
     .max(500),
   tag: z.string().min(2, { message: "At least one tag is required." }),
   githubLink: z.string().url({ message: "Please enter a valid GitHub URL." }),
+  websiteLink: z
+    .string()
+    .url({ message: "Please enter a valid website URL." })
+    .optional(),
 });
 
 const ProjectCard = () => {
@@ -50,6 +54,7 @@ const ProjectCard = () => {
       cardDescription: "",
       tag: "",
       githubLink: "",
+      websiteLink: "",
     },
   });
 
@@ -263,6 +268,29 @@ const ProjectCard = () => {
                   />
                 </div>
 
+                {/* Card website Link Field */}
+                <div className="mt-5">
+                  <FormField
+                    control={form.control}
+                    name="websiteLink"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-200 font-medium">
+                          Direccion Web
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Ingresa la direccion web"
+                            {...field}
+                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 {/* Card Description Field */}
                 <div className="mt-5">
                   <FormField
@@ -350,8 +378,8 @@ const ProjectCard = () => {
         </Card>
       </div>
 
-      {/* Projects Display Component */}
-      <ProjectsDisplay />
+      {/* Projects Display Component
+      <ProjectsDisplay /> */}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { github } from "../assets";
 import { SectionWrapper } from "../hoc";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { ArrowRightIcon } from "lucide-react";
 
 // Updated fadeIn function for faster animations
 const fadeIn = (direction, type, delay, duration) => {
@@ -82,6 +83,7 @@ const ProjectCard = ({
   cardTitle,
   cardDescription,
   githubLink,
+  websiteLink,
   tag,
   imageUrl,
   _id,
@@ -147,6 +149,17 @@ const ProjectCard = ({
         <div className="mt-5">
           <h3 className="text-white font-bold text-[24px]">{cardTitle}</h3>
           <p className="mt-2 text-secondary text-[14px]">{cardDescription}</p>
+          <div className="mt-4 flex flex-row justify-start items-center">
+            <a
+              href={websiteLink}
+              className="flex items-center cursor-pointer"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p>Ver Proyecto</p>
+              <ArrowRightIcon className="w-4 h-4 ml-2" />
+            </a>
+          </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {parsedTags.map((tagItem, tagIndex) => (

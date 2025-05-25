@@ -16,6 +16,7 @@ import LeftSidebar from "./components/backend/Sidebar";
 import Introduction from "./components/backend/Introduction";
 import ProjectCard from "./components/backend/ProjectCard";
 import WorkExperience from "./components/backend/Experience";
+import ProjectsDisplay from "./components/backend/ProjectsDisplay";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -87,17 +88,14 @@ const App = () => {
           }
         />
 
-        {/* Add more dashboard routes as needed */}
-        {/* 
         <Route
-          path="/settings"
+          path="/projectsDisplay"
           element={
             <DashboardLayout>
-              <Settings />
+              <ProjectsDisplay />
             </DashboardLayout>
           }
         />
-        */}
 
         <Route
           path="/introduction"

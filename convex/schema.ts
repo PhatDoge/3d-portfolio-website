@@ -18,6 +18,7 @@ export default defineSchema({
     cardDescription: v.string(),
     tag: v.string(),
     githubLink: v.string(),
+    websiteLink: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
   }),
