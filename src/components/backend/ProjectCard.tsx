@@ -16,7 +16,7 @@ import {
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import ProjectDetails from "./ProjectDetails";
 
@@ -40,6 +40,14 @@ const ProjectCard = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState<string>("");
 
+  // Edit mode states
+  const [editingProject, setEditingProject] = useState<string | null>(null);
+  const [editImage, setEditImage] = useState<File | null>(null);
+  const [editImagePreview, setEditImagePreview] = useState<string>("");
+  const [editTags, setEditTags] = useState<string[]>([]);
+  const [editCurrentTag, setEditCurrentTag] = useState<string>("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,8 +58,22 @@ const ProjectCard = () => {
     },
   });
 
+  // Edit form
+  const editForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      image: "",
+      cardTitle: "",
+      cardDescription: "",
+      tag: "",
+    },
+  });
+
   const createProject = useMutation(api.projects.createProject);
+  const updateProject = useMutation(api.projects.updateProject);
   const generateUploadUrl = useMutation(api.projects.generateUploadUrl);
+  const deleteProject = useMutation(api.projects.deleteProject);
+  const projects = useQuery(api.projects.getProjects);
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -60,6 +82,20 @@ const ProjectCard = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEditImageSelect = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setEditImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setEditImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -81,12 +117,38 @@ const ProjectCard = () => {
     }
   };
 
+  const handleEditTagKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter" || event.key === ",") {
+      event.preventDefault();
+      const trimmedTag = editCurrentTag.trim();
+
+      if (trimmedTag && !editTags.includes(trimmedTag)) {
+        const newTags = [...editTags, trimmedTag];
+        setEditTags(newTags);
+        setEditCurrentTag("");
+
+        // Update the form field with joined tags
+        editForm.setValue("tag", newTags.join(", "));
+      }
+    }
+  };
+
   const removeTag = (tagToRemove: string) => {
     const newTags = tags.filter((tag) => tag !== tagToRemove);
     setTags(newTags);
 
     // Update the form field
     form.setValue("tag", newTags.length > 0 ? newTags.join(", ") : "");
+  };
+
+  const removeEditTag = (tagToRemove: string) => {
+    const newTags = editTags.filter((tag) => tag !== tagToRemove);
+    setEditTags(newTags);
+
+    // Update the form field
+    editForm.setValue("tag", newTags.length > 0 ? newTags.join(", ") : "");
   };
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -106,6 +168,80 @@ const ProjectCard = () => {
     } catch (error) {
       console.error("Failed to upload image:", error);
       throw new Error("Image upload failed");
+    }
+  };
+
+  const startEditing = (project: any) => {
+    setEditingProject(project._id);
+
+    // Populate edit form with current project data
+    editForm.setValue("cardTitle", project.cardTitle);
+    editForm.setValue("cardDescription", project.cardDescription);
+
+    // Parse tags from string
+    const projectTags = project.tag
+      .split(", ")
+      .map((tag: string) => tag.trim());
+    setEditTags(projectTags);
+    editForm.setValue("tag", project.tag);
+
+    // Set current image preview
+    setEditImagePreview(project.imageUrl || "");
+    editForm.setValue("image", project.image);
+  };
+
+  const cancelEditing = () => {
+    setEditingProject(null);
+    setEditImage(null);
+    setEditImagePreview("");
+    setEditTags([]);
+    setEditCurrentTag("");
+    editForm.reset();
+  };
+
+  const handleUpdateProject = async (values: z.infer<typeof formSchema>) => {
+    if (!editingProject) return;
+
+    if (editTags.length === 0) {
+      editForm.setError("tag", { message: "Please add at least one tag." });
+      return;
+    }
+
+    try {
+      setIsUpdating(true);
+
+      let imageStorageId = values.image;
+
+      // Upload new image if one was selected
+      if (editImage) {
+        imageStorageId = await uploadImage(editImage);
+      }
+
+      // Update project
+      const updateData: any = {
+        id: editingProject as any,
+        cardTitle: values.cardTitle,
+        cardDescription: values.cardDescription,
+        tag: editTags.join(", "),
+      };
+
+      // Only include image if it was updated
+      if (editImage) {
+        updateData.image = imageStorageId;
+      }
+
+      await updateProject(updateData);
+      console.log("Project updated successfully");
+
+      // Reset edit state
+      cancelEditing();
+    } catch (error) {
+      console.error("Failed to update project:", error);
+      editForm.setError("root", {
+        message: "Failed to update project. Please try again.",
+      });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -154,9 +290,33 @@ const ProjectCard = () => {
     }
   }
 
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (
+      window.confirm("¿Estás seguro de que quieres eliminar este proyecto?")
+    ) {
+      try {
+        await deleteProject({ id: projectId as any });
+        console.log("Project deleted successfully");
+      } catch (error) {
+        console.error("Failed to delete project:", error);
+        alert("Error al eliminar el proyecto. Inténtalo de nuevo.");
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 mt-4">
-      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 mt-4">
+      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700 mb-8">
         <Card className="backdrop-blur-sm bg-gray-900/80 border-gray-700 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
@@ -324,6 +484,372 @@ const ProjectCard = () => {
             </Form>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Projects Display Section */}
+      <div className="w-full max-w-7xl px-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold">
+            <span className="orange-text-gradient">Todos los</span>{" "}
+            <span className="green-text-gradient">Proyectos</span>
+          </h2>
+        </div>
+
+        {projects === undefined ?
+          <div className="flex justify-center items-center py-12">
+            <div className="text-gray-400 text-lg">Cargando proyectos...</div>
+          </div>
+        : projects.length === 0 ?
+          <div className="flex justify-center items-center py-12">
+            <div className="text-gray-400 text-lg">
+              No hay proyectos creados aún.
+            </div>
+          </div>
+        : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
+            <table className="w-full">
+              {/* Table Header */}
+              <thead className="bg-gray-800/50 border-b border-gray-700">
+                <tr>
+                  <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
+                    Imagen
+                  </th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-300">
+                    Título
+                  </th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-300">
+                    Tags
+                  </th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-300 w-40">
+                    Creado
+                  </th>
+                  <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
+                    Actualizado
+                  </th>
+                  <th className="text-center p-4 text-sm font-medium text-gray-300 w-24">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+
+              {/* Table Body */}
+              <tbody className="divide-y divide-gray-700">
+                {projects.map((project, index) => (
+                  <React.Fragment key={project._id}>
+                    <tr
+                      className={`hover:bg-gray-800/30 transition-colors duration-200 ${
+                        index % 2 === 0 ? "bg-gray-900/40" : "bg-gray-900/20"
+                      }`}
+                    >
+                      {/* Image */}
+                      <td className="p-4">
+                        {project.imageUrl ?
+                          <img
+                            src={project.imageUrl}
+                            alt={project.cardTitle}
+                            className="w-16 h-12 object-cover rounded border border-gray-600"
+                          />
+                        : <div className="w-16 h-12 bg-gray-700 rounded border border-gray-600 flex items-center justify-center">
+                            <span className="text-gray-400 text-xs">
+                              Sin imagen
+                            </span>
+                          </div>
+                        }
+                      </td>
+
+                      {/* Title */}
+                      <td className="p-4">
+                        <div>
+                          <h3 className="text-white text-center font-medium text-sm leading-tight mb-1">
+                            {project.cardTitle}
+                          </h3>
+                          <p className="text-gray-400 text-xs line-clamp-2 text-center">
+                            {project.cardDescription}
+                          </p>
+                        </div>
+                      </td>
+
+                      {/* Tags */}
+                      <td className="p-4 text-center">
+                        <div className="flex flex-wrap gap-1">
+                          {project.tag
+                            .split(", ")
+                            .slice(0, 3)
+                            .map((tag: string, tagIndex: number) => (
+                              <span
+                                key={tagIndex}
+                                className="inline-block px-2 py-1 text-xs bg-purple-600/70 text-white rounded-full"
+                              >
+                                {tag.trim()}
+                              </span>
+                            ))}
+                          {project.tag.split(", ").length > 3 && (
+                            <span className="text-gray-400 text-xs">
+                              +{project.tag.split(", ").length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Created Date */}
+                      <td className="p-4 text-center">
+                        <span className="text-gray-300 text-sm">
+                          {formatDate(project.createdAt)}
+                        </span>
+                      </td>
+
+                      {/* Updated Date */}
+                      <td className="p-4 text-center">
+                        <span className="text-gray-300 text-sm">
+                          {(
+                            project.updatedAt &&
+                            project.updatedAt !== project.createdAt
+                          ) ?
+                            formatDate(project.updatedAt)
+                          : "-"}
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="p-4 text-center">
+                        <div className="flex gap-2 justify-center">
+                          {/* Edit Button */}
+                          <Button
+                            onClick={() => startEditing(project)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 h-8 w-8"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </Button>
+
+                          {/* Delete Button */}
+                          <Button
+                            onClick={() => handleDeleteProject(project._id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 h-8 w-8"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Edit Row */}
+                    {editingProject === project._id && (
+                      <tr className="bg-gray-800/50">
+                        <td colSpan={6} className="p-6">
+                          <div className="bg-gray-900/80 rounded-lg p-6 border border-gray-600">
+                            <h4 className="text-white text-lg font-semibold mb-4">
+                              Editar Proyecto
+                            </h4>
+
+                            <Form {...editForm}>
+                              <form
+                                onSubmit={editForm.handleSubmit(
+                                  handleUpdateProject
+                                )}
+                                className="space-y-4"
+                              >
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {/* Edit Image Upload */}
+                                  <div>
+                                    <FormField
+                                      control={editForm.control}
+                                      name="image"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel className="text-gray-200 font-medium">
+                                            Imagen del Proyecto
+                                          </FormLabel>
+                                          <FormControl>
+                                            <div className="space-y-2">
+                                              <Input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                  handleEditImageSelect(e);
+                                                  field.onChange(
+                                                    e.target.files?.[0]?.name ||
+                                                      field.value
+                                                  );
+                                                }}
+                                                className="bg-gray-800/50 border-gray-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-2 file:py-1 file:mr-2 hover:file:bg-purple-700 transition-all duration-300 text-sm"
+                                              />
+                                              {editImagePreview && (
+                                                <div className="mt-2">
+                                                  <img
+                                                    src={editImagePreview}
+                                                    alt="Preview"
+                                                    className="w-full h-24 object-cover rounded-md border border-gray-600"
+                                                  />
+                                                </div>
+                                              )}
+                                            </div>
+                                          </FormControl>
+                                          <FormMessage className="text-red-400" />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+
+                                  {/* Edit Title */}
+                                  <div>
+                                    <FormField
+                                      control={editForm.control}
+                                      name="cardTitle"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel className="text-gray-200 font-medium">
+                                            Título del Proyecto
+                                          </FormLabel>
+                                          <FormControl>
+                                            <Input
+                                              placeholder="Ingresa el título del proyecto"
+                                              {...field}
+                                              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                                            />
+                                          </FormControl>
+                                          <FormMessage className="text-red-400" />
+                                        </FormItem>
+                                      )}
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Edit Description */}
+                                <div>
+                                  <FormField
+                                    control={editForm.control}
+                                    name="cardDescription"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel className="text-gray-200 font-medium">
+                                          Descripción del Proyecto
+                                        </FormLabel>
+                                        <FormControl>
+                                          <Textarea
+                                            placeholder="Describe tu proyecto en detalle"
+                                            className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-20"
+                                            {...field}
+                                          />
+                                        </FormControl>
+                                        <FormMessage className="text-red-400" />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+
+                                {/* Edit Tags */}
+                                <div>
+                                  <FormField
+                                    control={editForm.control}
+                                    name="tag"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel className="text-gray-200 font-medium">
+                                          Etiquetas
+                                        </FormLabel>
+                                        <FormControl>
+                                          <div className="space-y-2">
+                                            <Input
+                                              placeholder="Escribe una etiqueta y presiona Enter o coma"
+                                              value={editCurrentTag}
+                                              onChange={(e) =>
+                                                setEditCurrentTag(
+                                                  e.target.value
+                                                )
+                                              }
+                                              onKeyDown={handleEditTagKeyPress}
+                                              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                                            />
+                                            {editTags.length > 0 && (
+                                              <div className="flex flex-wrap gap-2 mt-2">
+                                                {editTags.map((tag, index) => (
+                                                  <span
+                                                    key={index}
+                                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-600 text-white"
+                                                  >
+                                                    {tag}
+                                                    <button
+                                                      type="button"
+                                                      onClick={() =>
+                                                        removeEditTag(tag)
+                                                      }
+                                                      className="ml-2 text-purple-200 hover:text-white"
+                                                    >
+                                                      ×
+                                                    </button>
+                                                  </span>
+                                                ))}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </FormControl>
+                                        <FormMessage className="text-red-400" />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex gap-3 justify-end pt-4">
+                                  <Button
+                                    type="button"
+                                    onClick={cancelEditing}
+                                    variant="ghost"
+                                    className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-700/50 transition-all duration-300"
+                                  >
+                                    Cancelar
+                                  </Button>
+                                  <Button
+                                    type="submit"
+                                    disabled={isUpdating}
+                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    {isUpdating ?
+                                      "Actualizando..."
+                                    : "Actualizar Proyecto"}
+                                  </Button>
+                                </div>
+                              </form>
+                            </Form>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
     </div>
   );
