@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React, { useState } from "react";
 
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -14,12 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import ProjectDetails from "./ProjectDetails";
-import ProjectsDisplay from "./ProjectsDisplay";
 
 const formSchema = z.object({
   image: z.string().min(1, { message: "Please select an image." }),
