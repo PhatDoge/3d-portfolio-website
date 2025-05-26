@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { fadeIn } from "../utils/motion";
 import PropTypes from "prop-types";
@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 interface ServiceCardProps {
   index: number;
   title: string;
-  iconUrl: string; // Changed from icon to iconUrl
+  iconUrl: string;
   subtitle?: string;
   badgeText?: string;
   accentColor?: string;
@@ -26,7 +26,7 @@ interface ServiceCardProps {
 const ServiceCard: React.FC<ServiceCardProps> = ({
   index,
   title,
-  iconUrl, // Changed from icon to iconUrl
+  iconUrl,
   subtitle,
   badgeText,
   accentColor = "#00cea8",
@@ -42,6 +42,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   priceType,
   deliveryTime,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   // Convert keyFeatures string to array
   const featuresArray = keyFeatures
     .split(" • ")
@@ -53,17 +55,37 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     .map((tech) => tech.trim())
     .filter((tech) => tech);
 
-  // Get experience level color
-  const getExperienceColor = (level: string) => {
-    switch (level) {
-      case "Beginner":
-        return "text-yellow-400 bg-yellow-400/10";
-      case "Intermediate":
-        return "text-blue-400 bg-blue-400/10";
-      case "Expert":
-        return "text-green-400 bg-green-400/10";
+  // Get experience level styling
+  const getExperienceStyle = (level: string) => {
+    switch (level.toLowerCase()) {
+      case "beginner":
+        return {
+          bg: "bg-gradient-to-r from-amber-500/10 to-yellow-500/10",
+          text: "text-amber-400",
+          border: "border-amber-500/30",
+          icon: "🌱",
+        };
+      case "intermediate":
+        return {
+          bg: "bg-gradient-to-r from-blue-500/10 to-cyan-500/10",
+          text: "text-blue-400",
+          border: "border-blue-500/30",
+          icon: "⚡",
+        };
+      case "expert":
+        return {
+          bg: "bg-gradient-to-r from-emerald-500/10 to-green-500/10",
+          text: "text-emerald-400",
+          border: "border-emerald-500/30",
+          icon: "🏆",
+        };
       default:
-        return "text-gray-400 bg-gray-400/10";
+        return {
+          bg: "bg-gradient-to-r from-gray-500/10 to-slate-500/10",
+          text: "text-gray-400",
+          border: "border-gray-500/30",
+          icon: "📊",
+        };
     }
   };
 
@@ -77,179 +99,253 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     return `${currency}${startingPrice}${typeText}`;
   };
 
+  const experienceStyle = getExperienceStyle(experienceLevel);
+
   return (
     <motion.div
       variants={fadeIn("up", "spring", 0.1 * index, 0.75)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.25 }}
-      className="w-full max-w-sm mx-auto"
+      className="w-full max-w-xs mx-auto" // Made smaller: max-w-xs instead of max-w-sm
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
       <div
-        className="relative bg-[#1a1a2e] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] group"
+        className="relative bg-slate-800/40 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] group border border-white/10" // Simplified background, smaller scale, smaller rounded corners
         style={{
-          border: `1px solid ${accentColor}40`,
+          boxShadow:
+            isHovered ?
+              `0 15px 35px -10px ${accentColor}20, 0 0 0 1px ${accentColor}20` // Reduced shadow intensity
+            : "0 10px 20px -5px rgba(0, 0, 0, 0.1)",
         }}
       >
-        {/* Gradient Background Effect */}
-        <div
-          className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-          style={{
-            background: `linear-gradient(135deg, ${accentColor}20, #bf61ff20)`,
-          }}
-        />
-
-        {/* Badge */}
+        {/* Premium Badge - Fixed position to top-left */}
         {badgeText && (
-          <div className="absolute top-4 right-4 z-10">
-            <span
-              className="px-3 py-1 text-xs font-semibold text-white rounded-full shadow-lg"
-              style={{ backgroundColor: accentColor }}
+          <div className="absolute top-4 left-4 z-20">
+            {" "}
+            {/* Changed from top-6 right-6 to top-4 left-4 */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="relative"
             >
-              {badgeText}
-            </span>
+              <div
+                className="px-3 py-1.5 text-xs font-bold text-white rounded-full shadow-lg backdrop-blur-sm" // Reduced padding
+                style={{
+                  background: `linear-gradient(135deg, ${accentColor}, #bf61ff)`,
+                  boxShadow: `0 4px 16px ${accentColor}30`, // Reduced shadow
+                }}
+              >
+                {badgeText}
+              </div>
+            </motion.div>
           </div>
         )}
 
-        <div className="relative p-8">
-          {/* Header Section */}
+        <div className="relative p-6">
+          {" "}
+          {/* Reduced padding from p-8 to p-6 */}
+          {/* Enhanced Header Section */}
           <div className="text-center mb-6">
-            <div className="w-20 h-20 mx-auto mb-4 p-3 rounded-2xl bg-white/5 backdrop-blur-sm">
-              {/* Use regular img instead of ConvexImage */}
-              <img
-                src={iconUrl || "/default-service-icon.png"}
-                alt={title}
-                className="w-full h-full object-contain"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/default-service-icon.png";
-                }}
+            {" "}
+            {/* Reduced margin */}
+            <motion.div
+              className="relative w-16 h-16 mx-auto mb-4" // Reduced size from w-24 h-24 to w-16 h-16
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <div
+                className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20" // Smaller rounded corners
+                style={{ boxShadow: `0 4px 16px ${accentColor}15` }} // Reduced shadow
               />
-            </div>
-
-            <h3 className="text-white text-xl font-bold mb-2 leading-tight">
+              <div className="relative w-full h-full p-3 rounded-xl">
+                {" "}
+                {/* Reduced padding */}
+                <img
+                  src={iconUrl || "/default-service-icon.png"}
+                  alt={title}
+                  className="w-full h-full object-contain filter drop-shadow-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/default-service-icon.png";
+                  }}
+                />
+              </div>
+            </motion.div>
+            <h3 className="text-white text-xl font-bold mb-2 leading-tight tracking-tight">
+              {" "}
+              {/* Reduced font size */}
               {title}
             </h3>
-
-            {subtitle && <p className="text-gray-400 text-sm">{subtitle}</p>}
+            {subtitle && (
+              <p className="text-gray-300 text-sm font-medium opacity-80">
+                {subtitle}
+              </p>
+            )}
           </div>
-
-          {/* Stats Row */}
-          <div className="flex justify-between items-center mb-6 p-4 bg-white/5 rounded-xl backdrop-blur-sm">
-            <div className="text-center flex-1">
-              <div
-                className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getExperienceColor(experienceLevel)}`}
-              >
+          {/* Enhanced Stats Section */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {" "}
+            {/* Reduced gap and margin */}
+            {/* Experience Level */}
+            <div
+              className={`${experienceStyle.bg} ${experienceStyle.border} border rounded-lg p-3 text-center backdrop-blur-sm`} // Reduced padding and rounded corners
+            >
+              <div className="text-sm mb-1">{experienceStyle.icon}</div>{" "}
+              {/* Reduced icon size */}
+              <div className={`text-xs font-bold ${experienceStyle.text} mb-1`}>
                 {experienceLevel}
               </div>
-              <p className="text-gray-400 text-xs mt-1">Nivel</p>
+              <div className="text-gray-400 text-xs">Nivel</div>
             </div>
-
-            <div className="text-center flex-1">
-              <p className="text-white text-lg font-bold">{projectCount}+</p>
-              <p className="text-gray-400 text-xs">Proyectos</p>
+            {/* Project Count */}
+            <div className="bg-gradient-to-br from-white/5 to-white/10 border border-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
+              <div className="text-sm mb-1">🚀</div>
+              <div className="text-white text-sm font-bold mb-1">
+                {projectCount}+
+              </div>
+              <div className="text-gray-400 text-xs">Proyectos</div>
             </div>
-
+            {/* Price */}
             {startingPrice && (
-              <div className="text-center flex-1">
-                <p
-                  className="text-white text-lg font-bold"
+              <div className="bg-gradient-to-br from-white/5 to-white/10 border border-white/20 rounded-lg p-3 text-center backdrop-blur-sm">
+                <div className="text-sm mb-1">💰</div>
+                <div
+                  className="text-sm font-bold mb-1"
                   style={{ color: accentColor }}
                 >
                   {formatPrice()}
-                </p>
-                <p className="text-gray-400 text-xs">Desde</p>
+                </div>
+                <div className="text-gray-400 text-xs">Desde</div>
               </div>
             )}
           </div>
-
-          {/* Description */}
+          {/* Enhanced Description */}
           <div className="mb-6">
-            <p className="text-gray-300 text-sm leading-relaxed text-center">
+            {" "}
+            {/* Reduced margin */}
+            <p className="text-gray-200 text-sm leading-relaxed text-center font-medium">
               {description}
             </p>
           </div>
-
-          {/* Key Features */}
+          {/* Enhanced Key Features with Icons */}
           <div className="mb-6">
-            <h4 className="text-white text-sm font-semibold mb-3 flex items-center">
-              <span
+            {" "}
+            {/* Reduced margin */}
+            <div className="flex items-center mb-3">
+              {" "}
+              {/* Reduced margin */}
+              <div
+                className="w-2 h-2 rounded-full mr-2" // Reduced margin
+                style={{ backgroundColor: accentColor }}
+              />
+              <h4 className="text-white text-sm font-bold tracking-wide">
+                CARACTERÍSTICAS CLAVE
+              </h4>
+            </div>
+            <div className="space-y-2">
+              {" "}
+              {/* Reduced spacing */}
+              {featuresArray.slice(0, 3).map(
+                (
+                  feature,
+                  idx // Show only 3 features instead of 4
+                ) => (
+                  <motion.div
+                    key={idx}
+                    className="flex items-start gap-2 group/feature" // Reduced gap
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * idx }}
+                  >
+                    <div
+                      className="w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5 flex-shrink-0 shadow-lg" // Reduced size
+                      style={{ backgroundColor: accentColor }}
+                    >
+                      ✓
+                    </div>
+                    <span className="text-gray-200 text-sm leading-relaxed group-hover/feature:text-white transition-colors duration-200">
+                      {feature}
+                    </span>
+                  </motion.div>
+                )
+              )}
+            </div>
+          </div>
+          {/* Enhanced Technologies with Better Styling */}
+          <div className="mb-6">
+            {" "}
+            {/* Reduced margin */}
+            <div className="flex items-center mb-3">
+              <div
                 className="w-2 h-2 rounded-full mr-2"
                 style={{ backgroundColor: accentColor }}
               />
-              Características Clave
-            </h4>
-            <div className="space-y-2">
-              {featuresArray.slice(0, 4).map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <span
-                    className="text-sm mt-0.5 flex-shrink-0"
-                    style={{ color: accentColor }}
+              <h4 className="text-white text-sm font-bold tracking-wide">
+                TECNOLOGÍAS
+              </h4>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {techArray.slice(0, 6).map(
+                (
+                  tech,
+                  idx // Limit to 6 technologies
+                ) => (
+                  <motion.span
+                    key={idx}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.05 * idx }}
+                    className="px-2 py-1 text-xs font-semibold rounded-md text-white bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 cursor-default" // Reduced padding and rounded corners
                   >
-                    ✓
+                    {tech}
+                  </motion.span>
+                )
+              )}
+            </div>
+          </div>
+          {/* Enhanced Delivery Time */}
+          {deliveryTime && (
+            <div className="mb-6">
+              {" "}
+              {/* Reduced margin */}
+              <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-lg p-3 border border-white/20 backdrop-blur-sm">
+                {" "}
+                {/* Reduced padding and rounded corners */}
+                <div className="flex items-center justify-center gap-2">
+                  {" "}
+                  {/* Reduced gap */}
+                  <div className="text-sm">⏱️</div>
+                  <span className="text-xs text-gray-300 font-medium">
+                    Tiempo de entrega:
                   </span>
-                  <span className="text-gray-300 text-sm leading-relaxed">
-                    {feature}
+                  <span className="text-sm text-white font-bold">
+                    {deliveryTime}
                   </span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Technologies */}
-          <div className="mb-8">
-            <h4 className="text-white text-sm font-semibold mb-3 flex items-center">
-              <span
-                className="w-2 h-2 rounded-full mr-2"
-                style={{ backgroundColor: accentColor }}
-              />
-              Tecnologías
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {techArray.map((tech, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 text-xs rounded-full text-white bg-white/10 backdrop-blur-sm border border-white/20"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Delivery Time */}
-          {deliveryTime && (
-            <div className="mb-6 p-3 bg-white/5 rounded-lg">
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-xs text-gray-400">
-                  Tiempo de entrega:
-                </span>
-                <span className="text-sm text-white font-medium">
-                  {deliveryTime}
-                </span>
               </div>
             </div>
           )}
-
-          {/* CTA Button */}
-          <a
+          {/* Enhanced CTA Button */}
+          <motion.a
             href={ctaLink}
-            className="block w-full py-4 px-6 text-center text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
+            className="relative block w-full py-3 px-4 text-center text-white font-bold rounded-xl transition-all duration-500 overflow-hidden group/cta" // Reduced padding and rounded corners
             style={{
               background: `linear-gradient(135deg, ${accentColor}, #bf61ff)`,
             }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            {ctaText}
-          </a>
+            {/* Button Background Effects */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/cta:translate-x-[100%] transition-transform duration-1000" />
+            <span className="relative z-10 tracking-wide text-sm">
+              {ctaText}
+            </span>{" "}
+            {/* Reduced font size */}
+          </motion.a>
         </div>
-
-        {/* Hover Glow Effect */}
-        <div
-          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
-          style={{
-            boxShadow: `0 0 40px ${accentColor}40`,
-          }}
-        />
       </div>
     </motion.div>
   );
@@ -258,7 +354,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 ServiceCard.propTypes = {
   index: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  iconUrl: PropTypes.string.isRequired, // Changed from icon to iconUrl
+  iconUrl: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   badgeText: PropTypes.string,
   accentColor: PropTypes.string,
