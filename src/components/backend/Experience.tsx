@@ -5,10 +5,12 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { es } from "date-fns/locale";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Calendar } from "../ui/calendar";
+// import { Calendar } from "../ui/calendar"; // Old calendar removed
 import { Checkbox } from "../ui/checkbox";
 import {
   Form,
@@ -63,6 +65,9 @@ const formSchema = z
       path: ["endDate"],
     }
   );
+
+// Register Spanish locale for react-datepicker
+registerLocale("es", es);
 
 const WorkExperience = () => {
   const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
@@ -356,28 +361,17 @@ const WorkExperience = () => {
                             className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
                             align="start"
                           >
-                            <Calendar
-                              mode="single"
+                            <DatePicker
                               selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
-                              className="bg-gray-800 text-white"
-                              locale={es}
-                              classNames={{
-                                head_cell:
-                                  "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] uppercase",
-                                head_row: "flex",
-                              }}
-                              formatters={{
-                                formatWeekday: (date, options) =>
-                                  date.toLocaleDateString("es-ES", {
-                                    weekday: "narrow",
-                                  }),
-                              }}
+                              onChange={field.onChange}
+                              minDate={new Date("1900-01-01")}
+                              maxDate={new Date()}
+                              locale="es"
+                              inline
+                              calendarClassName="experience-datepicker"
+                              showYearDropdown
+                              scrollableYearDropdown
+                              yearDropdownItemNumber={15}
                             />
                           </PopoverContent>
                         </Popover>
@@ -445,28 +439,21 @@ const WorkExperience = () => {
                               className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
                               align="start"
                             >
-                              <Calendar
-                                mode="single"
+                              <DatePicker
                                 selected={field.value}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
+                                onChange={field.onChange}
+                                minDate={new Date("1900-01-01")}
+                                maxDate={
+                                  isCurrentJob ?
+                                    new Date("2999-12-31")
+                                  : new Date()
                                 }
-                                initialFocus
-                                className="bg-gray-800 text-white"
-                                locale={es}
-                                classNames={{
-                                  head_cell:
-                                    "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] uppercase",
-                                  head_row: "flex",
-                                }}
-                                formatters={{
-                                  formatWeekday: (date, options) =>
-                                    date.toLocaleDateString("es-ES", {
-                                      weekday: "narrow",
-                                    }),
-                                }}
+                                locale="es"
+                                inline
+                                calendarClassName="experience-datepicker"
+                                showYearDropdown
+                                scrollableYearDropdown
+                                yearDropdownItemNumber={15}
                               />
                             </PopoverContent>
                           </Popover>
