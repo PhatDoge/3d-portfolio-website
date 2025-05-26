@@ -40,6 +40,12 @@ const sidebarLinks = [
     path: "/experience",
     icon: "/assets/dashboard/experience.png",
   },
+  {
+    id: "services",
+    title: "Servicios",
+    path: "/services",
+    icon: "/assets/dashboard/services.png",
+  },
 ];
 
 const LeftSidebar = () => {

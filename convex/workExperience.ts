@@ -32,12 +32,11 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-// Get all work experiences (for displaying)
 export const getAllWorkExperiences = query({
   handler: async (ctx) => {
     const workExperiences = await ctx.db
       .query("workExperience")
-      .order("desc") // Most recent first
+      .order("asc") // Changed from "desc" to "asc" to get oldest first
       .collect();
 
     // Get the actual image URLs for each work experience
@@ -52,7 +51,8 @@ export const getAllWorkExperiences = query({
       }))
     );
 
-    return workExperiencesWithUrls;
+    // Sort by startDate to ensure chronological order (oldest first)
+    return workExperiencesWithUrls.sort((a, b) => a.startDate - b.startDate);
   },
 });
 
