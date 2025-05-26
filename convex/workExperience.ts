@@ -8,7 +8,9 @@ export const createWorkExperience = mutation({
     workplace: v.string(),
     workTitle: v.string(),
     description: v.string(), // Bullet-separated string
-    dateRange: v.string(),
+    startDate: v.number(), // Start date as timestamp
+    endDate: v.optional(v.number()), // End date as timestamp (optional)
+    isCurrentJob: v.boolean(), // Flag for current position
   },
   handler: async (ctx, args) => {
     const workExperienceId = await ctx.db.insert("workExperience", {
@@ -16,7 +18,9 @@ export const createWorkExperience = mutation({
       workplace: args.workplace,
       workTitle: args.workTitle,
       description: args.description,
-      dateRange: args.dateRange,
+      startDate: args.startDate,
+      endDate: args.endDate,
+      isCurrentJob: args.isCurrentJob,
     });
 
     return workExperienceId;
@@ -42,7 +46,9 @@ export const getAllWorkExperiences = query({
         ...exp,
         iconUrl: await ctx.storage.getUrl(exp.icon),
         // Convert bullet-separated string back to array if needed
-        descriptionArray: exp.description.split(" • "),
+        descriptionArray: exp.description ? exp.description.split(" • ") : [],
+        // Ensure endDate is properly handled for current jobs
+        endDate: exp.isCurrentJob ? undefined : exp.endDate,
       }))
     );
 
@@ -65,7 +71,12 @@ export const getLatestWorkExperience = query({
     return {
       ...workExperience,
       iconUrl: await ctx.storage.getUrl(workExperience.icon),
-      descriptionArray: workExperience.description.split(" • "),
+      descriptionArray:
+        workExperience.description ?
+          workExperience.description.split(" • ")
+        : [],
+      // Ensure endDate is properly handled for current jobs
+      endDate: workExperience.isCurrentJob ? undefined : workExperience.endDate,
     };
   },
 });
@@ -78,7 +89,9 @@ export const updateWorkExperience = mutation({
     workplace: v.optional(v.string()),
     workTitle: v.optional(v.string()),
     description: v.optional(v.string()),
-    dateRange: v.optional(v.string()),
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    isCurrentJob: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
@@ -100,7 +113,9 @@ export const updateLatestWorkExperience = mutation({
     workplace: v.optional(v.string()),
     workTitle: v.optional(v.string()),
     description: v.optional(v.string()),
-    dateRange: v.optional(v.string()),
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    isCurrentJob: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     // Get the latest work experience

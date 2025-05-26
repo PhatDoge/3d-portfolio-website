@@ -2,9 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { es } from "date-fns/locale";
 
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Calendar } from "../ui/calendar";
+import { Checkbox } from "../ui/checkbox";
 import {
   Form,
   FormControl,
@@ -14,32 +19,50 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
-const formSchema = z.object({
-  icon: z.string().min(1, { message: "Please select an icon image." }),
-  workplace: z
-    .string()
-    .min(2, { message: "Workplace must be at least 2 characters." })
-    .max(100),
-  workTitle: z
-    .string()
-    .min(2, { message: "Work title must be at least 2 characters." })
-    .max(100),
-  description: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters." })
-    .max(1000),
-  dateRange: z
-    .string()
-    .min(1, { message: "Date range is required." })
-    .regex(/^.+\s*-\s*.+$/, {
-      message:
-        "Date range must contain a dash (-) between start and end dates.",
+const formSchema = z
+  .object({
+    icon: z.string().min(1, { message: "Please select an icon image." }),
+    workplace: z
+      .string()
+      .min(2, { message: "Workplace must be at least 2 characters." })
+      .max(100),
+    workTitle: z
+      .string()
+      .min(2, { message: "Work title must be at least 2 characters." })
+      .max(100),
+    description: z
+      .string()
+      .min(10, { message: "Description must be at least 10 characters." })
+      .max(1000),
+    startDate: z.date({
+      required_error: "Start date is required.",
     }),
-});
+    endDate: z.date().optional(),
+    isCurrentJob: z.boolean().default(false),
+  })
+  .refine(
+    (data) => {
+      // If it's not a current job, end date is required
+      if (!data.isCurrentJob && !data.endDate) {
+        return false;
+      }
+      // If both dates are provided, end date should be after start date
+      if (data.endDate && data.startDate) {
+        return data.endDate >= data.startDate;
+      }
+      return true;
+    },
+    {
+      message:
+        "End date must be after start date, or check 'Current Job' if this is your current position.",
+      path: ["endDate"],
+    }
+  );
 
 const WorkExperience = () => {
   const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
@@ -55,9 +78,19 @@ const WorkExperience = () => {
       workplace: "",
       workTitle: "",
       description: "",
-      dateRange: "",
+      startDate: undefined,
+      endDate: undefined,
+      isCurrentJob: false,
     },
   });
+
+  // Watch the isCurrentJob field to clear endDate when it's checked
+  const isCurrentJob = form.watch("isCurrentJob");
+  React.useEffect(() => {
+    if (isCurrentJob) {
+      form.setValue("endDate", undefined);
+    }
+  }, [isCurrentJob, form]);
 
   // Replace with your actual Convex mutations
   const createWorkExperience = useMutation(
@@ -158,9 +191,13 @@ const WorkExperience = () => {
 
       // Create work experience with uploaded icon ID and descriptions as string
       const workExperienceData = {
-        ...values,
         icon: iconStorageId,
+        workplace: values.workplace,
+        workTitle: values.workTitle,
         description: descriptions.join(" • "), // Save as bullet-separated string
+        startDate: values.startDate.getTime(), // Convert to timestamp
+        endDate: values.endDate ? values.endDate.getTime() : undefined,
+        isCurrentJob: values.isCurrentJob,
       };
 
       const id = await createWorkExperience(workExperienceData);
@@ -288,28 +325,157 @@ const WorkExperience = () => {
                   />
                 </div>
 
-                {/* Date Range Field */}
+                {/* Start Date Field */}
                 <div className="mt-5">
                   <FormField
                     control={form.control}
-                    name="dateRange"
+                    name="startDate"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex flex-col">
                         <FormLabel className="text-gray-200 font-medium">
-                          Periodo de Trabajo
+                          Fecha de Inicio
                         </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Julio 2016 - Abril 2017"
-                            {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
-                          />
-                        </FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                className={`w-full pl-3 text-left font-normal bg-gray-800/50 border-gray-600 text-white hover:bg-gray-700/50 hover:text-white ${
+                                  !field.value && "text-gray-400"
+                                }`}
+                              >
+                                {field.value ?
+                                  format(field.value, "PPP", { locale: es })
+                                : <span>Selecciona fecha de inicio</span>}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+
+                          <PopoverContent
+                            className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
+                            align="start"
+                          >
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              initialFocus
+                              className="bg-gray-800 text-white"
+                              locale={es}
+                              classNames={{
+                                head_cell:
+                                  "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] uppercase",
+                                head_row: "flex",
+                              }}
+                              formatters={{
+                                formatWeekday: (date, options) =>
+                                  date.toLocaleDateString("es-ES", {
+                                    weekday: "narrow",
+                                  }),
+                              }}
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
                 </div>
+
+                {/* Current Job Checkbox */}
+                <div className="mt-5">
+                  <FormField
+                    control={form.control}
+                    name="isCurrentJob"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-gray-600 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-gray-200 font-medium">
+                            Trabajo Actual
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* End Date Field - Only show if not current job */}
+                {!isCurrentJob && (
+                  <div className="mt-5">
+                    <FormField
+                      control={form.control}
+                      name="endDate"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel className="text-gray-200 font-medium">
+                            Fecha de Finalización
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={`w-full pl-3 text-left font-normal bg-gray-800/50 border-gray-600 text-white hover:bg-gray-700/50 hover:text-white ${
+                                    !field.value && "text-gray-400"
+                                  }`}
+                                >
+                                  {field.value ?
+                                    format(field.value, "PPP", { locale: es })
+                                  : <span>
+                                      Selecciona fecha de finalización
+                                    </span>
+                                  }
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                  date > new Date() ||
+                                  date < new Date("1900-01-01")
+                                }
+                                initialFocus
+                                className="bg-gray-800 text-white"
+                                locale={es}
+                                classNames={{
+                                  head_cell:
+                                    "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] uppercase",
+                                  head_row: "flex",
+                                }}
+                                formatters={{
+                                  formatWeekday: (date, options) =>
+                                    date.toLocaleDateString("es-ES", {
+                                      weekday: "narrow",
+                                    }),
+                                }}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
 
                 {/* Description Field */}
                 <div className="mt-5">

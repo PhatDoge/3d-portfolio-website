@@ -14,7 +14,45 @@ import { api } from "../../convex/_generated/api";
 import { Loader } from "lucide-react";
 import PropTypes from "prop-types";
 
+// Helper function to format date range - handles both old and new data formats
+const formatDateRange = (experience) => {
+  // If the old dateRange field exists, use it (backward compatibility)
+  if (experience.dateRange) {
+    return experience.dateRange;
+  }
+
+  // If new date fields exist, format them
+  if (experience.startDate) {
+    const formatDate = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+      });
+    };
+
+    const startFormatted = formatDate(experience.startDate);
+
+    if (experience.isCurrentJob) {
+      return `${startFormatted} - Presente`;
+    }
+
+    if (experience.endDate) {
+      const endFormatted = formatDate(experience.endDate);
+      return `${startFormatted} - ${endFormatted}`;
+    }
+
+    return startFormatted;
+  }
+
+  // Fallback if neither format is available
+  return "Fecha no disponible";
+};
+
 const ExperienceCard = ({ experience, index }) => {
+  // Format the date range using the updated helper function
+  const dateRange = formatDateRange(experience);
+
   return (
     <VerticalTimelineElement
       contentStyle={{
@@ -22,7 +60,7 @@ const ExperienceCard = ({ experience, index }) => {
         color: "#fff",
       }}
       contentArrowStyle={{ borderRight: "7px solid  #232631" }}
-      date={experience.dateRange}
+      date={dateRange}
       iconStyle={{ background: "#383E56" }}
       icon={
         <div className="flex justify-center items-center w-full h-full">
@@ -47,7 +85,7 @@ const ExperienceCard = ({ experience, index }) => {
       </div>
 
       <ul className="mt-5 list-disc ml-5 space-y-2">
-        {experience.descriptionArray.map((point, index) => (
+        {experience.descriptionArray?.map((point, index) => (
           <li
             key={`experience-point-${index}`}
             className="text-white-100 text-[14px] pl-1 tracking-wider"
@@ -62,7 +100,12 @@ const ExperienceCard = ({ experience, index }) => {
 
 ExperienceCard.propTypes = {
   experience: PropTypes.shape({
-    dateRange: PropTypes.string.isRequired,
+    startDate: PropTypes.number.isRequired,
+    endDate: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.oneOf([null, undefined]),
+    ]),
+    isCurrentJob: PropTypes.bool.isRequired,
     iconUrl: PropTypes.string.isRequired,
     workplace: PropTypes.string.isRequired,
     workTitle: PropTypes.string.isRequired,

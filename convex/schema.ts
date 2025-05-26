@@ -7,7 +7,6 @@ export default defineSchema({
     description: v.string(),
   }),
   introduction: defineTable({
-    // Add this line
     header: v.string(),
     description: v.string(),
     title: v.string(),
@@ -32,6 +31,8 @@ export default defineSchema({
     workplace: v.string(), // Company name
     workTitle: v.string(), // Job position title
     description: v.string(), // Bullet-separated responsibilities (using " • ")
-    dateRange: v.string(), // Date period with dash (e.g., "Julio 2016 - Abril 2017")
+    startDate: v.float64(), // Start date as timestamp
+    endDate: v.optional(v.float64()), // End date as timestamp (optional for current jobs)
+    isCurrentJob: v.boolean(), // Flag to indicate if this is a current position
   }),
 });
