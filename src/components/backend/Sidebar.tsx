@@ -44,7 +44,7 @@ const sidebarLinks = [
     id: "services",
     title: "Servicios",
     path: "/services",
-    icon: "/assets/dashboard/services.png",
+    icon: "/assets/dashboard/payment.png",
   },
 ];
 

@@ -8,11 +8,30 @@ import "react-vertical-timeline-component/style.min.css";
 
 import { SectionWrapper } from "../hoc";
 import { styles } from "../styles";
-import { textVariant } from "../utils/motion";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Loader } from "lucide-react";
 import PropTypes from "prop-types";
+
+// Custom motion variant that triggers very early
+const earlyTextVariant = (delay = 0) => {
+  return {
+    hidden: {
+      y: -50,
+      opacity: 0,
+    },
+    show: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        duration: 0.8,
+        delay: delay,
+        ease: "easeOut",
+      },
+    },
+  };
+};
 
 // Helper function to format date range - handles both old and new data formats
 const formatDateRange = (experience) => {
@@ -49,7 +68,7 @@ const formatDateRange = (experience) => {
   return "Fecha no disponible";
 };
 
-const ExperienceCard = ({ experience, index }) => {
+const ExperienceCard = ({ experience }) => {
   // Format the date range using the updated helper function
   const dateRange = formatDateRange(experience);
 
@@ -115,11 +134,7 @@ ExperienceCard.propTypes = {
 };
 
 const Experience = () => {
-  // Option 1: Get all work experiences
   const allExperiences = useQuery(api.workExperience.getAllWorkExperiences);
-
-  // Option 2: Get just the latest work experience
-  // const latestExperience = useQuery(api.workExperience.getLatestWorkExperience);
 
   if (!allExperiences) {
     return (
@@ -131,7 +146,16 @@ const Experience = () => {
 
   return (
     <>
-      <motion.div variants={textVariant()}>
+      <motion.div
+        variants={earlyTextVariant()}
+        initial="hidden"
+        whileInView="show"
+        viewport={{
+          once: true,
+          amount: 0.01, // Trigger when only 1% is visible
+          margin: "0px 0px -200px 0px", // Start animation 200px before element enters viewport
+        }}
+      >
         <p className={`${styles.sectionSubText} text-center`}>
           ¿Qué he hecho hasta ahora?
         </p>

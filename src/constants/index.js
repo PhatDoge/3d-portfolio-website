@@ -41,6 +41,14 @@ export const navLinks = [
     id: "contact",
     title: "Contacto",
   },
+  {
+    id: "projects",
+    title: "Proyectos",
+  },
+  {
+    id: "services",
+    title: "Servicios",
+  },
 ];
 
 export const sidebarLinks = [

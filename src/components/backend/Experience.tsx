@@ -97,7 +97,6 @@ const WorkExperience = () => {
     }
   }, [isCurrentJob, form]);
 
-  // Replace with your actual Convex mutations
   const createWorkExperience = useMutation(
     api.workExperience.createWorkExperience
   );

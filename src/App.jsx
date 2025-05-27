@@ -17,6 +17,9 @@ import Introduction from "./components/backend/Introduction";
 import ProjectCard from "./components/backend/ProjectCard";
 import ProjectsDisplay from "./components/backend/ProjectsDisplay";
 import LeftSidebar from "./components/backend/Sidebar";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
+import AllServices from "./components/AllServices";
 import Services from "./components/backend/Services";
 // import Documents from "./components/backend/Documents";
 
@@ -36,6 +39,15 @@ DashboardLayout.propTypes = {
 
 // Home page layout component
 const HomeLayout = ({ children }) => {
+  const services = useQuery(api.services.getServices);
+  if (!services) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative z-0 bg-primary">
       <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
@@ -46,7 +58,15 @@ const HomeLayout = ({ children }) => {
       <About />
       <Experience />
       <Tech />
-      <Works />
+
+      {/* Reduced margin between Works and AllServices */}
+      <div className="mb-8">
+        <Works />
+      </div>
+
+      <div className="mt-8">
+        <AllServices services={services} />
+      </div>
 
       {/* <Feedbacks /> */}
       <div className="relative z-0">

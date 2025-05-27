@@ -197,8 +197,6 @@ const LoadingCard = ({ index }) => (
   </motion.div>
 );
 
-// Works component - Updated to use Convex
-// Works component - Updated to use Convex with proper null checking
 const Works = () => {
   // Fetch projects from Convex
   const projects = useQuery(api.projects.getProjects);
@@ -207,7 +205,7 @@ const Works = () => {
   const details = projectsDetails?.[0];
 
   return (
-    <>
+    <section id="projects" className="min-h-screen w-full">
       <motion.div
         variants={textVariant(0)}
         initial="hidden"
@@ -262,7 +260,7 @@ const Works = () => {
           ))
         }
       </div>
-    </>
+    </section>
   );
 };
 
