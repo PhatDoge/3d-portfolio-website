@@ -117,16 +117,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
   return (
     <motion.div
-      variants={fadeIn("up", "spring", 0.1 * index, 0.75)}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.25 }}
-      className="w-full max-w-xs mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 * index }}
+      className="w-full h-full" // Changed: removed max-width and made it fully responsive
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
       <div
-        className="relative backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] group border border-white/20"
+        className="relative backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] group border border-white/20 h-full flex flex-col min-h-[400px]" // Added min-height and made height responsive
         style={{
           background: `${cardGradient}, rgba(30, 41, 59, 0.4)`,
           boxShadow:
@@ -165,11 +164,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           </div>
         )}
 
-        <div className="relative p-6 z-10">
+        <div className="relative p-4 sm:p-6 z-10 flex-1 flex flex-col">
+          {" "}
+          {/* Made padding responsive */}
           {/* Enhanced Header Section */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 sm:mb-6">
+            {" "}
+            {/* Made margin responsive */}
             <motion.div
-              className="relative w-16 h-16 mx-auto mb-4"
+              className="relative w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" // Made icon size responsive
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
@@ -180,7 +183,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   boxShadow: `0 4px 16px ${accentColor}15`,
                 }}
               />
-              <div className="relative w-full h-full p-3 rounded-xl">
+              <div className="relative w-full h-full p-2 sm:p-3 rounded-xl">
+                {" "}
+                {/* Made padding responsive */}
                 <img
                   src={iconUrl || "/default-service-icon.png"}
                   alt={title}
@@ -192,25 +197,33 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 />
               </div>
             </motion.div>
-            <h3 className="text-white text-xl font-bold mb-2 leading-tight tracking-tight">
+            <h3 className="text-white text-lg sm:text-xl font-bold mb-2 leading-tight tracking-tight">
+              {" "}
+              {/* Made font size responsive */}
               {title}
             </h3>
             {subtitle && (
-              <p className="text-gray-300 text-sm font-medium opacity-80">
+              <p className="text-gray-300 text-xs sm:text-sm font-medium opacity-80">
+                {" "}
+                {/* Made font size responsive */}
                 {subtitle}
               </p>
             )}
           </div>
-
           {/* Enhanced Stats Section with subtle gradients */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6">
+            {" "}
+            {/* Made gap and margin responsive */}
             {/* Experience Level */}
             <div
-              className={`${experienceStyle.bg} ${experienceStyle.border} border rounded-lg p-3 text-center backdrop-blur-sm relative overflow-hidden`}
+              className={`${experienceStyle.bg} ${experienceStyle.border} border rounded-lg p-2 sm:p-3 text-center backdrop-blur-sm relative overflow-hidden`} // Made padding responsive
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50" />
               <div className="relative z-10">
-                <div className="text-sm mb-1">{experienceStyle.icon}</div>
+                <div className="text-xs sm:text-sm mb-1">
+                  {experienceStyle.icon}
+                </div>{" "}
+                {/* Made font size responsive */}
                 <div
                   className={`text-xs font-bold ${experienceStyle.text} mb-1`}
                 >
@@ -219,27 +232,33 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 <div className="text-gray-400 text-xs">Nivel</div>
               </div>
             </div>
-
             {/* Project Count */}
-            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/30 rounded-lg p-3 text-center backdrop-blur-sm relative overflow-hidden">
+            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/30 rounded-lg p-2 sm:p-3 text-center backdrop-blur-sm relative overflow-hidden">
+              {" "}
+              {/* Made padding responsive */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
               <div className="relative z-10">
-                <div className="text-sm mb-1">🚀</div>
-                <div className="text-white text-sm font-bold mb-1">
+                <div className="text-xs sm:text-sm mb-1">🚀</div>{" "}
+                {/* Made font size responsive */}
+                <div className="text-white text-xs sm:text-sm font-bold mb-1">
+                  {" "}
+                  {/* Made font size responsive */}
                   {projectCount}+
                 </div>
                 <div className="text-gray-400 text-xs">Proyectos</div>
               </div>
             </div>
-
             {/* Price */}
             {startingPrice && (
-              <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/30 rounded-lg p-3 text-center backdrop-blur-sm relative overflow-hidden">
+              <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/30 rounded-lg p-2 sm:p-3 text-center backdrop-blur-sm relative overflow-hidden">
+                {" "}
+                {/* Made padding responsive */}
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5" />
                 <div className="relative z-10">
-                  <div className="text-sm mb-1">💰</div>
+                  <div className="text-xs sm:text-sm mb-1">💰</div>{" "}
+                  {/* Made font size responsive */}
                   <div
-                    className="text-sm font-bold mb-1"
+                    className="text-xs sm:text-sm font-bold mb-1" // Made font size responsive
                     style={{ color: accentColor }}
                   >
                     {formatPrice()}
@@ -249,26 +268,36 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               </div>
             )}
           </div>
-
           {/* Enhanced Description */}
-          <div className="mb-6">
-            <p className="text-gray-200 text-sm leading-relaxed text-center font-medium">
+          <div className="mb-4 sm:mb-6">
+            {" "}
+            {/* Made margin responsive */}
+            <p className="text-gray-200 text-xs sm:text-sm leading-relaxed text-center font-medium">
+              {" "}
+              {/* Made font size responsive */}
               {description}
             </p>
           </div>
-
           {/* Enhanced Key Features with subtle gradient background */}
-          <div className="mb-6">
-            <div className="flex items-center mb-3">
+          <div className="mb-4 sm:mb-6">
+            {" "}
+            {/* Made margin responsive */}
+            <div className="flex items-center mb-2 sm:mb-3">
+              {" "}
+              {/* Made margin responsive */}
               <div
                 className="w-2 h-2 rounded-full mr-2"
                 style={{ backgroundColor: accentColor }}
               />
-              <h4 className="text-white text-sm font-bold tracking-wide">
+              <h4 className="text-white text-xs sm:text-sm font-bold tracking-wide">
+                {" "}
+                {/* Made font size responsive */}
                 CARACTERÍSTICAS CLAVE
               </h4>
             </div>
-            <div className="space-y-2 p-3 rounded-lg bg-gradient-to-br from-white/5 to-transparent border border-white/10">
+            <div className="space-y-2 p-2 sm:p-3 rounded-lg bg-gradient-to-br from-white/5 to-transparent border border-white/10">
+              {" "}
+              {/* Made padding responsive */}
               {featuresArray.slice(0, 3).map((feature, idx) => (
                 <motion.div
                   key={idx}
@@ -278,32 +307,43 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   transition={{ delay: 0.1 * idx }}
                 >
                   <div
-                    className="w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5 flex-shrink-0 shadow-lg"
+                    className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5 flex-shrink-0 shadow-lg" // Made size responsive
                     style={{ backgroundColor: accentColor }}
                   >
                     ✓
                   </div>
-                  <span className="text-gray-200 text-sm leading-relaxed group-hover/feature:text-white transition-colors duration-200">
+                  <span className="text-gray-200 text-xs sm:text-sm leading-relaxed group-hover/feature:text-white transition-colors duration-200">
+                    {" "}
+                    {/* Made font size responsive */}
                     {feature}
                   </span>
                 </motion.div>
               ))}
             </div>
           </div>
-
           {/* Enhanced Technologies with gradient container */}
-          <div className="mb-6">
-            <div className="flex items-center mb-3">
+          <div className="mb-4 sm:mb-6">
+            {" "}
+            {/* Made margin responsive */}
+            <div className="flex items-center mb-2 sm:mb-3">
+              {" "}
+              {/* Made margin responsive */}
               <div
                 className="w-2 h-2 rounded-full mr-2"
                 style={{ backgroundColor: accentColor }}
               />
-              <h4 className="text-white text-sm font-bold tracking-wide">
+              <h4 className="text-white text-xs sm:text-sm font-bold tracking-wide">
+                {" "}
+                {/* Made font size responsive */}
                 TECNOLOGÍAS
               </h4>
             </div>
-            <div className="p-3 rounded-lg bg-gradient-to-br from-white/5 to-transparent border border-white/10">
-              <div className="flex flex-wrap gap-2">
+            <div className="p-2 sm:p-3 rounded-lg bg-gradient-to-br from-white/5 to-transparent border border-white/10">
+              {" "}
+              {/* Made padding responsive */}
+              <div className="flex flex-wrap gap-1 sm:gap-2">
+                {" "}
+                {/* Made gap responsive */}
                 {techArray.slice(0, 6).map((tech, idx) => (
                   <motion.span
                     key={idx}
@@ -318,29 +358,34 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               </div>
             </div>
           </div>
-
           {/* Enhanced Delivery Time */}
           {deliveryTime && (
-            <div className="mb-6">
-              <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-lg p-3 border border-white/20 backdrop-blur-sm relative overflow-hidden">
+            <div className="mb-4 sm:mb-6">
+              {" "}
+              {/* Made margin responsive */}
+              <div className="bg-gradient-to-r from-white/10 to-white/5 rounded-lg p-2 sm:p-3 border border-white/20 backdrop-blur-sm relative overflow-hidden">
+                {" "}
+                {/* Made padding responsive */}
                 <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-orange-500/5" />
                 <div className="relative z-10 flex items-center justify-center gap-2">
-                  <div className="text-sm">⏱️</div>
+                  <div className="text-xs sm:text-sm">⏱️</div>{" "}
+                  {/* Made font size responsive */}
                   <span className="text-xs text-gray-300 font-medium">
                     Tiempo de entrega:
                   </span>
-                  <span className="text-sm text-white font-bold">
+                  <span className="text-xs sm:text-sm text-white font-bold">
+                    {" "}
+                    {/* Made font size responsive */}
                     {deliveryTime}
                   </span>
                 </div>
               </div>
             </div>
           )}
-
           {/* Enhanced CTA Button with improved gradient */}
           <motion.a
             href={ctaLink}
-            className="relative block w-full py-3 px-4 text-center text-white font-bold rounded-xl transition-all duration-500 overflow-hidden group/cta border border-white/20"
+            className="relative block w-full py-2 sm:py-3 px-3 sm:px-4 text-center text-white font-bold rounded-xl transition-all duration-500 overflow-hidden group/cta border border-white/20 mt-auto" // Made padding responsive
             style={{
               background: `linear-gradient(135deg, ${accentColor}, #bf61ff)`,
             }}
@@ -350,7 +395,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             {/* Button Background Effects */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/cta:translate-x-[100%] transition-transform duration-1000" />
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 tracking-wide text-sm">
+            <span className="relative z-10 tracking-wide text-xs sm:text-sm">
+              {" "}
+              {/* Made font size responsive */}
               {ctaText}
             </span>
           </motion.a>

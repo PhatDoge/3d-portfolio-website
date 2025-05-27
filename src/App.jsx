@@ -65,7 +65,7 @@ const HomeLayout = ({ children }) => {
         <Works />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 overflow-hidden">
         <AllServices services={services} />
       </div>
 

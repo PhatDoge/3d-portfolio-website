@@ -5,43 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import ServiceCard from "./ServiceCard";
 
-// Custom Arrow Components
-const CustomPrevArrow = ({ onClick }) => (
-  <button
-    onClick={onClick}
-    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/20"
-  >
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-    >
-      <path d="M15 18l-6-6 6-6" />
-    </svg>
-  </button>
-);
-
-const CustomNextArrow = ({ onClick }) => (
-  <button
-    onClick={onClick}
-    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/20"
-  >
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-    >
-      <path d="M9 18l6-6-6-6" />
-    </svg>
-  </button>
-);
-
 const AllServices = ({ services }) => {
   const [activeFilter, setActiveFilter] = useState("Todos");
 
@@ -92,19 +55,15 @@ const AllServices = ({ services }) => {
   const sliderSettings = {
     dots: true,
     infinite: filteredServices.length > 3,
-    speed: 800,
-    slidesToShow: Math.min(4, filteredServices.length),
+    speed: 600,
+    slidesToShow: Math.min(3, filteredServices.length),
     slidesToScroll: 1,
     autoplay: filteredServices.length > 1,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 3000,
     pauseOnHover: true,
     rtl: false,
-    prevArrow: (
-      <CustomPrevArrow onClick={() => console.log("Prev arrow clicked!")} />
-    ),
-    nextArrow: (
-      <CustomNextArrow onClick={() => console.log("Next arrow clicked!")} />
-    ),
+    prevArrow: null,
+    nextArrow: null,
     responsive: [
       {
         breakpoint: 1200,
@@ -139,10 +98,11 @@ const AllServices = ({ services }) => {
       {/* Filter Buttons - Only show if 3+ services and multiple categories */}
       {shouldShowFilters && categories.length > 1 && (
         <motion.div
-          className="flex justify-center mb-16"
+          className="flex justify-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
+          viewport={{ once: true, amount: 0.25 }}
         >
           <div className="relative">
             {/* Background glow effect */}
@@ -159,9 +119,7 @@ const AllServices = ({ services }) => {
                       "text-gray-400 hover:text-white"
                     )
                   }`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index, duration: 0.4 }}
+                  initial={{ opacity: 1, y: 0 }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -202,41 +160,63 @@ const AllServices = ({ services }) => {
 
       {/* Services Display */}
       <div className="px-4">
-        {
-          filteredServices.length === 1 ?
-            // Single service - centered display
-            <motion.div
-              className="flex justify-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-            >
+        {filteredServices.length === 1 ?
+          // Single service - centered display with max width
+          <motion.div
+            className="flex justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="max-w-sm sm:max-w-md lg:max-w-lg w-auto">
               <ServiceCard
                 index={0}
                 {...filteredServices[0]}
                 iconUrl={filteredServices[0].iconUrl}
               />
-            </motion.div>
-            // Multiple services - slider
-          : <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="services-slider"
-            >
-              <Slider {...sliderSettings}>
-                {filteredServices.map((service, index) => (
-                  <div key={service._id} className="px-3">
+            </div>
+          </motion.div>
+        : filteredServices.length === 2 ?
+          // Two services - justify between
+          <motion.div
+            className="flex justify-between gap-8 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {filteredServices.map((service, index) => (
+              <div key={service._id} className="flex-1 flex justify-center">
+                <div className="max-w-sm w-full">
+                  <ServiceCard
+                    index={index}
+                    {...service}
+                    iconUrl={service.iconUrl}
+                  />
+                </div>
+              </div>
+            ))}
+          </motion.div>
+          // Multiple services - slider
+        : <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="services-slider"
+          >
+            <Slider {...sliderSettings}>
+              {filteredServices.map((service, index) => (
+                <div key={service._id} className="px-3 h-full">
+                  <div className="h-full">
                     <ServiceCard
                       index={index}
                       {...service}
                       iconUrl={service.iconUrl}
                     />
                   </div>
-                ))}
-              </Slider>
-            </motion.div>
-
+                </div>
+              ))}
+            </Slider>
+          </motion.div>
         }
       </div>
 
@@ -277,7 +257,7 @@ const AllServices = ({ services }) => {
         </motion.div>
       )}
 
-      {/* Custom CSS for Slider */}
+      {/* Custom CSS for Slider - UPDATED WITH EQUAL HEIGHTS */}
       <style jsx global>{`
         .services-slider .slick-dots {
           bottom: -60px;
@@ -297,17 +277,37 @@ const AllServices = ({ services }) => {
           transform: scale(1.2);
         }
 
+        /* CRITICAL FIX: Equal heights for slider cards */
         .services-slider .slick-track {
-          display: flex;
-          align-items: center;
+          display: flex !important;
+          align-items: stretch !important;
         }
 
         .services-slider .slick-slide {
-          height: inherit;
+          height: auto !important;
+          display: flex !important;
         }
 
         .services-slider .slick-slide > div {
-          height: 100%;
+          height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+
+        .services-slider .slick-slide > div > div {
+          height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+
+        /* Force all cards to have the same height */
+        .services-slider .slick-list {
+          overflow: visible;
+        }
+
+        /* Alternative approach - set minimum height */
+        .services-slider .slick-slide {
+          min-height: 700px;
         }
 
         @keyframes slideIn {

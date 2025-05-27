@@ -91,7 +91,7 @@ const LeftSidebar = () => {
   };
 
   return (
-    <section className="bg-slate-900 border-r border-gray-700 sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto p-6 pt-10 shadow max-sm:hidden lg:w-[260px]">
+    <section className="bg-slate-900 border-r border-gray-700 sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto p-6 pt-10 shadow max-sm:hidden lg:w-[280px]">
       <div>
         <div
           onClick={() => navigate("/")}
