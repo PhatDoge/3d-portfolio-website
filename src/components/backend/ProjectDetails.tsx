@@ -14,7 +14,7 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
 const formSchema = z.object({
@@ -32,28 +32,25 @@ const formSchema = z.object({
     .max(1000),
 });
 
-const ProjectDetails = () => {
+// Separate form component that only renders when data is available
+const ProjectDetailsForm = ({ data, createProjectDetails }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      header: "",
-      description: "",
+      title: data[0]?.title || "",
+      header: data[0]?.header || "",
+      description: data[0]?.description || "",
     },
   });
-
-  const createProjectDetails = useMutation(
-    api.projectdetails.createProjectDetails
-  );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const id = await createProjectDetails(values);
-      console.log("introduction created with ID:", id);
+      console.log("Project details created with ID:", id);
       form.reset();
       window.location.href = "/";
     } catch (error) {
-      console.error("Failed to create introduction:", error);
+      console.error("Failed to create project details:", error);
     }
   }
 
@@ -62,8 +59,8 @@ const ProjectDetails = () => {
       {/* Section Header */}
       <div className="text-center pb-4 mb-6">
         <h3 className="text-2xl font-bold">
-          <span className="orange-text-gradient">Detalles</span>{" "}
-          <span className="green-text-gradient">Personales</span>
+          <span className="orange-text-gradient">Detalles de</span>{" "}
+          <span className="green-text-gradient">Cabezera</span>
         </h3>
       </div>
 
@@ -150,6 +147,31 @@ const ProjectDetails = () => {
         </form>
       </Form>
     </div>
+  );
+};
+
+// Main component that handles data loading
+const ProjectDetails = () => {
+  const data = useQuery(api.projectdetails.getProjectDetails);
+  const createProjectDetails = useMutation(
+    api.projectdetails.createProjectDetails
+  );
+
+  // Show loading state while data is being fetched
+  if (data === undefined) {
+    return (
+      <div className="w-full mt-5 flex items-center justify-center">
+        <div className="text-white text-lg">Loading project details...</div>
+      </div>
+    );
+  }
+
+  // Render the form only when data is available
+  return (
+    <ProjectDetailsForm
+      data={data}
+      createProjectDetails={createProjectDetails}
+    />
   );
 };
 

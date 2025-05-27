@@ -21,6 +21,7 @@ import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import AllServices from "./components/AllServices";
 import Services from "./components/backend/Services";
+import ExperienceList from "./components/backend/ExperienceList";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -150,6 +151,15 @@ const App = () => {
           element={
             <DashboardLayout>
               <Services />
+            </DashboardLayout>
+          }
+        />
+
+        <Route
+          path="/experienceList"
+          element={
+            <DashboardLayout>
+              <ExperienceList />
             </DashboardLayout>
           }
         />

@@ -37,8 +37,21 @@ const sidebarLinks = [
   {
     id: "experience",
     title: "Experiencia",
-    path: "/experience",
+    path: "/experienc3",
     icon: "/assets/dashboard/experience.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-experience",
+        title: "Crear Experiencia",
+        path: "/experience",
+      },
+      {
+        id: "experience-list",
+        title: "Todas las Experiencias",
+        path: "/experienceList",
+      },
+    ],
   },
   {
     id: "services",

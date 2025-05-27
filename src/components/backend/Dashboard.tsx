@@ -1,9 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React from "react";
 
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -14,11 +12,11 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api"; // adjust path as needed
-import PasskeyModal from "../PassKeyModal";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const formSchema = z.object({
   name: z
@@ -31,23 +29,22 @@ const formSchema = z.object({
     .max(100),
 });
 
-const Dashboard = () => {
+// Separate form component that only renders when data is available
+const HeaderForm = ({ data, createHeader }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: data[0]?.name || "",
+      description: data[0]?.description || "",
     },
   });
-
-  const createHeader = useMutation(api.header.createHeader); // <- adjust path as needed
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const id = await createHeader(values);
       console.log("Header created with ID:", id);
       form.reset();
-      window.location.href = "/"; // navigate to the root route
+      window.location.href = "/";
     } catch (error) {
       console.error("Failed to create header:", error);
     }
@@ -131,6 +128,24 @@ const Dashboard = () => {
       </div>
     </div>
   );
+};
+
+// Main component that handles data loading
+const Dashboard = () => {
+  const data = useQuery(api.header.getHeader);
+  const createHeader = useMutation(api.header.createHeader);
+
+  // Show loading state while data is being fetched
+  if (data === undefined) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Render the form only when data is available
+  return <HeaderForm data={data} createHeader={createHeader} />;
 };
 
 export default Dashboard;
