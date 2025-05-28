@@ -12,8 +12,7 @@ export default defineSchema({
     title: v.string(),
   }),
   skills: defineTable({
-    iconUrl: v.optional(v.string()), // Make optional since we might have iconFile instead
-    iconFile: v.optional(v.id("_storage")), // Add field for uploaded file
+    iconUrl: v.string(),
     title: v.string(),
     description: v.string(),
     link: v.string(),
@@ -33,12 +32,7 @@ export default defineSchema({
     header: v.string(),
     description: v.string(),
   }),
-  skills: defineTable({
-    iconUrl: v.string(),
-    title: v.string(),
-    description: v.string(),
-    link: v.string(),
-  }),
+
   workExperience: defineTable({
     icon: v.string(), // Storage ID for company icon/logo
     workplace: v.string(), // Company name

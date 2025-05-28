@@ -5,17 +5,17 @@ import "slick-carousel/slick/slick.css";
 
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { services } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { styles } from "../styles";
 import { fadeIn, textVariant } from "../utils/motion";
-import SkillCard from "../components/SkillCard";
-const About = () => {
-  const skills = useQuery(api.skills.getAllSkills);
+import SkillCard from "./SkillCard";
 
+const About = () => {
   const introductions = useQuery(api.introduction.getIntroductions);
 
   // Handle loading state
-  if (!introductions || !skills) {
+  if (!introductions) {
     return (
       <div className="h-screen flex items-center justify-center text-white">
         Loading...
@@ -39,6 +39,7 @@ const About = () => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          arrows: false, // Ensure arrows are disabled on smaller screens too
         },
       },
       {
@@ -82,9 +83,9 @@ const About = () => {
 
       <div className="mt-20">
         <Slider {...sliderSettings}>
-          {skills.map((skill, index) => (
-            <div key={skill._id} className="px-4">
-              <SkillCard index={index} {...skill} />
+          {services.map((service, index) => (
+            <div key={service.title} className="px-4">
+              <SkillCard index={index} {...service} />
             </div>
           ))}
         </Slider>
