@@ -7,6 +7,9 @@ import ServiceCard from "./ServiceCard";
 
 const AllServices = ({ services }) => {
   const [activeFilter, setActiveFilter] = useState("Todos");
+  const activeServices =
+    services?.filter((service: any) => service.isActive || service.active) ||
+    [];
 
   // Handle empty services
   if (!services || services.length === 0) {
@@ -40,16 +43,17 @@ const AllServices = ({ services }) => {
   // Get unique categories for filter
   const categories = [
     "Todos",
-    ...Array.from(new Set<string>(services.map((service) => service.category))),
+    ...Array.from(
+      new Set<string>(activeServices.map((service) => service.category))
+    ),
   ];
 
   // Only show filters if there are 3 or more services
-  const shouldShowFilters = services.length >= 3;
-
+  const shouldShowFilters = activeServices.length >= 3;
   // Filter services based on active filter
   const filteredServices =
-    activeFilter === "Todos" ? services : (
-      services.filter((service) => service.category === activeFilter)
+    activeFilter === "Todos" ? activeServices : (
+      activeServices.filter((service) => service.category === activeFilter)
     );
 
   const sliderSettings = {
@@ -221,7 +225,7 @@ const AllServices = ({ services }) => {
       </div>
 
       {/* Services Statistics */}
-      {services.length > 0 && (
+      {activeServices.length > 0 && (
         <motion.div
           className="mt-20 flex justify-center"
           initial={{ opacity: 0, y: 30 }}
@@ -231,13 +235,13 @@ const AllServices = ({ services }) => {
           <div className="flex flex-row gap-8 max-w-2xl w-full justify-center">
             <div className="flex-1 text-center">
               <div className="text-3xl font-bold text-white mb-2">
-                {services.length}+
+                {activeServices.length}+
               </div>
               <div className="text-gray-400 text-sm">Servicios Disponibles</div>
             </div>
             <div className="flex-1 text-center">
               <div className="text-3xl font-bold text-purple-400 mb-2">
-                {services.reduce(
+                {activeServices.reduce(
                   (acc, service) => acc + service.projectCount,
                   0
                 )}
