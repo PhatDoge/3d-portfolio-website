@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { useState, useEffect } from "react";
 
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -10,36 +11,50 @@ import { styles } from "../styles";
 import { fadeIn, textVariant } from "../utils/motion";
 import SkillCard from "./SkillCard";
 
+// Skeleton card component
+const SkeletonCard = () => (
+  <div className="xs:w-[250px] w-full mx-auto my-4">
+    <div className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card">
+      <div className="bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col">
+        <div className="w-16 h-16 bg-gray-600 rounded animate-pulse"></div>
+        <div className="w-32 h-6 bg-gray-600 rounded animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+);
+
 const About = () => {
   const introductions = useQuery(api.introduction.getIntroductions);
-  // Remove the services import and add skills query
   const skills = useQuery(api.skills.getAllSkills);
+  const [isDataReady, setIsDataReady] = useState(false);
 
-  // Handle loading state
-  // Handle loading state
-  if (!introductions || !skills) {
-    return (
-      <div className="h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
-  }
+  // Wait for data to be fully loaded before rendering carousel
+  useEffect(() => {
+    if (introductions && skills && skills.length > 0) {
+      // Small delay to ensure smooth transition
+      const timer = setTimeout(() => {
+        setIsDataReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [introductions, skills]);
 
   const sliderSettings = {
     dots: true,
-    infinite: skills.length > 1, // Only infinite if more than 1 skill
+    infinite: skills?.length > 1,
     speed: 2000,
-    slidesToShow: Math.min(skills.length, 3), // Show max 3 or total skills if less
+    slidesToShow: Math.min(skills?.length || 3, 3),
     slidesToScroll: 1,
-    autoplay: skills.length > 1, // Only autoplay if more than 1 skill
+    autoplay: skills?.length > 1,
     autoplaySpeed: 3000,
     rtl: false,
     arrows: false,
+    adaptiveHeight: false, // Keep consistent height
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(skills.length, 2),
+          slidesToShow: Math.min(skills?.length || 2, 2),
           slidesToScroll: 1,
         },
       },
@@ -53,6 +68,30 @@ const About = () => {
       },
     ],
   };
+
+  // Show skeleton loading
+  if (!introductions || !skills || !isDataReady) {
+    return (
+      <section id="about" className="min-h-screen w-full relative">
+        <div className="text-center">
+          <p className={`${styles.sectionSubText} text-center animate-pulse`}>
+            Loading...
+          </p>
+          <h2 className={`${styles.heroHeadText} text-center animate-pulse`}>
+            Please wait
+          </h2>
+        </div>
+
+        <div className="mt-20">
+          <div className="flex justify-center space-x-4">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const introduction = introductions[0];
   return (
@@ -83,16 +122,18 @@ const About = () => {
       </div>
 
       <div className="mt-20">
-        <Slider {...sliderSettings}>
-          {skills.map((skill, index) => (
-            <div key={skill._id} className="px-4">
-              <SkillCard index={index} {...skill} />
-            </div>
-          ))}
-        </Slider>
+        {/* Fixed height container prevents layout shift */}
+        <div className="carousel-container" style={{ height: "320px" }}>
+          <Slider {...sliderSettings}>
+            {skills.map((skill, index) => (
+              <div key={skill._id} className="px-4 h-full">
+                <SkillCard index={index} {...skill} />
+              </div>
+            ))}
+          </Slider>
+        </div>
       </div>
 
-      {/* Add the required CSS styles */}
       <style jsx>{`
         .perspective-1000 {
           perspective: 1000px;
@@ -125,35 +166,42 @@ const About = () => {
           overflow: hidden;
         }
 
-        /* Enhanced border styles for tilt effect */
         .green-pink-gradient {
           background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
         }
 
-        /* Subtle glow effect on hover without changing border appearance */
         .shadow-card:hover {
           box-shadow:
             0 10px 30px rgba(191, 97, 255, 0.15),
             0 0 20px rgba(0, 206, 168, 0.1);
         }
-        /* Fix slider layout */
+
+        /* Robust carousel styling */
+        .carousel-container {
+          position: relative;
+          overflow: hidden;
+        }
+
         .slick-track {
           display: flex !important;
-          align-items: center;
+          align-items: center !important;
+          height: 100% !important;
         }
 
         .slick-slide {
-          height: auto;
+          height: 320px !important;
           display: flex !important;
           justify-content: center;
         }
 
         .slick-slide > div {
-          width: 100%;
-          display: flex;
+          width: 100% !important;
+          height: 100% !important;
+          display: flex !important;
           justify-content: center;
+          align-items: center !important;
         }
-        /* Keep original card appearance */
+
         .card-face {
           background-clip: padding-box;
         }
