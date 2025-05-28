@@ -2,8 +2,37 @@ import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { Tilt } from "react-tilt";
 import { fadeIn } from "../utils/motion";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api"; // Adjust path as needed
 
-const SKillCard = ({ index, title, iconUrl, description, link }) => {
+// Helper component to handle image display
+const SkillIcon = ({ iconUrl, iconFile, title }) => {
+  const fileUrl = useQuery(
+    api.skills.getImageUrl,
+    iconFile ? { storageId: iconFile } : "skip"
+  );
+
+  const imageSrc = iconFile ? fileUrl : iconUrl;
+
+  if (!imageSrc) {
+    // Fallback icon if neither URL nor file is available
+    return (
+      <div className="w-16 h-16 bg-gray-600 rounded-lg flex items-center justify-center">
+        <span className="text-white text-2xl">📦</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={imageSrc}
+      alt={title}
+      className="w-16 h-16 object-contain rounded-lg"
+    />
+  );
+};
+
+const SKillCard = ({ index, title, iconUrl, iconFile, description, link }) => {
   return (
     <Tilt className="xs:w-[250px] w-full mx-auto my-4">
       <motion.div
@@ -26,11 +55,7 @@ const SKillCard = ({ index, title, iconUrl, description, link }) => {
 
             {/* Front side */}
             <div className="card-face card-front absolute inset-0 bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col backface-hidden">
-              <img
-                src={iconUrl} // Changed from 'icon' to 'iconUrl'
-                alt={title}
-                className="w-16 h-16 object-contain"
-              />
+              <SkillIcon iconUrl={iconUrl} iconFile={iconFile} title={title} />
               <h3 className="text-white text-[20px] font-bold text-center">
                 {title}
               </h3>
@@ -69,10 +94,11 @@ const SKillCard = ({ index, title, iconUrl, description, link }) => {
 
 SKillCard.propTypes = {
   title: PropTypes.string.isRequired,
-  iconUrl: PropTypes.string.isRequired, // Changed from 'icon' to 'iconUrl'
+  iconUrl: PropTypes.string, // Make optional since we might have iconFile instead
+  iconFile: PropTypes.string, // Add iconFile prop
   index: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired, // Add description
-  link: PropTypes.string.isRequired, // Add link
+  description: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
 };
 
 export default SKillCard;

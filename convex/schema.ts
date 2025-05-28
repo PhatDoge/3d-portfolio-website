@@ -12,7 +12,8 @@ export default defineSchema({
     title: v.string(),
   }),
   skills: defineTable({
-    iconUrl: v.string(),
+    iconUrl: v.optional(v.string()), // Make optional since we might have iconFile instead
+    iconFile: v.optional(v.id("_storage")), // Add field for uploaded file
     title: v.string(),
     description: v.string(),
     link: v.string(),

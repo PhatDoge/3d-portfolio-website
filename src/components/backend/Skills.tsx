@@ -17,45 +17,83 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useState } from "react";
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(2, { message: "Title must be at least 2 characters." })
-    .max(50),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters." })
-    .max(500),
-  iconUrl: z
-    .string()
-    .url({ message: "Please enter a valid URL for the icon." }),
-  link: z.string().url({ message: "Please enter a valid URL for the link." }),
-});
+const formSchema = z
+  .object({
+    title: z
+      .string()
+      .min(2, { message: "Title must be at least 2 characters." })
+      .max(50),
+    description: z
+      .string()
+      .min(2, { message: "Description must be at least 2 characters." })
+      .max(500),
+    iconUrl: z.string().url().optional().or(z.literal("")), // Make optional
+    iconFile: z.any().optional(), // Add for file upload
+    link: z.string().url({ message: "Please enter a valid URL for the link." }),
+  })
+  .refine((data) => data.iconUrl || data.iconFile, {
+    message: "Either provide an icon URL or upload an image",
+    path: ["iconUrl"], // This will show the error on the iconUrl field
+  });
 
 // Separate form component that only renders when data is available
 const SkillsForm = ({ data, createSkill }) => {
+  const [uploadedFileId, setUploadedFileId] = useState(null);
+  const generateUploadUrl = useMutation(api.skills.generateUploadUrl);
+
+  const handleFileUpload = async (file) => {
+    const postUrl = await generateUploadUrl();
+    const result = await fetch(postUrl, {
+      method: "POST",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+    const { storageId } = await result.json();
+    setUploadedFileId(storageId);
+    return storageId;
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
       iconUrl: "",
+      iconFile: undefined, // Add this line
       link: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const id = await createSkill(values);
+      const skillData: {
+        title: string;
+        description: string;
+        link: string;
+        iconFile?: string;
+        iconUrl?: string;
+      } = {
+        title: values.title,
+        description: values.description,
+        link: values.link,
+      };
+
+      if (uploadedFileId) {
+        skillData.iconFile = uploadedFileId;
+      } else if (values.iconUrl) {
+        skillData.iconUrl = values.iconUrl;
+      }
+
+      const id = await createSkill(skillData);
       console.log("skill created with ID:", id);
       form.reset();
+      setUploadedFileId(null);
       window.location.href = "/";
     } catch (error) {
       console.error("Failed to create skill:", error);
     }
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center p-4 mt-4 bg-gray-900">
       <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
@@ -126,14 +164,32 @@ const SkillsForm = ({ data, createSkill }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          URL del Icono
+                          Icono (URL o subir imagen)
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="https://ejemplo.com/icono.png"
-                            {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
-                          />
+                          <div className="space-y-3">
+                            <Input
+                              placeholder="https://ejemplo.com/icono.png"
+                              {...field}
+                              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            />
+                            <div className="text-gray-400 text-center text-sm">
+                              o
+                            </div>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const fileId = await handleFileUpload(file);
+                                  form.setValue("iconFile", fileId);
+                                  form.setValue("iconUrl", ""); // Clear URL when file is uploaded
+                                }
+                              }}
+                              className="w-full text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage className="text-red-400" />
                       </FormItem>
