@@ -20,6 +20,19 @@ const sidebarLinks = [
     title: "Habilidades",
     path: "/skills",
     icon: "/assets/dashboard/skill.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-skill",
+        title: "Crear Habilidad",
+        path: "/skills",
+      },
+      {
+        id: "skill-list",
+        title: "Todas las Habilidades",
+        path: "/skillsList",
+      },
+    ],
   },
   {
     id: "project-card",
