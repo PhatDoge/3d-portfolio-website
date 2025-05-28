@@ -58,6 +58,19 @@ const sidebarLinks = [
     title: "Servicios",
     path: "/services",
     icon: "/assets/dashboard/payment.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-service",
+        title: "Crear Servicio",
+        path: "/services",
+      },
+      {
+        id: "service-list",
+        title: "Todos los Servicios",
+        path: "/servicesList",
+      },
+    ],
   },
 ];
 

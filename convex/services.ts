@@ -20,11 +20,7 @@ export const getImageUrl = query({
 export const getServices = query({
   args: {},
   handler: async (ctx) => {
-    const services = await ctx.db
-      .query("services")
-      .filter((q) => q.eq(q.field("isActive"), true))
-      .order("asc")
-      .collect();
+    const services = await ctx.db.query("services").order("asc").collect();
 
     // Get image URLs for all services
     const servicesWithImages = await Promise.all(
@@ -136,14 +132,11 @@ export const updateService = mutation({
   },
 });
 
-// Delete service (soft delete by setting isActive to false)
+// Delete service (hard delete) ya no cambia el estado ya que se agrego un campo en la db
 export const deleteService = mutation({
   args: { id: v.id("services") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.id, {
-      isActive: false,
-      updatedAt: Date.now(),
-    });
+    await ctx.db.delete(args.id);
   },
 });
 
