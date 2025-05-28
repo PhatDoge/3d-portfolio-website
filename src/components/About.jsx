@@ -5,7 +5,6 @@ import "slick-carousel/slick/slick.css";
 
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { services } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { styles } from "../styles";
 import { fadeIn, textVariant } from "../utils/motion";
@@ -13,9 +12,12 @@ import SkillCard from "./SkillCard";
 
 const About = () => {
   const introductions = useQuery(api.introduction.getIntroductions);
+  // Remove the services import and add skills query
+  const skills = useQuery(api.skills.getAllSkills);
 
   // Handle loading state
-  if (!introductions) {
+  // Handle loading state
+  if (!introductions || !skills) {
     return (
       <div className="h-screen flex items-center justify-center text-white">
         Loading...
@@ -25,21 +27,20 @@ const About = () => {
 
   const sliderSettings = {
     dots: true,
-    infinite: true,
+    infinite: skills.length > 1, // Only infinite if more than 1 skill
     speed: 2000,
-    slidesToShow: 3,
+    slidesToShow: Math.min(skills.length, 3), // Show max 3 or total skills if less
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: skills.length > 1, // Only autoplay if more than 1 skill
     autoplaySpeed: 3000,
-    rtl: false, // Left to right direction
-    arrows: false, // This removes the side arrows
+    rtl: false,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(skills.length, 2),
           slidesToScroll: 1,
-          arrows: false, // Ensure arrows are disabled on smaller screens too
         },
       },
       {
@@ -83,9 +84,9 @@ const About = () => {
 
       <div className="mt-20">
         <Slider {...sliderSettings}>
-          {services.map((service, index) => (
-            <div key={service.title} className="px-4">
-              <SkillCard index={index} {...service} />
+          {skills.map((skill, index) => (
+            <div key={skill._id} className="px-4">
+              <SkillCard index={index} {...skill} />
             </div>
           ))}
         </Slider>
@@ -135,7 +136,23 @@ const About = () => {
             0 10px 30px rgba(191, 97, 255, 0.15),
             0 0 20px rgba(0, 206, 168, 0.1);
         }
+        /* Fix slider layout */
+        .slick-track {
+          display: flex !important;
+          align-items: center;
+        }
 
+        .slick-slide {
+          height: auto;
+          display: flex !important;
+          justify-content: center;
+        }
+
+        .slick-slide > div {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
         /* Keep original card appearance */
         .card-face {
           background-clip: padding-box;

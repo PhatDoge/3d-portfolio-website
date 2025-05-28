@@ -70,5 +70,4 @@ SKillCard.propTypes = {
   description: PropTypes.string.isRequired, // Add description
   link: PropTypes.string.isRequired, // Add link
 };
-
 export default SKillCard;
