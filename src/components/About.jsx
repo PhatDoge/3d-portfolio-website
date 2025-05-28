@@ -41,7 +41,7 @@ const About = () => {
 
   const sliderSettings = {
     dots: true,
-    infinite: skills?.length > 1,
+    infinite: skills?.length > 3,
     speed: 2000,
     slidesToShow: Math.min(skills?.length || 3, 3),
     slidesToScroll: 1,
@@ -103,10 +103,10 @@ const About = () => {
         viewport={{ once: true, amount: 0.25 }}
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          {introduction.header}
+          {introduction.header || "header example"}
         </p>
         <h2 className={`${styles.heroHeadText} text-center`}>
-          {introduction.title}
+          {introduction.title || "title example"}
         </h2>
       </motion.div>
       <div className="w-full flex justify-center items-center text-center">
@@ -117,7 +117,7 @@ const About = () => {
           viewport={{ once: true, amount: 0.25 }}
           className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
-          {introduction.description}
+          {introduction.description || "description example"}
         </motion.p>
       </div>
 

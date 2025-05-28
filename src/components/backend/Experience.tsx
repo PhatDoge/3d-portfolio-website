@@ -45,7 +45,7 @@ const formSchema = z
       required_error: "Start date is required.",
     }),
     endDate: z.date().optional(),
-    isCurrentJob: z.boolean().default(false),
+    isCurrentJob: z.boolean(), // Removed .default(false) to match expected type
   })
   .refine(
     (data) => {
@@ -85,7 +85,7 @@ const WorkExperience = () => {
       description: "",
       startDate: undefined,
       endDate: undefined,
-      isCurrentJob: false,
+      isCurrentJob: false, // Now explicitly set to false
     },
   });
 

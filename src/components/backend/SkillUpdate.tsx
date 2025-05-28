@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Id } from "../../../convex/_generated/dataModel";
 
 const updateFormSchema = z
   .object({
@@ -84,11 +85,11 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
     setIsUpdating(true);
     try {
       const skillData: {
-        id: string;
+        id: Id<"skills">;
         title: string;
         description: string;
         link: string;
-        iconFile?: string;
+        iconFile?: Id<"_storage">;
         iconUrl?: string;
       } = {
         id: skill._id,
