@@ -16,6 +16,12 @@ const sidebarLinks = [
     icon: "/assets/dashboard/introduction.png",
   },
   {
+    id: "skills",
+    title: "Habilidades",
+    path: "/skills",
+    icon: "/assets/dashboard/skill.png",
+  },
+  {
     id: "project-card",
     title: "Proyectos",
     path: "/project-card",

@@ -26,6 +26,12 @@ export default defineSchema({
     header: v.string(),
     description: v.string(),
   }),
+  skills: defineTable({
+    iconUrl: v.string(),
+    title: v.string(),
+    description: v.string(),
+    link: v.string(),
+  }),
   workExperience: defineTable({
     icon: v.string(), // Storage ID for company icon/logo
     workplace: v.string(), // Company name
