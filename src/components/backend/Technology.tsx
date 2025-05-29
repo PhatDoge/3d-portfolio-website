@@ -50,9 +50,8 @@ const TechnologyItem = ({ technology, onToggle }) => {
             alt={technology.name}
             className="w-8 h-8 object-contain"
             onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-              (e.target as HTMLImageElement).nextSibling.style.display =
-                "block";
+              e.target.style.display = "none";
+              e.target.nextSibling.style.display = "block";
             }}
           />
           <div className="hidden text-xs text-gray-400">❌</div>
@@ -202,55 +201,75 @@ const TechnologyManagement = () => {
     setIsInitializing(true);
     try {
       const defaultTechnologies = [
-        { name: "HTML 5", icon: "/icons/html.png", isVisible: true, order: 1 },
-        { name: "CSS 3", icon: "/icons/css.png", isVisible: true, order: 2 },
+        {
+          name: "HTML 5",
+          icon: "/src/assets/tech/html.png",
+          isVisible: true,
+          order: 1,
+        },
+        {
+          name: "CSS 3",
+          icon: "/src/assets/tech/css.png",
+          isVisible: true,
+          order: 2,
+        },
         {
           name: "JavaScript",
-          icon: "/icons/javascript.png",
+          icon: "/src/assets/tech/javascript.png",
           isVisible: true,
           order: 3,
         },
         {
           name: "TypeScript",
-          icon: "/icons/typescript.png",
+          icon: "/src/assets/tech/typescript.png",
           isVisible: true,
           order: 4,
         },
         {
           name: "React JS",
-          icon: "/icons/reactjs.png",
+          icon: "/src/assets/tech/reactjs.png",
           isVisible: true,
           order: 5,
         },
         {
           name: "Redux Toolkit",
-          icon: "/icons/redux.png",
+          icon: "/src/assets/tech/redux.png",
           isVisible: true,
           order: 6,
         },
         {
           name: "Node.js",
-          icon: "/icons/nodejs.png",
+          icon: "/src/assets/tech/nodejs.png",
           isVisible: true,
           order: 7,
         },
         {
           name: "MongoDB",
-          icon: "/icons/mongodb.png",
+          icon: "/src/assets/tech/mongodb.png",
           isVisible: true,
           order: 8,
         },
         {
           name: "Three.js",
-          icon: "/icons/threejs.svg",
+          icon: "/src/assets/tech/threejs.svg",
           isVisible: true,
           order: 9,
         },
-        { name: "Git", icon: "/icons/git.png", isVisible: true, order: 10 },
-        { name: "Figma", icon: "/icons/figma.png", isVisible: true, order: 11 },
+        {
+          name: "Git",
+          icon: "/src/assets/tech/git.png",
+          isVisible: true,
+          order: 10,
+        },
+        {
+          name: "Figma",
+          icon: "/src/assets/tech/figma.png",
+          isVisible: true,
+          order: 11,
+        },
         {
           name: "Docker",
-          icon: "/icons/docker.png",
+          icon: "/src/assets/tech/docker.png",
           isVisible: true,
           order: 12,
         },

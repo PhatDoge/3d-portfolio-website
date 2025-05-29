@@ -1,3 +1,4 @@
+// File: convex/technologies.ts
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
@@ -22,38 +23,6 @@ export const createTechnology = mutation({
       console.error("Error creating technology:", error);
       return null;
     }
-  },
-});
-
-// Add this new mutation for uploading files
-export const uploadTechnologyIcon = mutation({
-  args: {
-    storageId: v.id("_storage"),
-    name: v.string(),
-    isVisible: v.optional(v.boolean()),
-    order: v.optional(v.number()),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert("technologies", {
-      name: args.name,
-      icon: args.storageId,
-      isVisible: args.isVisible ?? true,
-      order: args.order,
-    });
-  },
-});
-
-// Add this query to get technology with file URL
-export const getTechnologiesWithUrls = query({
-  handler: async (ctx) => {
-    const technologies = await ctx.db.query("technologies").collect();
-
-    return Promise.all(
-      technologies.map(async (tech) => ({
-        ...tech,
-        iconUrl: await ctx.storage.getUrl(tech.icon),
-      }))
-    );
   },
 });
 

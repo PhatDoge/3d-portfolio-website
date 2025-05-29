@@ -1,41 +1,64 @@
 // File: components/MigrationUtility.tsx
 // This component helps migrate your existing technologies array to the database
 import { useState } from "react";
-import { Button } from "./ui/button.jsx";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useMutation } from "convex/react";
-import { api } from "convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 
-import { technologies } from "../constants/index.js";
-// Or define it here for the migration
-// const existingTechnologies = [
-//   {
-//     name: "HTML 5",
-//     icon: "/path/to/html.png", // Replace with your actual icon paths
-//   },
-//   {
-//     name: "CSS 3",
-//     icon: "/path/to/css.png",
-//   },
-//   {
-//     name: "JavaScript",
-//     icon: "/path/to/javascript.png",
-//   },
-//   {
-//     name: "TypeScript",
-//     icon: "/path/to/typescript.png",
-//   },
-//   {
-//     name: "React JS",
-//     icon: "/path/to/reactjs.png",
-//   },
-//   {
-//     name: "Redux Toolkit",
-//     icon: "/path/to/redux.png",
-//   },
-//   // Add all your existing technologies here
-// ];
-const existingTechnologies = technologies;
+// Updated technologies with correct paths
+const existingTechnologies = [
+  {
+    name: "HTML 5",
+    icon: "/src/assets/tech/html.png",
+  },
+  {
+    name: "CSS 3",
+    icon: "/src/assets/tech/css.png",
+  },
+  {
+    name: "JavaScript",
+    icon: "/src/assets/tech/javascript.png",
+  },
+  {
+    name: "TypeScript",
+    icon: "/src/assets/tech/typescript.png",
+  },
+  {
+    name: "React JS",
+    icon: "/src/assets/tech/reactjs.png",
+  },
+  {
+    name: "Redux Toolkit",
+    icon: "/src/assets/tech/redux.png",
+  },
+  {
+    name: "Node.js",
+    icon: "/src/assets/tech/nodejs.png",
+  },
+  {
+    name: "MongoDB",
+    icon: "/src/assets/tech/mongodb.png",
+  },
+  {
+    name: "Three.js",
+    icon: "/src/assets/tech/threejs.svg",
+  },
+  {
+    name: "Git",
+    icon: "/src/assets/tech/git.png",
+  },
+  {
+    name: "Figma",
+    icon: "/src/assets/tech/figma.png",
+  },
+  {
+    name: "Docker",
+    icon: "/src/assets/tech/docker.png",
+  },
+  // Add more technologies as needed with the correct /src/assets/tech/ path
+];
+
 const MigrationUtility = () => {
   const [isMigrating, setIsMigrating] = useState(false);
   const [migrationStatus, setMigrationStatus] = useState("");
@@ -110,9 +133,7 @@ const MigrationUtility = () => {
           <div className="mt-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
             <h4 className="text-blue-300 font-medium mb-2">Instructions:</h4>
             <ol className="text-sm text-blue-200 space-y-1 text-left">
-              <li>
-                1. Update the icon paths in the existingTechnologies array
-              </li>
+              <li>1. All icon paths are now set to /src/assets/tech/</li>
               <li>2. Run this migration once to populate your database</li>
               <li>3. After migration, you can delete this component</li>
               <li>
