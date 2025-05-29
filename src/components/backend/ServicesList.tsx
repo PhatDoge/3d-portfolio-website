@@ -125,7 +125,7 @@ const ServicesList = () => {
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-16">
                   Icono
                 </th>
-                <th className="text-left p-4 text-sm font-medium text-gray-300 min-w-[280px]">
+                <th className="text-center p-4 text-sm font-medium text-gray-300 min-w-[280px]">
                   Título / Tag
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
@@ -134,7 +134,7 @@ const ServicesList = () => {
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
                   Experiencia
                 </th>
-                <th className="text-left p-4 text-sm font-medium text-gray-300 text-center">
+                <th className="text-left p-4 text-sm font-medium text-gray-300 ">
                   Proyectos
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
@@ -178,24 +178,24 @@ const ServicesList = () => {
                     </td>
 
                     {/* Title and Tags */}
-                    <td className="p-4">
+                    <td className="p-4 justify-center">
                       <div className="space-y-2">
                         {/* Title and Subtitle */}
                         <div>
-                          <h3 className="text-white font-medium text-sm leading-tight">
+                          <h3 className="text-white text-center font-medium text-sm leading-tight">
                             {service.title}
                           </h3>
                           {service.subtitle && (
-                            <p className="text-gray-400 text-xs mt-1">
+                            <p className="text-gray-400 text-xs mt-1 text-center">
                               {service.subtitle}
                             </p>
                           )}
                         </div>
 
                         {/* Tags Row */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 justify-center">
                           {service.badgeText && (
-                            <span className="inline-flex items-center px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-600/30">
+                            <span className="inline-flex items-center text-center px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-600/30">
                               {service.badgeText}
                             </span>
                           )}

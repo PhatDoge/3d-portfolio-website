@@ -83,10 +83,10 @@ const ProjectsDisplay = () => {
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
                   Imagen
                 </th>
-                <th className="text-left p-4 text-sm font-medium text-gray-300">
+                <th className="text-center p-4 text-sm font-medium text-gray-300">
                   Título
                 </th>
-                <th className="text-left p-4 text-sm font-medium text-gray-300">
+                <th className="text-center p-4 text-sm font-medium text-gray-300">
                   Tags
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-40">
@@ -161,7 +161,7 @@ const ProjectsDisplay = () => {
                     </td>
 
                     {/* Created Date */}
-                    <td className="p-4 text-center">
+                    <td className="p-4 text-left">
                       <span className="text-gray-300 text-sm">
                         {formatDate(project.createdAt)}
                       </span>
