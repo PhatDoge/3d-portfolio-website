@@ -93,7 +93,7 @@ const About = () => {
     );
   }
 
-  const introduction = introductions[0];
+  const introduction = introductions?.[0] || {};
   return (
     <section id="about" className="min-h-screen w-full relative">
       <motion.div
@@ -103,10 +103,10 @@ const About = () => {
         viewport={{ once: true, amount: 0.25 }}
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          {introduction.header || "header example"}
+          {introduction.header ?? "header example"}
         </p>
         <h2 className={`${styles.heroHeadText} text-center`}>
-          {introduction.title || "title example"}
+          {introduction.title ?? "title example"}
         </h2>
       </motion.div>
       <div className="w-full flex justify-center items-center text-center">
@@ -117,7 +117,7 @@ const About = () => {
           viewport={{ once: true, amount: 0.25 }}
           className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
         >
-          {introduction.description || "description example"}
+          {introduction.description ?? "description example"}
         </motion.p>
       </div>
 

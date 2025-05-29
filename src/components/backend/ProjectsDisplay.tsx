@@ -16,14 +16,14 @@ import {
 import ProjectUpdateForm from "./ProjectUpdate";
 
 const ProjectsDisplay = () => {
-  // Edit mode state
+  // Estado para el modo edición
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
-  // Convex queries and mutations
+  // Consultas y mutaciones de Convex
   const projects = useQuery(api.projects.getProjects);
   const deleteProject = useMutation(api.projects.deleteProject);
 
-  // Functions
+  // Funciones
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("es-ES", {
       year: "numeric",
@@ -77,7 +77,7 @@ const ProjectsDisplay = () => {
         </div>
       : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
           <table className="w-full">
-            {/* Table Header */}
+            {/* Encabezado de la tabla */}
             <thead className="bg-gray-800/50 border-b border-gray-700">
               <tr>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
@@ -101,7 +101,7 @@ const ProjectsDisplay = () => {
               </tr>
             </thead>
 
-            {/* Table Body */}
+            {/* Cuerpo de la tabla */}
             <tbody className="divide-y divide-gray-700">
               {projects.map((project, index) => (
                 <React.Fragment key={project._id}>
@@ -110,7 +110,7 @@ const ProjectsDisplay = () => {
                       index % 2 === 0 ? "bg-gray-900/40" : "bg-gray-900/20"
                     }`}
                   >
-                    {/* Image */}
+                    {/* Imagen del proyecto */}
                     <td className="p-4">
                       {project.imageUrl ?
                         <img
@@ -126,7 +126,7 @@ const ProjectsDisplay = () => {
                       }
                     </td>
 
-                    {/* Title */}
+                    {/* Título del proyecto */}
                     <td className="p-4">
                       <div>
                         <h3 className="text-white text-center font-medium text-sm leading-tight mb-1">
@@ -138,7 +138,7 @@ const ProjectsDisplay = () => {
                       </div>
                     </td>
 
-                    {/* Tags */}
+                    {/* Etiquetas (tags) del proyecto */}
                     <td className="p-4 text-center">
                       <div className="flex flex-wrap gap-1">
                         {project.tag
@@ -160,14 +160,14 @@ const ProjectsDisplay = () => {
                       </div>
                     </td>
 
-                    {/* Created Date */}
+                    {/* Fecha de creación */}
                     <td className="p-4 text-left">
                       <span className="text-gray-300 text-sm">
                         {formatDate(project.createdAt)}
                       </span>
                     </td>
 
-                    {/* Updated Date */}
+                    {/* Fecha de actualización */}
                     <td className="p-4 text-center">
                       <span className="text-gray-300 text-sm">
                         {(
@@ -179,10 +179,10 @@ const ProjectsDisplay = () => {
                       </span>
                     </td>
 
-                    {/* Actions */}
+                    {/* Acciones: editar y eliminar */}
                     <td className="p-4 text-center">
                       <div className="flex gap-2 justify-center">
-                        {/* Edit Button */}
+                        {/* Botón para editar el proyecto */}
                         <Button
                           onClick={() => startEditing(project)}
                           variant="ghost"
@@ -205,7 +205,7 @@ const ProjectsDisplay = () => {
                           </svg>
                         </Button>
 
-                        {/* Delete Button */}
+                        {/* Botón para eliminar el proyecto con confirmación */}
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button
@@ -256,7 +256,7 @@ const ProjectsDisplay = () => {
                     </td>
                   </tr>
 
-                  {/* Edit Row - Using the extracted component */}
+                  {/* Fila de edición: muestra el formulario de actualización si está en modo edición */}
                   {editingProject === project._id && (
                     <ProjectUpdateForm
                       project={project}

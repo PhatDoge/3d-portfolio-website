@@ -16,15 +16,15 @@ import {
 import ServiceUpdate from "./ServiceUpdate";
 
 const ServicesList = () => {
-  // Edit mode state
+  // Estado de edición para el formulario de actualización
   const [editingService, setEditingService] = useState<string | null>(null);
 
-  // Convex queries and mutations
+  // Consultas y mutaciones de Convex
   const services = useQuery(api.services.getServices);
   const deleteService = useMutation(api.services.deleteService);
   const updateServiceStatus = useMutation(api.services.updateService);
 
-  // Functions
+  // Función para formatear la fecha en formato local español
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("es-ES", {
       year: "numeric",
@@ -33,6 +33,7 @@ const ServicesList = () => {
     });
   };
 
+  // Maneja la eliminación de un servicio
   const handleDeleteService = async (serviceId: string) => {
     try {
       await deleteService({ id: serviceId as any });
@@ -43,18 +44,22 @@ const ServicesList = () => {
     }
   };
 
+  // Inicia el modo de edición para un servicio
   const startEditing = (service: any) => {
     setEditingService(service._id);
   };
 
+  // Cancela la edición
   const cancelEditing = () => {
     setEditingService(null);
   };
 
+  // Maneja el éxito al actualizar un servicio
   const handleUpdateSuccess = () => {
     setEditingService(null);
   };
 
+  // Devuelve la etiqueta de la categoría en español
   const getCategoryLabel = (category: string) => {
     const categories = {
       design: "Diseño",
@@ -64,6 +69,7 @@ const ServicesList = () => {
     return categories[category as keyof typeof categories] || category;
   };
 
+  // Devuelve la etiqueta del nivel de experiencia en español
   const getExperienceLevelLabel = (level: string) => {
     const levels = {
       Beginner: "Principiante",
@@ -73,6 +79,7 @@ const ServicesList = () => {
     return levels[level as keyof typeof levels] || level;
   };
 
+  // Devuelve la etiqueta del tipo de precio en español
   const getPriceTypeLabel = (type: string) => {
     const types = {
       project: "Por Proyecto",
@@ -82,6 +89,7 @@ const ServicesList = () => {
     return types[type as keyof typeof types] || type;
   };
 
+  // Cambia el estado activo/inactivo de un servicio
   const handleToggleActive = async (
     serviceId: string,
     currentStatus: boolean
@@ -98,6 +106,7 @@ const ServicesList = () => {
     }
   };
 
+  // Renderizado principal de la lista de servicios
   return (
     <div className="w-full max-w-7xl px-6">
       <div className="text-center mb-8">
@@ -108,10 +117,12 @@ const ServicesList = () => {
       </div>
 
       {services === undefined ?
+        // Estado de carga: muestra mensaje mientras se obtienen los servicios
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-400 text-lg">Cargando servicios...</div>
         </div>
       : services.length === 0 ?
+        // Estado vacío: no hay servicios creados
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-400 text-lg">
             No hay servicios creados aún.
@@ -119,7 +130,7 @@ const ServicesList = () => {
         </div>
       : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
           <table className="w-full">
-            {/* Table Header */}
+            {/* Encabezado de la tabla de servicios */}
             <thead className="bg-gray-800/50 border-b border-gray-700">
               <tr>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-16">
@@ -152,7 +163,7 @@ const ServicesList = () => {
               </tr>
             </thead>
 
-            {/* Table Body */}
+            {/* Cuerpo de la tabla: lista todos los servicios */}
             <tbody className="divide-y divide-gray-700">
               {services.map((service, index) => (
                 <React.Fragment key={service._id}>
@@ -161,7 +172,7 @@ const ServicesList = () => {
                       index % 2 === 0 ? "bg-gray-900/40" : "bg-gray-900/20"
                     }`}
                   >
-                    {/* Icon */}
+                    {/* Celda del icono del servicio */}
                     <td className="p-4">
                       {service.iconUrl ?
                         <img
@@ -177,10 +188,10 @@ const ServicesList = () => {
                       }
                     </td>
 
-                    {/* Title and Tags */}
+                    {/* Celda de título y etiquetas */}
                     <td className="p-4 justify-center">
                       <div className="space-y-2">
-                        {/* Title and Subtitle */}
+                        {/* Título y subtítulo del servicio */}
                         <div>
                           <h3 className="text-white text-center font-medium text-sm leading-tight">
                             {service.title}
@@ -192,7 +203,7 @@ const ServicesList = () => {
                           )}
                         </div>
 
-                        {/* Tags Row */}
+                        {/* Fila de etiquetas: badge, categoría y experiencia */}
                         <div className="flex flex-wrap gap-2 justify-center">
                           {service.badgeText && (
                             <span className="inline-flex items-center text-center px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-600/30">
@@ -200,12 +211,12 @@ const ServicesList = () => {
                             </span>
                           )}
 
-                          {/* Category Tag */}
+                          {/* Etiqueta de categoría */}
                           <span className="inline-flex items-center px-2 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full border border-blue-600/30">
                             {getCategoryLabel(service.category)}
                           </span>
 
-                          {/* Experience Level Tag */}
+                          {/* Etiqueta de nivel de experiencia */}
                           <span className="inline-flex items-center px-2 py-1 bg-green-600/20 text-green-300 text-xs rounded-full border border-green-600/30">
                             {getExperienceLevelLabel(service.experienceLevel)}
                           </span>
@@ -213,28 +224,28 @@ const ServicesList = () => {
                       </div>
                     </td>
 
-                    {/* Category - Now simplified since it's shown in tags */}
+                    {/* Celda de categoría (ya se muestra en etiquetas) */}
                     <td className="p-4">
                       <span className="text-gray-300 text-sm">
                         {getCategoryLabel(service.category)}
                       </span>
                     </td>
 
-                    {/* Experience Level - Now simplified since it's shown in tags */}
+                    {/* Celda de nivel de experiencia (ya se muestra en etiquetas) */}
                     <td className="p-4">
                       <span className="text-gray-300 text-sm">
                         {getExperienceLevelLabel(service.experienceLevel)}
                       </span>
                     </td>
 
-                    {/* Project Count */}
+                    {/* Celda de cantidad de proyectos */}
                     <td className="p-4 text-center">
                       <span className="inline-flex items-center justify-center w-8 h-8 bg-gray-700/50 text-gray-300 text-sm rounded-full border border-gray-600">
                         {service.projectCount}
                       </span>
                     </td>
 
-                    {/* Pricing */}
+                    {/* Celda de precio */}
                     <td className="p-4">
                       <div className="text-sm">
                         {service.startingPrice ?
@@ -253,17 +264,17 @@ const ServicesList = () => {
                       </div>
                     </td>
 
-                    {/* Display Order */}
+                    {/* Celda de orden de visualización */}
                     <td className="p-4 text-center">
                       <span className="inline-flex items-center justify-center w-8 h-8 bg-gray-700/50 text-gray-300 text-sm rounded-full border border-gray-600">
                         {service.displayOrder}
                       </span>
                     </td>
 
-                    {/* Status */}
+                    {/* Celda de estado del servicio */}
                     <td className="p-4">
                       <div className="flex flex-col gap-2">
-                        {/* Active/Inactive Badge */}
+                        {/* Insignia de activo/inactivo */}
                         <span
                           className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
                             service.isActive ?
@@ -274,7 +285,7 @@ const ServicesList = () => {
                           {service.isActive ? "Activo" : "Inactivo"}
                         </span>
 
-                        {/* Active Checkbox */}
+                        {/* Checkbox para activar/desactivar el servicio */}
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="checkbox"
@@ -287,7 +298,7 @@ const ServicesList = () => {
                           <span className="text-xs text-gray-400">Activo</span>
                         </label>
 
-                        {/* Created Date */}
+                        {/* Fecha de creación del servicio */}
                         {service.createdAt && (
                           <span className="text-gray-400 text-xs">
                             {formatDate(service.createdAt)}
@@ -296,10 +307,10 @@ const ServicesList = () => {
                       </div>
                     </td>
 
-                    {/* Actions */}
+                    {/* Celda de acciones: editar y eliminar */}
                     <td className="p-4 text-center">
                       <div className="flex gap-1 justify-center">
-                        {/* Edit Button */}
+                        {/* Botón para editar el servicio */}
                         <Button
                           onClick={() => startEditing(service)}
                           variant="ghost"
@@ -323,7 +334,7 @@ const ServicesList = () => {
                           </svg>
                         </Button>
 
-                        {/* Delete Button */}
+                        {/* Botón para eliminar el servicio con confirmación */}
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button
@@ -375,7 +386,7 @@ const ServicesList = () => {
                     </td>
                   </tr>
 
-                  {/* Edit Row - Using the update form component */}
+                  {/* Fila de edición: muestra el formulario de actualización si está en modo edición */}
                   {editingService === service._id && (
                     <ServiceUpdate
                       service={service}

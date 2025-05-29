@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { fadeIn } from "../utils/motion";
 import PropTypes from "prop-types";
+import React, { useState } from "react";
 
 interface ServiceCardProps {
   index: number;
