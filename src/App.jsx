@@ -25,6 +25,7 @@ import ExperienceList from "./components/backend/ExperienceList";
 import ServicesList from "./components/backend/ServicesList";
 import Skills from "./components/backend/Skills";
 import SkillsList from "./components/backend/SkillsList";
+import TechnologyManagement from "./components/backend/Technology";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -109,6 +110,14 @@ const App = () => {
           element={
             <DashboardLayout>
               <WorkExperience />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/technologies"
+          element={
+            <DashboardLayout>
+              <TechnologyManagement />
             </DashboardLayout>
           }
         />

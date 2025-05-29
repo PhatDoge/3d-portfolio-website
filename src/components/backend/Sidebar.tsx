@@ -16,6 +16,12 @@ const sidebarLinks = [
     icon: "/assets/dashboard/introduction.png",
   },
   {
+    id: "technologies",
+    title: "Tecnologías",
+    path: "/technologies",
+    icon: "/assets/dashboard/introduction.png",
+  },
+  {
     id: "skills",
     title: "Habilidades",
     path: "/skills",
@@ -166,7 +172,9 @@ const LeftSidebar = () => {
                       className={`${isActive ? "" : "opacity-75"} w-6 h-6`}
                     />
                     <p
-                      className={`${isActive ? "font-bold" : "font-medium"} max-lg:hidden`}
+                      className={`${
+                        isActive ? "font-bold" : "font-medium"
+                      } max-lg:hidden`}
                     >
                       {item.title}
                     </p>

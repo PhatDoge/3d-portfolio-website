@@ -11,6 +11,12 @@ export default defineSchema({
     description: v.string(),
     title: v.string(),
   }),
+  technologies: defineTable({
+    name: v.string(),
+    icon: v.string(), // URL or path to the icon
+    isVisible: v.boolean(),
+    order: v.optional(v.number()), // For custom ordering
+  }),
   skills: defineTable({
     iconUrl: v.optional(v.string()), // Make optional since we might have iconFile instead
     iconFile: v.optional(v.id("_storage")), // Add field for uploaded file

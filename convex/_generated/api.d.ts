@@ -19,6 +19,7 @@ import type * as projectdetails from "../projectdetails.js";
 import type * as projects from "../projects.js";
 import type * as services from "../services.js";
 import type * as skills from "../skills.js";
+import type * as technologies from "../technologies.js";
 import type * as workExperience from "../workExperience.js";
 
 /**
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   projects: typeof projects;
   services: typeof services;
   skills: typeof skills;
+  technologies: typeof technologies;
   workExperience: typeof workExperience;
 }>;
 export declare const api: FilterApi<
