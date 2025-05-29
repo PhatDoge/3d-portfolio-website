@@ -166,15 +166,6 @@ const App = () => {
         />
 
         <Route
-          path="/experience"
-          element={
-            <DashboardLayout>
-              <WorkExperience />
-            </DashboardLayout>
-          }
-        />
-
-        <Route
           path="/services"
           element={
             <DashboardLayout>
