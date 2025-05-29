@@ -19,7 +19,7 @@ const sidebarLinks = [
     id: "technologies",
     title: "Tecnologías",
     path: "/technologies",
-    icon: "/assets/dashboard/introduction.png",
+    icon: "/assets/dashboard/technologies.png",
   },
   {
     id: "skills",
