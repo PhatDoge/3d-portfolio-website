@@ -197,79 +197,80 @@ const TechnologyManagement = () => {
   };
 
   // Initialize with default technologies (for first-time setup)
+  // Initialize with default technologies (for first-time setup)
   const initializeDefaultTechnologies = async () => {
     setIsInitializing(true);
     try {
       const defaultTechnologies = [
         {
           name: "HTML 5",
-          icon: "/src/assets/tech/html.png",
+          icon: "/tech/html.png", // Changed from /src/assets/tech/
           isVisible: true,
           order: 1,
         },
         {
           name: "CSS 3",
-          icon: "/src/assets/tech/css.png",
+          icon: "/tech/css.png",
           isVisible: true,
           order: 2,
         },
         {
           name: "JavaScript",
-          icon: "/src/assets/tech/javascript.png",
+          icon: "/tech/javascript.png",
           isVisible: true,
           order: 3,
         },
         {
           name: "TypeScript",
-          icon: "/src/assets/tech/typescript.png",
+          icon: "/tech/typescript.png",
           isVisible: true,
           order: 4,
         },
         {
           name: "React JS",
-          icon: "/src/assets/tech/reactjs.png",
+          icon: "/tech/reactjs.png",
           isVisible: true,
           order: 5,
         },
         {
           name: "Redux Toolkit",
-          icon: "/src/assets/tech/redux.png",
+          icon: "/tech/redux.png",
           isVisible: true,
           order: 6,
         },
         {
           name: "Node.js",
-          icon: "/src/assets/tech/nodejs.png",
+          icon: "/tech/nodejs.png",
           isVisible: true,
           order: 7,
         },
         {
           name: "MongoDB",
-          icon: "/src/assets/tech/mongodb.png",
+          icon: "/tech/mongodb.png",
           isVisible: true,
           order: 8,
         },
         {
           name: "Three.js",
-          icon: "/src/assets/tech/threejs.svg",
+          icon: "/tech/threejs.svg",
           isVisible: true,
           order: 9,
         },
         {
           name: "Git",
-          icon: "/src/assets/tech/git.png",
+          icon: "/tech/git.png",
           isVisible: true,
           order: 10,
         },
         {
           name: "Figma",
-          icon: "/src/assets/tech/figma.png",
+          icon: "/tech/figma.png",
           isVisible: true,
           order: 11,
         },
         {
           name: "Docker",
-          icon: "/src/assets/tech/docker.png",
+          icon: "/tech/docker.png",
           isVisible: true,
           order: 12,
         },

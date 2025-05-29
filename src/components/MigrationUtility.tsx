@@ -6,57 +6,57 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
-// Updated technologies with correct paths
+// Updated technologies with correct paths - now using public folder
 const existingTechnologies = [
   {
     name: "HTML 5",
-    icon: "/src/assets/tech/html.png",
+    icon: "/tech/html.png", // Changed from /src/assets/tech/
   },
   {
     name: "CSS 3",
-    icon: "/src/assets/tech/css.png",
+    icon: "/tech/css.png",
   },
   {
     name: "JavaScript",
-    icon: "/src/assets/tech/javascript.png",
+    icon: "/tech/javascript.png",
   },
   {
     name: "TypeScript",
-    icon: "/src/assets/tech/typescript.png",
+    icon: "/tech/typescript.png",
   },
   {
     name: "React JS",
-    icon: "/src/assets/tech/reactjs.png",
+    icon: "/tech/reactjs.png",
   },
   {
     name: "Redux Toolkit",
-    icon: "/src/assets/tech/redux.png",
+    icon: "/tech/redux.png",
   },
   {
     name: "Node.js",
-    icon: "/src/assets/tech/nodejs.png",
+    icon: "/tech/nodejs.png",
   },
   {
     name: "MongoDB",
-    icon: "/src/assets/tech/mongodb.png",
+    icon: "/tech/mongodb.png",
   },
   {
     name: "Three.js",
-    icon: "/src/assets/tech/threejs.svg",
+    icon: "/tech/threejs.svg",
   },
   {
     name: "Git",
-    icon: "/src/assets/tech/git.png",
+    icon: "/tech/git.png",
   },
   {
     name: "Figma",
-    icon: "/src/assets/tech/figma.png",
+    icon: "/tech/figma.png",
   },
   {
     name: "Docker",
-    icon: "/src/assets/tech/docker.png",
+    icon: "/tech/docker.png",
   },
-  // Add more technologies as needed with the correct /src/assets/tech/ path
+  // Add more technologies as needed with the correct /tech/ path
 ];
 
 const MigrationUtility = () => {
@@ -133,11 +133,12 @@ const MigrationUtility = () => {
           <div className="mt-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
             <h4 className="text-blue-300 font-medium mb-2">Instructions:</h4>
             <ol className="text-sm text-blue-200 space-y-1 text-left">
-              <li>1. All icon paths are now set to /src/assets/tech/</li>
-              <li>2. Run this migration once to populate your database</li>
-              <li>3. After migration, you can delete this component</li>
+              <li>1. Move all icons from src/assets/tech/ to public/tech/</li>
+              <li>2. All icon paths are now set to /tech/</li>
+              <li>3. Run this migration once to populate your database</li>
+              <li>4. After migration, you can delete this component</li>
               <li>
-                4. Use the Technology Management dashboard to manage your tech
+                5. Use the Technology Management dashboard to manage your tech
                 stack
               </li>
             </ol>
