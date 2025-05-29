@@ -4,9 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { close, menu } from "../assets";
 import { navLinks } from "../constants";
 import { styles } from "../styles";
-
-import logo from "../assets/logo.png";
 import OtpModal from "./OTP";
+import logo from "../assets/logo.png";
 
 const Navbar = () => {
   const navigate = useNavigate();
