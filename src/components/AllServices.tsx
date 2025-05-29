@@ -114,46 +114,52 @@ const AllServices = ({ services }) => {
 
             {/* Filter container */}
             <div className="relative flex gap-2 p-2 bg-black/40 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl">
-              {categories.map((category, index) => (
-                <motion.button
-                  key={`category-${index}`}
-                  onClick={() => setActiveFilter(category)}
-                  className={`relative px-6 py-3 rounded-2xl font-semibold text-sm transition-all duration-500 overflow-hidden group ${
-                    activeFilter === category ? "text-white" : (
-                      "text-gray-400 hover:text-white"
-                    )
-                  }`}
-                  initial={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {/* Active button background */}
-                  {activeFilter === category && (
-                    <motion.div
-                      layoutId="activeFilter"
-                      className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-lg"
-                      transition={{
-                        type: "spring",
-                        bounce: 0.2,
-                        duration: 0.6,
-                      }}
-                    />
-                  )}
+              {categories.map((category, index) => {
+                let displayName = category;
+                if (category === "design") displayName = "Diseño";
+                else if (category === "consulting") displayName = "Consulta";
+                else if (category === "development") displayName = "Desarrollo";
+                return (
+                  <motion.button
+                    key={`category-${index}`}
+                    onClick={() => setActiveFilter(category)}
+                    className={`relative px-6 py-3 rounded-2xl font-semibold text-sm transition-all duration-500 overflow-hidden group ${
+                      activeFilter === category ? "text-white" : (
+                        "text-gray-400 hover:text-white"
+                      )
+                    }`}
+                    initial={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* Fondo activo del botón */}
+                    {activeFilter === category && (
+                      <motion.div
+                        layoutId="activeFilter"
+                        className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-lg"
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
+                      />
+                    )}
 
-                  {/* Hover effect for inactive buttons */}
-                  <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Efecto hover para botones inactivos */}
+                    <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                  {/* Button text */}
-                  <span className="relative z-10 tracking-wide">
-                    {category}
-                  </span>
+                    {/* Texto del botón */}
+                    <span className="relative z-10 tracking-wide">
+                      {displayName}
+                    </span>
 
-                  {/* Active button glow */}
-                  {activeFilter === category && (
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 opacity-30 blur-sm" />
-                  )}
-                </motion.button>
-              ))}
+                    {/* Glow activo */}
+                    {activeFilter === category && (
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 opacity-30 blur-sm" />
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
 
             {/* Bottom accent line */}
