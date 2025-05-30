@@ -317,7 +317,7 @@ const AllServices = ({ services }) => {
 
         /* Alternative approach - set minimum height */
         .services-slider .slick-slide {
-          min-height: 700px;
+          min-height: 540px; /* was 700px, adjust here for card height */
         }
 
         @keyframes slideIn {

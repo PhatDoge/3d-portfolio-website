@@ -329,8 +329,8 @@ const TechnologyManagement = () => {
                 className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
               >
                 {isInitializing ?
-                  "Initializing..."
-                : "Initialize Default Technologies"}
+                  "Inicializando..."
+                : "Iniciar con tecnologias predeterminadas"}
               </Button>
             </CardContent>
           </Card>

@@ -26,8 +26,14 @@ const Tech = () => {
   // Handle empty state
   if (technologies.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 text-gray-400">
-        <p>No technologies configured yet.</p>
+      <div className="flex flex-col items-center justify-center gap-2 text-gray-400 py-8">
+        <span className="text-6xl animate-bounce">🛠️</span>
+        <p className="text-lg font-semibold">
+          ¡Ups! No se encontraron tecnologías.
+        </p>
+        <p className="text-sm text-gray-500">
+          Agrega tecnologías para mostrarlas en tu portafolio.
+        </p>
       </div>
     );
   }
@@ -43,4 +49,5 @@ const Tech = () => {
   );
 };
 
-export default SectionWrapper(Tech, "");
+const WrappedTech = SectionWrapper(Tech, "");
+export default WrappedTech;

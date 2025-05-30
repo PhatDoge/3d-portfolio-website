@@ -12,11 +12,21 @@ export const createTechnology = mutation({
   },
   handler: async (ctx, { name, icon, isVisible = true, order }) => {
     try {
+      let finalOrder = order;
+      if (finalOrder === undefined) {
+        // Get the current max order
+        const allTechs = await ctx.db.query("technologies").collect();
+        const maxOrder =
+          allTechs.length > 0 ?
+            Math.max(...allTechs.map((t) => t.order ?? 0))
+          : 12;
+        finalOrder = maxOrder + 1;
+      }
       const newTechId = await ctx.db.insert("technologies", {
         name,
         icon,
         isVisible,
-        order: order ?? Date.now(), // Default to timestamp for ordering
+        order: finalOrder,
       });
       return newTechId;
     } catch (error) {

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api"; // Adjust path as needed
 
 import { close, menu } from "../assets";
 import { navLinks } from "../constants";
@@ -13,6 +15,9 @@ const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
+
+  // Query services data from Convex
+  const hasActiveServices = useQuery(api.services.hasActiveServices);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,6 +88,19 @@ const Navbar = () => {
     }, 100);
   };
 
+  // Filter navLinks based on services data
+  // Filter navLinks based on active services
+  const getFilteredNavLinks = () => {
+    return navLinks.filter((link) => {
+      // If it's the "Servicio" link, only show it if we have active services
+      if (link.title === "Servicios") {
+        return hasActiveServices === true;
+      }
+      // Show all other links
+      return true;
+    });
+  };
+
   return (
     <>
       <nav
@@ -127,7 +145,7 @@ const Navbar = () => {
           </Link>
 
           <ul className="list-none hidden sm:flex flex-row gap-10">
-            {navLinks.map((link) => (
+            {getFilteredNavLinks().map((link) => (
               <li
                 key={link.id}
                 className={`${
@@ -157,7 +175,7 @@ const Navbar = () => {
               } p-6 black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl backdrop-blur-sm border border-white/10`}
             >
               <ul className="list-none flex items-start justify-end flex-col gap-4">
-                {navLinks.map((link) => (
+                {getFilteredNavLinks().map((link) => (
                   <li
                     key={link.id}
                     className={`${

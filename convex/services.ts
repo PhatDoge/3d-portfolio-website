@@ -316,3 +316,15 @@ export const searchServices = query({
     return servicesWithImages;
   },
 });
+// Check if there are any active services
+export const hasActiveServices = query({
+  args: {},
+  handler: async (ctx) => {
+    const activeServices = await ctx.db
+      .query("services")
+      .filter((q) => q.eq(q.field("isActive"), true))
+      .first(); // Just get the first one to check existence
+
+    return activeServices !== null;
+  },
+});

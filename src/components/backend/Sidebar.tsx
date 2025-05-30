@@ -15,12 +15,7 @@ const sidebarLinks = [
     path: "/introduction",
     icon: "/assets/dashboard/introduction.png",
   },
-  {
-    id: "technologies",
-    title: "Tecnologías",
-    path: "/technologies",
-    icon: "/assets/dashboard/technologies.png",
-  },
+
   {
     id: "skills",
     title: "Habilidades",
@@ -39,6 +34,12 @@ const sidebarLinks = [
         path: "/skillsList",
       },
     ],
+  },
+  {
+    id: "technologies",
+    title: "Tecnologías",
+    path: "/technologies",
+    icon: "/assets/dashboard/technologies.png",
   },
   {
     id: "project-card",
