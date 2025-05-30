@@ -242,7 +242,7 @@ const LeftSidebar = () => {
           className="flex items-center justify-start gap-4 p-4 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200"
         >
           <svg
-            className="w-6 h-6 drop-shadow-md text-red-500"
+            className="w-6 h-6 drop-shadow-md text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -256,7 +256,7 @@ const LeftSidebar = () => {
             />
           </svg>
 
-          <p className="font-semibold max-lg:hidden text-red-500">
+          <p className="font-semibold max-lg:hidden text-white">
             Cerrar Sesión
           </p>
         </div>

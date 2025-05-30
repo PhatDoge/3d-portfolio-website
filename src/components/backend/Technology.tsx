@@ -63,13 +63,13 @@ const TechnologyItem = ({ technology, onToggle }) => {
       </div>
       <div className="flex items-center space-x-3">
         <Badge variant={technology.isVisible ? "default" : "secondary"}>
-          {technology.isVisible ? "Visible" : "Hidden"}
+          {technology.isVisible ? "Visible" : "Esconder"}
         </Badge>
         <Checkbox
           checked={technology.isVisible}
           onCheckedChange={handleToggle}
           disabled={isUpdating}
-          className="data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+          className="data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600 border-white"
         />
       </div>
     </div>
@@ -98,7 +98,7 @@ const AddTechnologyForm = ({ onAdd }) => {
   return (
     <Card className="bg-gray-900/80 border-gray-700 mb-6">
       <CardHeader>
-        <CardTitle className="text-xl text-white">Add New Technology</CardTitle>
+        <CardTitle className="text-xl text-white">Agregar Tecnología</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -110,7 +110,7 @@ const AddTechnologyForm = ({ onAdd }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-200">
-                      Technology Name
+                      Nombre de la Tecnología
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -128,7 +128,9 @@ const AddTechnologyForm = ({ onAdd }) => {
                 name="icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-200">Icon URL</FormLabel>
+                    <FormLabel className="text-gray-200">
+                      URL de Icono
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="https://example.com/icon.png"
@@ -145,7 +147,7 @@ const AddTechnologyForm = ({ onAdd }) => {
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300"
             >
-              Add Technology
+              Agregar Tecnología
             </Button>
           </form>
         </Form>
@@ -169,7 +171,7 @@ const TechnologyManagement = () => {
   if (technologies === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-lg">Loading technologies...</div>
+        <div className="text-white text-lg">Cargando tecnologías...</div>
       </div>
     );
   }
@@ -293,11 +295,12 @@ const TechnologyManagement = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Technology Management
+              Administracion de Tecnologias
             </span>
           </h1>
           <p className="text-gray-400">
-            Manage which technologies are displayed on your portfolio
+            Administra tus tecnologias y controla su visibilidad en tu
+            portafolio.
           </p>
           <div className="mt-4 flex justify-center space-x-4">
             <Badge
@@ -317,7 +320,9 @@ const TechnologyManagement = () => {
         {technologies.length === 0 ?
           <Card className="bg-gray-900/80 border-gray-700 text-center p-8">
             <CardContent>
-              <p className="text-gray-400 mb-4">No technologies found.</p>
+              <p className="text-gray-400 mb-4">
+                No se encontraron tecnologias
+              </p>
               <Button
                 onClick={initializeDefaultTechnologies}
                 disabled={isInitializing}
@@ -332,7 +337,7 @@ const TechnologyManagement = () => {
         : <Card className="bg-gray-900/80 border-gray-700">
             <CardHeader>
               <CardTitle className="text-xl text-white">
-                Manage Technologies
+                Lista de Tecnologias
               </CardTitle>
             </CardHeader>
             <CardContent>
