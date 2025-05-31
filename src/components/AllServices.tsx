@@ -88,7 +88,7 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
   const sliderSettings = useMemo(
     () => ({
       dots: true,
-      infinite: filteredServices.length > 3,
+      infinite: filteredServices.length > 3, // Large screens: infinite if more than 3
       speed: 600,
       slidesToShow: Math.min(3, filteredServices.length),
       slidesToScroll: 1,
@@ -104,6 +104,7 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
           settings: {
             slidesToShow: Math.min(3, filteredServices.length),
             slidesToScroll: 1,
+            infinite: filteredServices.length > 2, // Medium screens: infinite if more than 2
           },
         },
         {
@@ -111,6 +112,7 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
           settings: {
             slidesToShow: Math.min(2, filteredServices.length),
             slidesToScroll: 1,
+            infinite: filteredServices.length > 2, // Medium screens: infinite if more than 2
           },
         },
         {
@@ -118,6 +120,7 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
           settings: {
             slidesToShow: 1,
             slidesToScroll: 1,
+            infinite: true, // Small screens: always infinite
           },
         },
       ],

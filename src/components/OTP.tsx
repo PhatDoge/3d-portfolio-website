@@ -18,7 +18,7 @@ const OtpModal = ({ isOpen, onClose }) => {
         // Store the passkey (you can add encryption later)
         localStorage.setItem("accessKey", passkey);
         closeModal();
-        navigate("/dashboard");
+        navigate("/user");
       } catch (error) {
         console.error("Error storing key:", error);
         setError("Error al procesar la clave. Intenta de nuevo.");

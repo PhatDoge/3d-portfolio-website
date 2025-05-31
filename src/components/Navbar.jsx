@@ -151,7 +151,7 @@ const Navbar = () => {
             />
             <p className="text-white text-[18px] font-bold cursor-pointer flex">
               Alonso &nbsp;
-              <span className="sm:block hidden">|&nbsp; Castillo</span>
+              <span className="md:block hidden">|&nbsp; Castillo</span>
             </p>
           </Link>
 
