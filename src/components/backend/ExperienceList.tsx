@@ -60,8 +60,9 @@ const ExperienceList = () => {
     <div className="w-full max-w-7xl px-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">
-          <span className="orange-text-gradient">Todas las</span>{" "}
-          <span className="green-text-gradient">Experiencias</span>
+          <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            Todas las Experiencias
+          </span>
         </h2>
       </div>
 

@@ -63,8 +63,9 @@ const IntroductionForm = ({ data, createIntroduction }) => {
 
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
-              <span className="orange-text-gradient">Cambia tu</span>{" "}
-              <span className="green-text-gradient">introducción</span>
+              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                Cambia tu introducción
+              </span>
             </CardTitle>
           </CardHeader>
 

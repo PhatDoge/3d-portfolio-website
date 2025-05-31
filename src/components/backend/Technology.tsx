@@ -16,9 +16,21 @@ import {
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { Badge } from "../ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import TechnologyUpdate from "./TechnologyUpdate";
 
 const addTechnologySchema = z.object({
   name: z
@@ -28,9 +40,16 @@ const addTechnologySchema = z.object({
   icon: z.string().min(1, { message: "Icon URL is required." }),
 });
 
-// Component for managing individual technology visibility
-const TechnologyItem = ({ technology, onToggle }) => {
+// Component for managing individual technology visibility with edit/delete buttons
+const TechnologyItem = ({
+  technology,
+  onToggle,
+  onEdit,
+  onDelete,
+  isEditing,
+}) => {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleToggle = async () => {
     setIsUpdating(true);
@@ -38,6 +57,15 @@ const TechnologyItem = ({ technology, onToggle }) => {
       await onToggle(technology._id, !technology.isVisible);
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete(technology._id);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -57,8 +85,11 @@ const TechnologyItem = ({ technology, onToggle }) => {
           <div className="hidden text-xs text-gray-400">❌</div>
         </div>
         <div>
-          <h3 className="text-white font-medium">{technology.name}</h3>
+          <h3 className="text-white font-medium pb-2">{technology.name}</h3>
           <p className="text-sm text-gray-400">{technology.icon}</p>
+          {/* {technology.order !== undefined && (
+            <p className="text-xs text-gray-500">Orden: {technology.order}</p>
+          )} */}
         </div>
       </div>
       <div className="flex items-center space-x-3">
@@ -68,9 +99,92 @@ const TechnologyItem = ({ technology, onToggle }) => {
         <Checkbox
           checked={technology.isVisible}
           onCheckedChange={handleToggle}
-          disabled={isUpdating}
+          disabled={isUpdating || isEditing}
           className="data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600 border-white"
         />
+
+        {/* Add this condition to check if it's NOT a system icon */}
+        {!(
+          technology.order &&
+          technology.order >= 1 &&
+          technology.order <= 12
+        ) && (
+          <>
+            {/* Edit Button */}
+            <Button
+              onClick={() => onEdit(technology)}
+              disabled={isEditing}
+              variant="ghost"
+              size="sm"
+              className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 h-8 w-8"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </Button>
+
+            {/* Delete Button */}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  disabled={isEditing}
+                  variant="ghost"
+                  size="sm"
+                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 h-8 w-8"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="border border-gray-700 bg-gray-900">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-gray-200">
+                    ¿Eliminar tecnología?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-gray-400">
+                    Esta acción no se puede deshacer. La tecnología "
+                    {technology.name}" será eliminada permanentemente.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
+                    Cancelar
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-red-600 text-white hover:bg-red-700"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Eliminando..." : "Eliminar"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
+        )}
       </div>
     </div>
   );
@@ -98,7 +212,7 @@ const AddTechnologyForm = ({ onAdd }) => {
   return (
     <Card className="bg-gray-900/80 border-gray-700 mb-6">
       <CardHeader>
-        <CardTitle className="text-xl text-white">Agregar Tecnología</CardTitle>
+        <CardTitle className="text-xl text-white">Agregar Tecnología</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -110,7 +224,7 @@ const AddTechnologyForm = ({ onAdd }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-200">
-                      Nombre de la Tecnología
+                      Nombre de la Tecnología
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -147,7 +261,7 @@ const AddTechnologyForm = ({ onAdd }) => {
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300"
             >
-              Agregar Tecnología
+              Agregar Tecnología
             </Button>
           </form>
         </Form>
@@ -158,11 +272,14 @@ const AddTechnologyForm = ({ onAdd }) => {
 
 // Main component that handles data loading and management
 const TechnologyManagement = () => {
+  const [editingTechnology, setEditingTechnology] = useState<any | null>(null);
+
   const technologies = useQuery(api.technologies.getTechnologies);
   const createTechnology = useMutation(api.technologies.createTechnology);
   const toggleVisibility = useMutation(
     api.technologies.toggleTechnologyVisibility
   );
+  const deleteTechnology = useMutation(api.technologies.deleteTechnology);
   const bulkInsert = useMutation(api.technologies.bulkInsertTechnologies);
 
   const [isInitializing, setIsInitializing] = useState(false);
@@ -171,7 +288,7 @@ const TechnologyManagement = () => {
   if (technologies === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-lg">Cargando tecnologías...</div>
+        <div className="text-white text-lg">Cargando tecnologías...</div>
       </div>
     );
   }
@@ -198,7 +315,36 @@ const TechnologyManagement = () => {
     }
   };
 
-  // Initialize with default technologies (for first-time setup)
+  // Handle editing technology
+  const startEditing = (technology) => {
+    setEditingTechnology(technology);
+  };
+
+  // Handle canceling edit
+  const cancelEditing = () => {
+    setEditingTechnology(null);
+  };
+
+  // Handle successful update
+  const handleUpdateSuccess = () => {
+    setEditingTechnology(null);
+  };
+
+  // Handle deleting technology
+  const handleDeleteTechnology = async (id) => {
+    try {
+      const result = await deleteTechnology({ id });
+      if (result?.success) {
+        console.log("Technology deleted successfully");
+      } else {
+        throw new Error("Failed to delete technology");
+      }
+    } catch (error) {
+      console.error("Failed to delete technology:", error);
+      alert("Error al eliminar la tecnología. Inténtalo de nuevo.");
+    }
+  };
+
   // Initialize with default technologies (for first-time setup)
   const initializeDefaultTechnologies = async () => {
     setIsInitializing(true);
@@ -206,7 +352,7 @@ const TechnologyManagement = () => {
       const defaultTechnologies = [
         {
           name: "HTML 5",
-          icon: "/tech/html.png", // Changed from /src/assets/tech/
+          icon: "/tech/html.png",
           isVisible: true,
           order: 1,
         },
@@ -343,11 +489,26 @@ const TechnologyManagement = () => {
             <CardContent>
               <div className="space-y-3">
                 {technologies.map((technology) => (
-                  <TechnologyItem
-                    key={technology._id}
-                    technology={technology}
-                    onToggle={handleToggleVisibility}
-                  />
+                  <div key={technology._id}>
+                    <TechnologyItem
+                      technology={technology}
+                      onToggle={handleToggleVisibility}
+                      onEdit={startEditing}
+                      onDelete={handleDeleteTechnology}
+                      isEditing={editingTechnology?._id === technology._id}
+                    />
+
+                    {/* Edit Form - Render below the technology item */}
+                    {editingTechnology?._id === technology._id && (
+                      <div className="mt-3">
+                        <TechnologyUpdate
+                          technology={editingTechnology}
+                          onCancel={cancelEditing}
+                          onSuccess={handleUpdateSuccess}
+                        />
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </CardContent>
