@@ -982,3 +982,360 @@ html {
     opacity: 0.5;
   }
 }
+/* AllServices.css */
+
+/* Main Section */
+.services-section {
+  margin-bottom: 7rem; /* mb-28 */
+}
+
+/* Empty Services State */
+.empty-services {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-services-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(0.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-services-text {
+  color: rgb(209, 213, 219);
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.add-services-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(to right, rgb(147, 51, 234), rgb(37, 99, 235));
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+.add-services-btn:hover {
+  background: linear-gradient(to right, rgb(126, 34, 206), rgb(29, 78, 216));
+  transform: scale(1.05);
+}
+
+/* Filter Buttons */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.filter-wrapper {
+  position: relative;
+}
+
+.filter-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(147, 51, 234, 0.2),
+    rgba(37, 99, 235, 0.2),
+    rgba(147, 51, 234, 0.2)
+  );
+  border-radius: 1.5rem;
+  filter: blur(1rem);
+}
+
+.filter-buttons {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3rem);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.filter-btn {
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgb(156, 163, 175);
+}
+
+.filter-btn:hover {
+  color: white;
+}
+
+.filter-btn.active {
+  color: white;
+}
+
+.filter-btn-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgb(147, 51, 234), rgb(37, 99, 235));
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn-hover {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.filter-btn:hover .filter-btn-hover {
+  opacity: 1;
+}
+
+.filter-btn-text {
+  position: relative;
+  z-index: 10;
+  letter-spacing: 0.025em;
+}
+
+.filter-btn-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: linear-gradient(to right, rgb(147, 51, 234), rgb(37, 99, 235));
+  opacity: 0.3;
+  filter: blur(0.5rem);
+}
+
+.filter-accent {
+  position: absolute;
+  bottom: -0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 0.125rem;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(147, 51, 234, 0.5),
+    transparent
+  );
+}
+
+/* Services Container */
+.services-container {
+  padding: 0 1rem;
+}
+
+/* Single Service Display */
+.single-service {
+  display: flex;
+  justify-content: center;
+}
+
+.single-service-wrapper {
+  max-width: 24rem;
+  width: auto;
+}
+
+@media (min-width: 640px) {
+  .single-service-wrapper {
+    max-width: 28rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .single-service-wrapper {
+    max-width: 32rem;
+  }
+}
+
+/* Two Services Display */
+.two-services {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.two-services-item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.two-services-wrapper {
+  max-width: 24rem;
+  width: 100%;
+}
+
+/* Slider Styles */
+.services-slider .slick-dots {
+  bottom: -60px;
+  text-align: center;
+}
+
+.services-slider .slick-dots li {
+  margin: 0 8px;
+}
+
+.services-slider .slick-dots li div {
+  transition: all 0.3s ease;
+}
+
+.services-slider .slick-dots li.slick-active div {
+  background: rgba(147, 51, 234, 0.8);
+  transform: scale(1.2);
+}
+
+.custom-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+
+.custom-dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Critical Fix: Equal heights for slider cards */
+.services-slider .slick-track {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.services-slider .slick-slide {
+  height: auto !important;
+  display: flex !important;
+  min-height: 540px;
+}
+
+.services-slider .slick-slide > div {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.slider-item {
+  padding: 0 0.75rem;
+  height: 100%;
+}
+
+.slider-wrapper {
+  height: 100%;
+}
+
+.services-slider .slick-list {
+  overflow: visible;
+}
+
+/* Statistics */
+.statistics {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.statistics-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  max-width: 32rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number.purple {
+  color: rgb(196, 181, 253);
+}
+
+.stat-number.blue {
+  color: rgb(147, 197, 253);
+}
+
+.stat-label {
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.services-slider .slick-slide {
+  animation: slideIn 0.6s ease-out;
+}
+
+@keyframes filterGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .two-services {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .statistics-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+}

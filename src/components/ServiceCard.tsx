@@ -4,18 +4,18 @@ import React, { useState } from "react";
 
 interface ServiceCardProps {
   index: number;
-  title: string;
-  iconUrl: string;
+  title?: string;
+  iconUrl?: string;
   subtitle?: string;
   badgeText?: string;
   accentColor?: string;
-  description: string;
-  keyFeatures: string;
-  technologies: string;
-  experienceLevel: string;
-  projectCount: number;
-  ctaText: string;
-  ctaLink: string;
+  description?: string;
+  keyFeatures?: string;
+  technologies?: string;
+  experienceLevel?: string;
+  projectCount?: number;
+  ctaText?: string;
+  ctaLink?: string;
   startingPrice?: number;
   currency?: string;
   priceType?: string;

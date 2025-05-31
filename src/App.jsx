@@ -64,12 +64,16 @@ const HomeLayout = ({ children }) => {
       <Experience />
       <Tech />
 
-      {/* Reduced margin between Works and AllServices */}
-      <div className="mb-8">
+      {/* Increased margin between Works and AllServices for better separation */}
+      <div className="mb-16">
         <Works />
       </div>
 
-      <div className="mt-8 overflow-hidden">
+      {/* Divider and extra padding for visual separation, keep overflow-hidden for slider */}
+      <div className="w-full flex justify-center">
+        <div className="w-full max-w-6xl border-t border-gray-700" />
+      </div>
+      <div className="mt-16 pt-8 overflow-hidden">
         <AllServices services={services} />
       </div>
 
