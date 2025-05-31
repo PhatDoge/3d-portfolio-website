@@ -35,13 +35,7 @@ const SkillIcon = ({ iconUrl, iconFile, title }) => {
 const SKillCard = ({ index, title, iconUrl, iconFile, description, link }) => {
   return (
     <Tilt className="xs:w-[250px] w-full mx-auto my-4">
-      <motion.div
-        variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.25 }}
-        className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
-      >
+      <div className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card">
         <div className="card-container relative w-full min-h-[280px] perspective-1000">
           <div className="card-inner relative w-full h-full transition-all duration-700 transform-style-preserve-3d hover:rotate-y-180 hover:scale-95">
             {/* 
@@ -87,7 +81,7 @@ const SKillCard = ({ index, title, iconUrl, iconFile, description, link }) => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Tilt>
   );
 };

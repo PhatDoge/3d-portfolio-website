@@ -51,7 +51,7 @@ const Navbar = () => {
       e.preventDefault();
 
       if (checkAuthStatus()) {
-        navigate("/dashboard");
+        navigate("/user");
       } else {
         setShowOtpModal(true);
       }

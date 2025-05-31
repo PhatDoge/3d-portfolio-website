@@ -112,8 +112,9 @@ const ServicesList = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">
-            <span className="orange-text-gradient">Todos los</span>{" "}
-            <span className="green-text-gradient">Servicios</span>
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              Todos los Servicios
+            </span>
           </h2>
         </div>
 

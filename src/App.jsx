@@ -96,7 +96,7 @@ const App = () => {
 
         {/* Dashboard routes with layout */}
         <Route
-          path="/dashboard"
+          path="/user"
           element={
             <DashboardLayout>
               <Dashboard />
@@ -106,7 +106,7 @@ const App = () => {
 
         {/* experience route */}
         <Route
-          path="/experience"
+          path="/create-experience"
           element={
             <DashboardLayout>
               <WorkExperience />
@@ -114,7 +114,7 @@ const App = () => {
           }
         />
         <Route
-          path="/technologies"
+          path="/create-technology"
           element={
             <DashboardLayout>
               <TechnologyManagement />
@@ -123,7 +123,7 @@ const App = () => {
         />
 
         <Route
-          path="/projectsDisplay"
+          path="/project-list"
           element={
             <DashboardLayout>
               <ProjectsDisplay />
@@ -132,7 +132,7 @@ const App = () => {
         />
 
         <Route
-          path="/introduction"
+          path="/create-introduction"
           element={
             <DashboardLayout>
               <Introduction />
@@ -140,7 +140,7 @@ const App = () => {
           }
         />
         <Route
-          path="/skills"
+          path="/create-skill"
           element={
             <DashboardLayout>
               <Skills />
@@ -148,7 +148,7 @@ const App = () => {
           }
         />
         <Route
-          path="/skillsList"
+          path="/skill-list"
           element={
             <DashboardLayout>
               <SkillsList />
@@ -157,7 +157,7 @@ const App = () => {
         />
 
         <Route
-          path="/project-card"
+          path="/create-project"
           element={
             <DashboardLayout>
               <ProjectCard />
@@ -166,7 +166,7 @@ const App = () => {
         />
 
         <Route
-          path="/services"
+          path="/create-service"
           element={
             <DashboardLayout>
               <Services />
@@ -175,7 +175,7 @@ const App = () => {
         />
 
         <Route
-          path="/experienceList"
+          path="/experience-list"
           element={
             <DashboardLayout>
               <ExperienceList />
@@ -183,7 +183,7 @@ const App = () => {
           }
         />
         <Route
-          path="/servicesList"
+          path="/service-list"
           element={
             <DashboardLayout>
               <ServicesList />
