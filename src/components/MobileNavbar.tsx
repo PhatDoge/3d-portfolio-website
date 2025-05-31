@@ -1,149 +1,403 @@
-import { useState, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { X, Menu } from "lucide-react";
+import React, { useState, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { navLinks } from "../constants";
-// Import logo - adjust path as needed
-const logo = "/assets/logo.png"; // or wherever your logo is located
+// Menu icon component
+const MenuIcon = () => (
+  <svg
+    className="w-6 h-6 text-white"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M4 6h16M4 12h16M4 18h16"
+    />
+  </svg>
+);
 
-const MobileNavbar = ({
-  active,
-  setActive,
-  onSmoothScroll,
-  onAdminClick,
-  showOtpModal,
+// Close icon component
+const CloseIcon = () => (
+  <svg
+    className="w-6 h-6 text-white"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+);
+
+// Chevron down icon for submenus
+const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
+  <svg
+    className={`w-4 h-4 transition-transform duration-200 text-gray-400 ${
+      isOpen ? "rotate-180" : ""
+    }`}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 9l-7 7-7-7"
+    />
+  </svg>
+);
+
+// Logout icon
+const LogoutIcon = () => (
+  <svg
+    className="w-5 h-5 text-white"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"
+    />
+  </svg>
+);
+
+// Sidebar links (same as in your original component)
+const SIDEBAR_LINKS = [
+  {
+    id: "dashboard",
+    title: "Usuario",
+    path: "/dashboard",
+    icon: "/assets/dashboard/programmer.png",
+  },
+  {
+    id: "introduction",
+    title: "Introducción",
+    path: "/introduction",
+    icon: "/assets/dashboard/introduction.png",
+  },
+  {
+    id: "skills",
+    title: "Habilidades",
+    path: "/skills",
+    icon: "/assets/dashboard/skill.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-skill",
+        title: "Crear Habilidad",
+        path: "/skills",
+      },
+      {
+        id: "skill-list",
+        title: "Todas las Habilidades",
+        path: "/skillsList",
+      },
+    ],
+  },
+  {
+    id: "technologies",
+    title: "Tecnologías",
+    path: "/technologies",
+    icon: "/assets/dashboard/technologies.png",
+  },
+  {
+    id: "project-card",
+    title: "Proyectos",
+    path: "/project-card",
+    icon: "/assets/dashboard/project.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-project",
+        title: "Crear Proyecto",
+        path: "/project-card",
+      },
+      {
+        id: "project-list",
+        title: "Todos los Proyectos",
+        path: "/projectsDisplay",
+      },
+    ],
+  },
+  {
+    id: "experience",
+    title: "Experiencia",
+    path: "/experience",
+    icon: "/assets/dashboard/experience.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-experience",
+        title: "Crear Experiencia",
+        path: "/experience",
+      },
+      {
+        id: "experience-list",
+        title: "Todas las Experiencias",
+        path: "/experienceList",
+      },
+    ],
+  },
+  {
+    id: "services",
+    title: "Servicios",
+    path: "/services",
+    icon: "/assets/dashboard/payment.png",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "create-service",
+        title: "Crear Servicio",
+        path: "/services",
+      },
+      {
+        id: "service-list",
+        title: "Todos los Servicios",
+        path: "/servicesList",
+      },
+    ],
+  },
+];
+
+interface MobileNavbarProps {
+  className?: string;
+  onMenuToggle?: (isOpen: boolean) => void;
+}
+
+const MobileNavbar: React.FC<MobileNavbarProps> = ({
+  className = "",
+  onMenuToggle,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // Query services data from Convex
-  const hasActiveServices = useQuery(api.services.hasActiveServices);
+  const toggleMenu = useCallback(() => {
+    const newState = !isOpen;
+    setIsOpen(newState);
+    onMenuToggle?.(newState);
+    if (isOpen) {
+      setOpenSubmenu(null);
+    }
+  }, [isOpen, onMenuToggle]);
 
-  // Filter navLinks based on active services
-  const filteredNavLinks = useMemo(() => {
-    return navLinks.filter((link) => {
-      if (link.title === "Servicios") {
-        return hasActiveServices === true;
-      }
-      return true;
-    });
-  }, [hasActiveServices]);
-
-  // Handle mobile menu item click
-  const handleMobileMenuClick = useCallback(
-    (e, elementId, linkTitle) => {
-      e.preventDefault();
-      setIsOpen(false); // Close mobile menu
-      onSmoothScroll(elementId, linkTitle);
-    },
-    [onSmoothScroll]
-  );
-
-  // Handle logo click
-  const handleLogoClick = useCallback(() => {
-    setActive("");
+  const closeMenu = useCallback(() => {
     setIsOpen(false);
-    window.scrollTo(0, 0);
-  }, [setActive]);
+    setOpenSubmenu(null);
+    onMenuToggle?.(false);
+  }, [onMenuToggle]);
 
-  // Handle admin click in mobile
-  const handleMobileAdminClick = useCallback(
-    (e) => {
-      e.preventDefault();
-      setIsOpen(false);
-      onAdminClick(e);
+  const isItemActive = useCallback((item: any, currentPath: string) => {
+    return (
+      (currentPath.includes(item.path) && item.path.length > 1) ||
+      currentPath === item.path ||
+      (item.submenu &&
+        item.submenu.some((sub: any) => currentPath === sub.path))
+    );
+  }, []);
+
+  const handleLinkClick = useCallback(
+    (linkPath: string, itemId: string) => {
+      const item = SIDEBAR_LINKS.find((link) => link.id === itemId);
+      if (item?.hasSubmenu) {
+        setOpenSubmenu((prev) => (prev === itemId ? null : itemId));
+      } else {
+        navigate(linkPath);
+        closeMenu();
+      }
     },
-    [onAdminClick]
+    [navigate, closeMenu]
   );
+
+  const handleSubmenuClick = useCallback(
+    (submenuPath: string) => {
+      navigate(submenuPath);
+      closeMenu();
+    },
+    [navigate, closeMenu]
+  );
+
+  const handleLogoClick = useCallback(() => {
+    navigate("/");
+    closeMenu();
+  }, [navigate, closeMenu]);
+
+  const handleLogout = useCallback(async () => {
+    try {
+      localStorage.removeItem("accessKey");
+      navigate("/");
+      closeMenu();
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  }, [navigate, closeMenu]);
 
   return (
     <>
-      {/* Mobile Menu Trigger */}
-      <div className="md:hidden flex items-center">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 text-white hover:text-purple-400 transition-colors duration-200"
-          aria-label="Toggle mobile menu"
-        >
-          {isOpen ?
-            <X size={24} />
-          : <Menu size={24} />}
-        </button>
-      </div>
+      {/* Mobile menu button */}
+      <button
+        onClick={toggleMenu}
+        className={`md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-slate-800 shadow-lg ${className}`}
+        aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+      >
+        {isOpen ?
+          <CloseIcon />
+        : <MenuIcon />}
+      </button>
 
-      {/* Mobile Menu Overlay */}
+      {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setIsOpen(false)}
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={closeMenu}
+          aria-hidden="true"
         />
       )}
 
-      {/* Mobile Menu Content */}
-      <div
-        className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-primary/95 backdrop-blur-md shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+      {/* Mobile sidebar */}
+      <aside
+        className={`md:hidden fixed left-0 top-0 h-full w-80 bg-slate-900 border-r border-gray-700 shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        role="navigation"
+        aria-label="Navegación móvil"
       >
-        {/* Mobile Menu Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={handleLogoClick}
-          >
-            <img src={logo} alt="logo" className="w-8 h-8 object-contain" />
-            <p className="text-white text-lg font-bold">
-              Alonso
-              <span className="text-purple-400"> | Castillo</span>
-            </p>
-          </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-2 text-white hover:text-purple-400 transition-colors duration-200"
-            aria-label="Close mobile menu"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Mobile Navigation Links */}
-        <div className="flex flex-col py-6">
-          <nav className="flex flex-col space-y-2 px-6">
-            {filteredNavLinks.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                onClick={(e) => handleMobileMenuClick(e, link.id, link.title)}
-                className={`${
-                  active === link.title ?
-                    "text-white bg-white/10 border-l-4 border-purple-400"
-                  : "text-secondary hover:text-white hover:bg-white/5"
-                } flex items-center px-4 py-3 text-lg font-medium transition-all duration-200 rounded-r-lg`}
-              >
-                {link.title}
-              </a>
-            ))}
-          </nav>
-
-          {/* Mobile Admin Section */}
-          <div className="mt-8 px-6 pt-6 border-t border-white/10">
+        <div className="flex flex-col h-full">
+          {/* Header with logo */}
+          <div className="p-6 pt-16">
             <button
-              onClick={handleMobileAdminClick}
-              className="flex items-center gap-3 w-full px-4 py-3 text-purple-400/70 hover:text-purple-400 hover:bg-white/5 transition-all duration-200 rounded-lg"
+              onClick={handleLogoClick}
+              className="flex items-center justify-center w-full mb-8 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+              aria-label="Ir al inicio"
             >
               <img
-                src="/assets/dashboard/admin.png"
-                alt="admin"
-                className="w-5 h-5"
+                src="/assets/dashboard/alonso_logo.png"
+                height={80}
+                width={80}
+                alt="Logo de Alonso"
+                className="rounded-full"
+                loading="eager"
               />
-              <span className="text-sm font-medium">
-                Panel de Administración
+            </button>
+          </div>
+
+          {/* Navigation menu */}
+          <nav className="flex-1 px-6 pb-6">
+            <div className="space-y-2">
+              {SIDEBAR_LINKS.map((item) => {
+                const isActive = isItemActive(item, location.pathname);
+                const isSubmenuOpen = openSubmenu === item.id;
+
+                return (
+                  <div key={item.id}>
+                    <button
+                      onClick={() => handleLinkClick(item.path, item.id)}
+                      className={`w-full flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                        isActive ?
+                          "bg-blue-600 text-white shadow-md"
+                        : "text-gray-400 hover:text-gray-200 hover:bg-slate-800"
+                      }`}
+                      aria-expanded={
+                        item.hasSubmenu ? isSubmenuOpen : undefined
+                      }
+                      aria-label={
+                        item.hasSubmenu ?
+                          `${item.title} - ${
+                            isSubmenuOpen ? "Contraer" : "Expandir"
+                          } submenú`
+                        : `Navegar a ${item.title}`
+                      }
+                    >
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={item.icon}
+                          alt=""
+                          width={20}
+                          height={20}
+                          className={`${isActive ? "" : "opacity-75"} w-5 h-5`}
+                          loading="lazy"
+                        />
+                        <span
+                          className={`${
+                            isActive ? "font-bold" : "font-medium"
+                          } text-sm`}
+                        >
+                          {item.title}
+                        </span>
+                      </div>
+
+                      {item.hasSubmenu && (
+                        <ChevronDownIcon isOpen={isSubmenuOpen} />
+                      )}
+                    </button>
+
+                    {/* Submenu */}
+                    {item.hasSubmenu && isSubmenuOpen && (
+                      <div className="ml-4 mt-1 space-y-1">
+                        {item.submenu.map((subItem) => {
+                          const isSubActive =
+                            location.pathname === subItem.path;
+                          return (
+                            <button
+                              key={subItem.id}
+                              onClick={() => handleSubmenuClick(subItem.path)}
+                              className={`w-full flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                                isSubActive ?
+                                  "bg-blue-500 text-white"
+                                : "text-gray-400 hover:text-gray-200 hover:bg-slate-800"
+                              }`}
+                              aria-label={`Navegar a ${subItem.title}`}
+                            >
+                              <div className="w-2 h-2 rounded-full bg-current opacity-70" />
+                              <span
+                                className={`${
+                                  isSubActive ? "font-semibold" : "font-medium"
+                                } text-sm`}
+                              >
+                                {subItem.title}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+
+          {/* Logout section */}
+          <div className="p-6 border-t border-gray-700">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-3 p-3 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
+              aria-label="Cerrar sesión"
+            >
+              <LogoutIcon />
+              <span className="font-semibold text-white text-sm">
+                Cerrar Sesión
               </span>
             </button>
           </div>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

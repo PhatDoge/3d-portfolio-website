@@ -794,3 +794,191 @@ html {
   background-color: #1f2937;
   border-bottom-color: #374151;
 }
+
+/* About Section Base Styles */
+.about-section {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.loading-section {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Description */
+.description-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.description-text {
+  margin-top: 1rem;
+  color: var(--secondary-color);
+  font-size: 17px;
+  max-width: 48rem;
+  line-height: 30px;
+}
+
+/* Skills Section */
+.skills-section {
+  margin-top: 5rem;
+}
+
+/* Skeleton Loading */
+.skeleton-container {
+  margin-top: 5rem;
+}
+
+.skeleton-cards-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.skeleton-card {
+  width: 250px;
+  width: 100%;
+  margin: 1rem auto;
+}
+
+@media (min-width: 475px) {
+  .skeleton-card {
+    width: 250px;
+  }
+}
+
+.skeleton-card-wrapper {
+  width: 100%;
+  background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+  padding: 1px;
+  border-radius: 20px;
+  box-shadow:
+    0 20px 50px -20px rgba(50, 50, 93, 0.25),
+    0 30px 60px -30px rgba(0, 0, 0, 0.3);
+}
+
+.skeleton-card-content {
+  background-color: var(--tertiary-color);
+  border-radius: 20px;
+  padding: 1.25rem 3rem;
+  min-height: 280px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.skeleton-icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: #4b5563;
+  border-radius: 0.25rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-text {
+  width: 8rem;
+  height: 1.5rem;
+  background-color: #4b5563;
+  border-radius: 0.25rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 3D Card Effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.hover\:rotate-y-180:hover {
+  transform: rotateY(180deg);
+}
+
+.card-container:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Text Utilities */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Gradients and Shadows */
+.green-pink-gradient {
+  background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+}
+
+.shadow-card:hover {
+  box-shadow:
+    0 10px 30px rgba(191, 97, 255, 0.15),
+    0 0 20px rgba(0, 206, 168, 0.1);
+}
+
+/* Carousel Styling */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  height: 320px;
+}
+
+.skill-slide {
+  padding: 0 1rem;
+  height: 100%;
+}
+
+/* Slick Carousel Overrides */
+.slick-track {
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+.slick-slide {
+  height: 320px !important;
+  display: flex !important;
+  justify-content: center;
+}
+
+.slick-slide > div {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center !important;
+}
+
+/* Card Face Styling */
+.card-face {
+  background-clip: padding-box;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import MobileNavbar from "../MobileNavbar";
 
 // Constants moved outside component to prevent re-creation
 const SIDEBAR_LINKS = [
@@ -320,6 +321,7 @@ const MainMenuItem = React.memo(
 MainMenuItem.displayName = "MainMenuItem";
 
 const LeftSidebar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {
     selectedMainItem,
     openSubmenu,
@@ -361,48 +363,53 @@ const LeftSidebar = () => {
   );
 
   return (
-    <aside
-      className="bg-slate-900 border-r border-gray-700 sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto p-6 pt-10 shadow max-sm:hidden lg:w-[280px]"
-      role="navigation"
-      aria-label="Navegación principal"
-    >
-      <div>
-        {/* Logo */}
-        <button
-          onClick={handleLogoClick}
-          className="flex items-center justify-center gap-3 mb-8 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 hover:scale-105"
-          aria-label="Ir al inicio"
-        >
-          <img
-            src="/assets/dashboard/alonso_logo.png"
-            height={120}
-            width={120}
-            alt="Logo de Alonso"
-            className="rounded-full"
-            loading="eager"
-          />
-        </button>
+    <>
+      <MobileNavbar onMenuToggle={(isOpen) => setIsMobileMenuOpen(isOpen)} />
+      <aside
+        className={`bg-slate-900 border-r border-gray-700 sticky left-0 top-0  h-screen flex-col justify-between overflow-y-auto p-6 pt-10 shadow hidden md:flex lg:w-[280px] ${
+          isMobileMenuOpen ? "md:hidden" : ""
+        }`}
+        role="navigation"
+        aria-label="Navegación principal"
+      >
+        <div>
+          {/* Logo */}
+          <button
+            onClick={handleLogoClick}
+            className="flex items-center justify-center gap-3 mb-8 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 hover:scale-105"
+            aria-label="Ir al inicio"
+          >
+            <img
+              src="/assets/dashboard/alonso_logo.png"
+              height={120}
+              width={120}
+              alt="Logo de Alonso"
+              className="rounded-full"
+              loading="eager"
+            />
+          </button>
 
-        {/* Navigation Menu */}
-        <nav className="flex flex-1 flex-col gap-1" role="menubar">
-          {navigationItems}
-        </nav>
-      </div>
+          {/* Navigation Menu */}
+          <nav className="flex flex-1 flex-col gap-1" role="menubar">
+            {navigationItems}
+          </nav>
+        </div>
 
-      {/* Logout Section */}
-      <div className="mt-auto pt-6 border-t border-gray-700">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-start gap-4 p-4 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-          aria-label="Cerrar sesión"
-        >
-          <LogoutIcon />
-          <span className="font-semibold max-lg:hidden text-white">
-            Cerrar Sesión
-          </span>
-        </button>
-      </div>
-    </aside>
+        {/* Logout Section */}
+        <div className="mt-auto pt-6 border-t border-gray-700">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-start gap-4 p-4 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+            aria-label="Cerrar sesión"
+          >
+            <LogoutIcon />
+            <span className="font-semibold max-lg:hidden text-white">
+              Cerrar Sesión
+            </span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

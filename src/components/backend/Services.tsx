@@ -315,9 +315,9 @@ const Services = () => {
 
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
-              <span className="orange-text-gradient">Crear</span>{" "}
-              <span className="blue-text-gradient">Nuevo</span>{" "}
-              <span className="green-text-gradient">Servicio</span>
+              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                Crear Nuevo Servicio
+              </span>
             </CardTitle>
           </CardHeader>
 
@@ -331,7 +331,7 @@ const Services = () => {
                   {/* Left Column - Front Side Content */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-semibold text-purple-400 border-b border-purple-400/30 pb-2">
-                      Contenido Frontal
+                      Crea un Nuevo Servicio
                     </h3>
 
                     {/* Title Field */}
@@ -465,10 +465,10 @@ const Services = () => {
                     />
                   </div>
 
-                  {/* Right Column - Back Side Content */}
+                  {/* Right Column - */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-semibold text-green-400 border-b border-green-400/30 pb-2">
-                      Contenido Posterior
+                      &#8288;
                     </h3>
 
                     {/* Description Field */}
