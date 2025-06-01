@@ -19,43 +19,10 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useContext, useState } from "react";
 import { LanguageContext } from "./Dashboard";
-
-const translations = {
-  es: {
-    title: "Agregar nueva habilidad",
-    formTitle: "Título",
-    formTitlePlaceholder: "Ingresa el título de la habilidad",
-    description: "Descripción", // Fixed typo: was "Descriptcion"
-    descriptionPlaceholder: "Describe la habilidad",
-    iconLabel: "Icono (URL o subir imagen)",
-    iconPlaceholder: "https://ejemplo.com/icono.png",
-    or: "o",
-    fileButton: "Subir imagen",
-    link: "Enlace",
-    linkPlaceholder: "https://ejemplo.com/proyecto",
-    submit: "Crear habilidad",
-    loading: "Cargando...",
-    fileError: "Proporcione una URL del icono o suba una imagen",
-  },
-  en: {
-    title: "Add new skill",
-    formTitle: "Title",
-    formTitlePlaceholder: "Enter the skill title",
-    description: "Description",
-    descriptionPlaceholder: "Describe the skill",
-    iconLabel: "Icon (URL or upload image)",
-    iconPlaceholder: "https://example.com/icon.png",
-    or: "or",
-    fileButton: "Upload image",
-    link: "Link",
-    linkPlaceholder: "https://example.com/project",
-    submit: "Create skill",
-    loading: "Loading...",
-    fileError: "Please provide either an icon URL or upload an image",
-  },
-};
+import { skillTranslations } from "./translations";
 
 const formSchema = z
+
   .object({
     title: z
       .string()
@@ -77,7 +44,7 @@ const formSchema = z
 // Separate form component that only renders when data is available
 const SkillsForm = ({ data, createSkill }) => {
   const { language } = useContext(LanguageContext); // Add this line
-  const t = translations[language];
+  const t = skillTranslations[language];
   const [uploadedFileId, setUploadedFileId] = useState(null);
   const generateUploadUrl = useMutation(api.skills.generateUploadUrl);
 
@@ -277,8 +244,8 @@ const SkillsForm = ({ data, createSkill }) => {
 
 // Main component that handles data loading
 const Skills = () => {
-  const { language } = useContext(LanguageContext); // Add this line
-  const t = translations[language]; // Add this line
+  const { language } = useContext(LanguageContext);
+  const t = skillTranslations[language];
 
   const data = useQuery(api.skills.getAllSkills);
   const createSkill = useMutation(api.skills.createSkill);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Id } from "../../../convex/_generated/dataModel";
+import { LanguageContext } from "./Dashboard";
+import { skillUpdateTranslations } from "./translations";
 
 const updateFormSchema = z
   .object({
@@ -47,6 +49,8 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
   onCancel,
   onSuccess,
 }) => {
+  const { language } = useContext(LanguageContext); // Add this line
+  const t = skillUpdateTranslations[language];
   const [uploadedFileId, setUploadedFileId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -109,7 +113,7 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
       onSuccess();
     } catch (error) {
       console.error("Failed to update skill:", error);
-      alert("Error al actualizar la habilidad. Inténtalo de nuevo.");
+      alert(t.updateError);
     } finally {
       setIsUpdating(false);
     }
@@ -123,7 +127,7 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">
-                  Editar Habilidad
+                  {t.editSkill}
                 </h3>
               </div>
 
@@ -140,11 +144,11 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium text-sm">
-                            Título
+                            {t.title}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Título de la habilidad"
+                              placeholder={t.titlePlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 text-sm"
                             />
@@ -161,11 +165,11 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium text-sm">
-                            Enlace
+                            {t.link}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="https://ejemplo.com/proyecto"
+                              placeholder={t.linkPlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 text-sm"
                             />
@@ -183,11 +187,11 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium text-sm">
-                          Descripción
+                          {t.description}
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Describe la habilidad"
+                            placeholder={t.descriptionPlaceholder}
                             className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-20 text-sm"
                             {...field}
                           />
@@ -204,17 +208,17 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium text-sm">
-                          Icono (URL o subir imagen)
+                          {t.icon}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-3">
                             <Input
-                              placeholder="https://ejemplo.com/icono.png"
+                              placeholder={t.iconPlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 text-sm"
                             />
                             <div className="text-gray-400 text-center text-xs">
-                              o
+                              {t.or}
                             </div>
                             <input
                               type="file"
@@ -227,7 +231,7 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                                     form.setValue("iconFile", fileId);
                                     form.setValue("iconUrl", "");
                                   } catch (error) {
-                                    alert("Error al subir la imagen");
+                                    alert(t.uploadError);
                                   }
                                 }
                               }}
@@ -249,14 +253,14 @@ const SkillUpdate: React.FC<SkillUpdateProps> = ({
                       className="text-gray-400 hover:text-gray-300 hover:bg-gray-700/50 text-sm px-4 py-2"
                       disabled={isUpdating}
                     >
-                      Cancelar
+                      {t.cancel}
                     </Button>
                     <Button
                       type="submit"
                       disabled={isUpdating}
                       className="px-6 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     >
-                      {isUpdating ? "Actualizando..." : "Actualizar"}
+                      {isUpdating ? t.updating : t.update}
                     </Button>
                   </div>
                 </form>

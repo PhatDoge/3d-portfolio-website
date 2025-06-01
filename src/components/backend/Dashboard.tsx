@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { userTranslations } from "./translations";
 
 // Exporta el contexto y proveedor de idioma para uso global
 export const LanguageContext = createContext({
@@ -39,28 +40,6 @@ export const LanguageProvider = ({ children }) => {
   );
 };
 
-// Translations
-const translations = {
-  es: {
-    title: "Cambia tu cabezera",
-    name: "Nombre",
-    description: "Descripción",
-    namePlaceholder: "Ingresa tu Nombre",
-    descPlaceholder: "Ingresa tu Descripción",
-    button: "Cambiar detalles",
-    loading: "Cargando...",
-  },
-  en: {
-    title: "Change your header",
-    name: "Name",
-    description: "Description",
-    namePlaceholder: "Enter your Name",
-    descPlaceholder: "Enter your Description",
-    button: "Change details",
-    loading: "Loading...",
-  },
-};
-
 const formSchema = z.object({
   name: z
     .string()
@@ -75,7 +54,7 @@ const formSchema = z.object({
 // Separate form component that only renders when data is available
 const HeaderForm = ({ data, createHeader }) => {
   const { language } = useContext(LanguageContext);
-  const t = translations[language];
+  const t = userTranslations[language];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -181,7 +160,7 @@ const HeaderForm = ({ data, createHeader }) => {
 // Main component that handles data loading
 const Dashboard = () => {
   const { language } = useContext(LanguageContext);
-  const t = translations[language];
+  const t = userTranslations[language];
 
   const data = useQuery(api.header.getHeader);
   const createHeader = useMutation(api.header.createHeader);

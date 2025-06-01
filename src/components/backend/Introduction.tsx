@@ -18,32 +18,8 @@ import { LanguageContext } from "./Dashboard";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { introductionTranslations } from "./translations";
 
-// Translations
-const translations = {
-  es: {
-    title: "Cambia tu introducción",
-    header: "Cabezera",
-    headerPlaceholder: "Ingresa tu Cabezera",
-    formTitle: "Titulo",
-    formTitlePlaceholder: "Ingresa tu Titulo",
-    description: "Resumen",
-    descriptionPlaceholder: "Ingresa tu Resumen",
-    button: "Cambiar detalles",
-    loading: "Cargando...",
-  },
-  en: {
-    title: "Change your introduction",
-    header: "Header",
-    headerPlaceholder: "Enter your Header",
-    formTitle: "Title",
-    formTitlePlaceholder: "Enter your Title",
-    description: "Summary",
-    descriptionPlaceholder: "Enter your Summary",
-    button: "Change details",
-    loading: "Loading...",
-  },
-};
 const formSchema = z.object({
   title: z
     .string()
@@ -62,7 +38,7 @@ const formSchema = z.object({
 // Separate form component that only renders when data is available
 const IntroductionForm = ({ data, createIntroduction }) => {
   const { language } = useContext(LanguageContext);
-  const t = translations[language];
+  const t = introductionTranslations[language];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

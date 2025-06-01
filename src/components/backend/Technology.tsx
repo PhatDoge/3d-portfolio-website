@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -31,14 +31,8 @@ import {
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import TechnologyUpdate from "./TechnologyUpdate";
-
-const addTechnologySchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters." })
-    .max(50),
-  icon: z.string().min(1, { message: "Icon URL is required." }),
-});
+import { LanguageContext } from "./Dashboard";
+import { technologyTranslations } from "./translations";
 
 // Component for managing individual technology visibility with edit/delete buttons
 const TechnologyItem = ({
@@ -48,6 +42,10 @@ const TechnologyItem = ({
   onDelete,
   isEditing,
 }) => {
+  // Move context usage INSIDE the component
+  const { language } = useContext(LanguageContext);
+  const t = technologyTranslations[language];
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -87,14 +85,11 @@ const TechnologyItem = ({
         <div>
           <h3 className="text-white font-medium pb-2">{technology.name}</h3>
           <p className="text-sm text-gray-400">{technology.icon}</p>
-          {/* {technology.order !== undefined && (
-            <p className="text-xs text-gray-500">Orden: {technology.order}</p>
-          )} */}
         </div>
       </div>
       <div className="flex items-center space-x-3">
         <Badge variant={technology.isVisible ? "default" : "secondary"}>
-          {technology.isVisible ? "Visible" : "Esconder"}
+          {technology.isVisible ? t.visible : t.hidden}
         </Badge>
         <Checkbox
           checked={technology.isVisible}
@@ -162,23 +157,22 @@ const TechnologyItem = ({
               <AlertDialogContent className="border border-gray-700 bg-gray-900">
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-gray-200">
-                    ¿Eliminar tecnología?
+                    {t.deleteTitle}
                   </AlertDialogTitle>
                   <AlertDialogDescription className="text-gray-400">
-                    Esta acción no se puede deshacer. La tecnología "
-                    {technology.name}" será eliminada permanentemente.
+                    {t.deleteDescription.replace("{name}", technology.name)}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
-                    Cancelar
+                    {t.cancel}
                   </AlertDialogCancel>
                   <AlertDialogAction
                     className="bg-red-600 text-white hover:bg-red-700"
                     onClick={handleDelete}
                     disabled={isDeleting}
                   >
-                    {isDeleting ? "Eliminando..." : "Eliminar"}
+                    {isDeleting ? t.deleting : t.delete}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -192,6 +186,16 @@ const TechnologyItem = ({
 
 // Form component for adding new technologies
 const AddTechnologyForm = ({ onAdd }) => {
+  // Move context usage INSIDE the component
+  const { language } = useContext(LanguageContext);
+  const t = technologyTranslations[language];
+
+  // Create schema inside component so it has access to translations
+  const addTechnologySchema = z.object({
+    name: z.string().min(2, { message: t.nameMinError }).max(50),
+    icon: z.string().min(1, { message: t.iconRequiredError }),
+  });
+
   const form = useForm<z.infer<typeof addTechnologySchema>>({
     resolver: zodResolver(addTechnologySchema),
     defaultValues: {
@@ -205,14 +209,14 @@ const AddTechnologyForm = ({ onAdd }) => {
       await onAdd(values);
       form.reset();
     } catch (error) {
-      console.error("Failed to add technology:", error);
+      console.error(t.addError, error);
     }
   }
 
   return (
     <Card className="bg-gray-900/80 border-gray-700 mb-6">
       <CardHeader>
-        <CardTitle className="text-xl text-white">Agregar Tecnología</CardTitle>
+        <CardTitle className="text-xl text-white">{t.addFormTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -224,11 +228,11 @@ const AddTechnologyForm = ({ onAdd }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-200">
-                      Nombre de la Tecnología
+                      {t.nameLabel}
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g., React JS"
+                        placeholder={t.namePlaceholder}
                         {...field}
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500"
                       />
@@ -243,11 +247,11 @@ const AddTechnologyForm = ({ onAdd }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-200">
-                      URL de Icono
+                      {t.iconLabel}
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="https://example.com/icon.png"
+                        placeholder={t.iconPlaceholder}
                         {...field}
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500"
                       />
@@ -261,7 +265,7 @@ const AddTechnologyForm = ({ onAdd }) => {
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300"
             >
-              Agregar Tecnología
+              {t.addButton}
             </Button>
           </form>
         </Form>
@@ -272,6 +276,10 @@ const AddTechnologyForm = ({ onAdd }) => {
 
 // Main component that handles data loading and management
 const TechnologyManagement = () => {
+  // Move context usage INSIDE the component
+  const { language } = useContext(LanguageContext);
+  const t = technologyTranslations[language];
+
   const [editingTechnology, setEditingTechnology] = useState<any | null>(null);
 
   const technologies = useQuery(api.technologies.getTechnologies);
@@ -288,7 +296,7 @@ const TechnologyManagement = () => {
   if (technologies === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-lg">Cargando tecnologías...</div>
+        <div className="text-white text-lg">{t.loading}</div>
       </div>
     );
   }
@@ -311,7 +319,7 @@ const TechnologyManagement = () => {
     try {
       await toggleVisibility({ id, isVisible });
     } catch (error) {
-      console.error("Failed to toggle visibility:", error);
+      console.error(t.toggleError, error);
     }
   };
 
@@ -335,13 +343,13 @@ const TechnologyManagement = () => {
     try {
       const result = await deleteTechnology({ id });
       if (result?.success) {
-        console.log("Technology deleted successfully");
+        console.log(t.deleteSuccess);
       } else {
         throw new Error("Failed to delete technology");
       }
     } catch (error) {
-      console.error("Failed to delete technology:", error);
-      alert("Error al eliminar la tecnología. Inténtalo de nuevo.");
+      console.error(t.deleteFailedError, error);
+      alert(t.deleteError);
     }
   };
 
@@ -441,22 +449,19 @@ const TechnologyManagement = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Administracion de Tecnologias
+              {t.title}
             </span>
           </h1>
-          <p className="text-gray-400">
-            Administra tus tecnologias y controla su visibilidad en tu
-            portafolio.
-          </p>
+          <p className="text-gray-400">{t.subtitle}</p>
           <div className="mt-4 flex justify-center space-x-4">
             <Badge
               variant="outline"
               className="text-green-400 border-green-400"
             >
-              {visibleCount} Visible
+              {visibleCount} {t.visibleBadge}
             </Badge>
             <Badge variant="outline" className="text-gray-400 border-gray-400">
-              {totalCount} Total
+              {totalCount} {t.totalBadge}
             </Badge>
           </div>
         </div>
@@ -466,24 +471,20 @@ const TechnologyManagement = () => {
         {technologies.length === 0 ?
           <Card className="bg-gray-900/80 border-gray-700 text-center p-8">
             <CardContent>
-              <p className="text-gray-400 mb-4">
-                No se encontraron tecnologias
-              </p>
+              <p className="text-gray-400 mb-4">{t.noTechnologies}</p>
               <Button
                 onClick={initializeDefaultTechnologies}
                 disabled={isInitializing}
                 className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
               >
-                {isInitializing ?
-                  "Inicializando..."
-                : "Iniciar con tecnologias predeterminadas"}
+                {isInitializing ? t.initializing : t.initializeButton}
               </Button>
             </CardContent>
           </Card>
         : <Card className="bg-gray-900/80 border-gray-700">
             <CardHeader>
               <CardTitle className="text-xl text-white">
-                Lista de Tecnologias
+                {t.listTitle}
               </CardTitle>
             </CardHeader>
             <CardContent>

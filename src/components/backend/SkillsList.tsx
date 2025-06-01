@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
@@ -14,8 +14,12 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import SkillUpdate from "./SkillUpdate";
+import { LanguageContext } from "./Dashboard";
+import { skillListTranslations } from "./translations";
 
 const SkillsList = () => {
+  const { language } = useContext(LanguageContext);
+  const t = skillListTranslations[language];
   // Edit mode state
   const [editingSkill, setEditingSkill] = useState<string | null>(null);
 
@@ -27,10 +31,10 @@ const SkillsList = () => {
   const handleDeleteSkill = async (skillId: string) => {
     try {
       await deleteSkill({ id: skillId as any });
-      console.log("Skill deleted successfully");
+      console.log(t.deleteSuccess);
     } catch (error) {
       console.error("Failed to delete skill:", error);
-      alert("Error al eliminar la habilidad. Inténtalo de nuevo.");
+      alert(t.deleteError);
     }
   };
 
@@ -58,20 +62,18 @@ const SkillsList = () => {
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Todas las Habilidades
+              {t.title}
             </span>
           </h2>
         </div>
 
         {skills === undefined ?
           <div className="flex justify-center items-center py-12">
-            <div className="text-gray-400 text-lg">Cargando habilidades...</div>
+            <div className="text-gray-400 text-lg">{t.loading}</div>
           </div>
         : skills.length === 0 ?
           <div className="flex justify-center items-center py-12">
-            <div className="text-gray-400 text-lg">
-              No hay habilidades creadas aún.
-            </div>
+            <div className="text-gray-400 text-lg">{t.noSkills}</div>
           </div>
         : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
             <table className="w-full">
@@ -79,19 +81,19 @@ const SkillsList = () => {
               <thead className="bg-gray-800/50 border-b border-gray-700">
                 <tr>
                   <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
-                    Icono
+                    {t.iconHeader}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300">
-                    Título
+                    {t.titleHeader}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300">
-                    Descripción
+                    {t.descriptionHeader}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
-                    Enlace
+                    {t.linkHeader}
                   </th>
                   <th className="text-center p-4 text-sm font-medium text-gray-300 w-24">
-                    Acciones
+                    {t.actionsHeader}
                   </th>
                 </tr>
               </thead>
@@ -115,7 +117,7 @@ const SkillsList = () => {
                           />
                         : <div className="w-16 h-12 bg-gray-700 rounded border border-gray-600 flex items-center justify-center">
                             <span className="text-gray-400 text-xs">
-                              Sin icono
+                              {t.noIcon}
                             </span>
                           </div>
                         }
@@ -149,9 +151,12 @@ const SkillsList = () => {
                               rel="noopener noreferrer"
                               className="text-purple-400 hover:text-purple-300 text-sm underline transition-colors duration-200"
                             >
-                              Ver enlace
+                              {t.viewLink}
                             </a>
-                          : <span className="text-gray-400 text-sm">-</span>}
+                          : <span className="text-gray-400 text-sm">
+                              {t.noLink}
+                            </span>
+                          }
                         </div>
                       </td>
 
@@ -208,22 +213,21 @@ const SkillsList = () => {
                             <AlertDialogContent className="border border-gray-700 bg-gray-900">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="text-gray-200">
-                                  ¿Eliminar habilidad?
+                                  {t.deleteTitle}
                                 </AlertDialogTitle>
                                 <AlertDialogDescription className="text-gray-400">
-                                  Esta acción no se puede deshacer. La habilidad
-                                  será eliminada permanentemente.
+                                  {t.deleteDescription}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
-                                  Cancelar
+                                  {t.cancel}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-600 text-white hover:bg-red-700"
                                   onClick={() => handleDeleteSkill(skill._id)}
                                 >
-                                  Eliminar
+                                  {t.delete}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

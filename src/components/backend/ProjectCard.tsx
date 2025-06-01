@@ -137,7 +137,10 @@ const ProjectCard = () => {
       const projectData = {
         ...values,
         image: imageStorageId,
-        tag: tags.join(", "), // Ensure tags are saved as comma-separated string
+        tag: tags.join(", "),
+        githubLink: values.githubLink || "",
+        cardTitle: values.cardTitle || "",
+        cardDescription: values.cardDescription || "",
       };
 
       const id = await createProject(projectData);
