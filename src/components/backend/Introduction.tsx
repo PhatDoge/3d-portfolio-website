@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { createContext, useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -14,10 +14,36 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { LanguageContext } from "./Dashboard";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
+// Translations
+const translations = {
+  es: {
+    title: "Cambia tu introducción",
+    header: "Cabezera",
+    headerPlaceholder: "Ingresa tu Cabezera",
+    formTitle: "Titulo",
+    formTitlePlaceholder: "Ingresa tu Titulo",
+    description: "Resumen",
+    descriptionPlaceholder: "Ingresa tu Resumen",
+    button: "Cambiar detalles",
+    loading: "Cargando...",
+  },
+  en: {
+    title: "Change your introduction",
+    header: "Header",
+    headerPlaceholder: "Enter your Header",
+    formTitle: "Title",
+    formTitlePlaceholder: "Enter your Title",
+    description: "Summary",
+    descriptionPlaceholder: "Enter your Summary",
+    button: "Change details",
+    loading: "Loading...",
+  },
+};
 const formSchema = z.object({
   title: z
     .string()
@@ -35,6 +61,8 @@ const formSchema = z.object({
 
 // Separate form component that only renders when data is available
 const IntroductionForm = ({ data, createIntroduction }) => {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,7 +92,7 @@ const IntroductionForm = ({ data, createIntroduction }) => {
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Cambia tu introducción
+                {t.title}
               </span>
             </CardTitle>
           </CardHeader>
@@ -82,7 +110,7 @@ const IntroductionForm = ({ data, createIntroduction }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Cabezera
+                          {t.header}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -104,7 +132,7 @@ const IntroductionForm = ({ data, createIntroduction }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Titulo
+                          {t.formTitle}
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -126,7 +154,7 @@ const IntroductionForm = ({ data, createIntroduction }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Resumen
+                          {t.description}
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -146,7 +174,7 @@ const IntroductionForm = ({ data, createIntroduction }) => {
                     type="submit"
                     className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0"
                   >
-                    Cambiar detalles
+                    {t.button}
                   </Button>
                 </div>
               </form>

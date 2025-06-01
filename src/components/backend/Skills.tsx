@@ -17,7 +17,43 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LanguageContext } from "./Dashboard";
+
+const translations = {
+  es: {
+    title: "Agregar nueva habilidad",
+    formTitle: "Título",
+    formTitlePlaceholder: "Ingresa el título de la habilidad",
+    description: "Descripción", // Fixed typo: was "Descriptcion"
+    descriptionPlaceholder: "Describe la habilidad",
+    iconLabel: "Icono (URL o subir imagen)",
+    iconPlaceholder: "https://ejemplo.com/icono.png",
+    or: "o",
+    fileButton: "Subir imagen",
+    link: "Enlace",
+    linkPlaceholder: "https://ejemplo.com/proyecto",
+    submit: "Crear habilidad",
+    loading: "Cargando...",
+    fileError: "Proporcione una URL del icono o suba una imagen",
+  },
+  en: {
+    title: "Add new skill",
+    formTitle: "Title",
+    formTitlePlaceholder: "Enter the skill title",
+    description: "Description",
+    descriptionPlaceholder: "Describe the skill",
+    iconLabel: "Icon (URL or upload image)",
+    iconPlaceholder: "https://example.com/icon.png",
+    or: "or",
+    fileButton: "Upload image",
+    link: "Link",
+    linkPlaceholder: "https://example.com/project",
+    submit: "Create skill",
+    loading: "Loading...",
+    fileError: "Please provide either an icon URL or upload an image",
+  },
+};
 
 const formSchema = z
   .object({
@@ -40,6 +76,8 @@ const formSchema = z
 
 // Separate form component that only renders when data is available
 const SkillsForm = ({ data, createSkill }) => {
+  const { language } = useContext(LanguageContext); // Add this line
+  const t = translations[language];
   const [uploadedFileId, setUploadedFileId] = useState(null);
   const generateUploadUrl = useMutation(api.skills.generateUploadUrl);
 
@@ -103,7 +141,7 @@ const SkillsForm = ({ data, createSkill }) => {
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Agregar nueva habilidad
+                {t.title}
               </span>
             </CardTitle>
           </CardHeader>
@@ -121,11 +159,11 @@ const SkillsForm = ({ data, createSkill }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Título
+                          {t.formTitle}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa el título de la habilidad"
+                            placeholder={t.formTitlePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -143,11 +181,11 @@ const SkillsForm = ({ data, createSkill }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Descripción
+                          {t.description}
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Describe la habilidad"
+                            placeholder={t.descriptionPlaceholder}
                             className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
                             {...field}
                           />
@@ -165,17 +203,17 @@ const SkillsForm = ({ data, createSkill }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Icono (URL o subir imagen)
+                          {t.iconLabel}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-3">
                             <Input
-                              placeholder="https://ejemplo.com/icono.png"
+                              placeholder={t.iconPlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                             />
                             <div className="text-gray-400 text-center text-sm">
-                              o
+                              {t.or}
                             </div>
                             <input
                               type="file"
@@ -205,11 +243,11 @@ const SkillsForm = ({ data, createSkill }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Enlace
+                          {t.link}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="https://ejemplo.com/proyecto"
+                            placeholder={t.linkPlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -225,7 +263,7 @@ const SkillsForm = ({ data, createSkill }) => {
                     type="submit"
                     className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0"
                   >
-                    Crear habilidad
+                    {t.submit}
                   </Button>
                 </div>
               </form>
@@ -239,6 +277,9 @@ const SkillsForm = ({ data, createSkill }) => {
 
 // Main component that handles data loading
 const Skills = () => {
+  const { language } = useContext(LanguageContext); // Add this line
+  const t = translations[language]; // Add this line
+
   const data = useQuery(api.skills.getAllSkills);
   const createSkill = useMutation(api.skills.createSkill);
 
@@ -246,7 +287,7 @@ const Skills = () => {
   if (data === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg">{t.loading}</div>
       </div>
     );
   }

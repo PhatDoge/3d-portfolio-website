@@ -11,7 +11,7 @@ import {
   Tech,
   Works,
 } from "./components";
-import Dashboard from "./components/backend/Dashboard";
+import Dashboard, { LanguageProvider } from "./components/backend/Dashboard";
 import WorkExperience from "./components/backend/Experience";
 import Introduction from "./components/backend/Introduction";
 import ProjectCard from "./components/backend/ProjectCard";
@@ -31,10 +31,12 @@ import TechnologyManagement from "./components/backend/Technology";
 // Layout component for dashboard routes
 const DashboardLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen">
-      <LeftSidebar />
-      <main className="flex-1 overflow-auto bg-gray-900">{children}</main>
-    </div>
+    <LanguageProvider>
+      <div className="flex min-h-screen">
+        <LeftSidebar />
+        <main className="flex-1 overflow-auto bg-gray-900">{children}</main>
+      </div>
+    </LanguageProvider>
   );
 };
 

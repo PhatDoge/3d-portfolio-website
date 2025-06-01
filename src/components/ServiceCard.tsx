@@ -124,9 +124,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       onHoverEnd={() => setIsHovered(false)}
     >
       <div
-        className="relative backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] group border border-white/20 h-full flex flex-col min-h-[340px]" // min-h changed from 400px to 340px (card height)
+        className="relative backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] group border border-white/20 h-full flex flex-col min-h-[340px]"
+        // Added minWidth to prevent thin cards when content is short
         style={{
           background: `${cardGradient}, rgba(30, 41, 59, 0.4)`,
+          minWidth: "420px", // <-- Minimum width for card
           boxShadow:
             isHovered ?
               `0 15px 35px -10px ${accentColor}20, 0 0 0 1px ${accentColor}20`

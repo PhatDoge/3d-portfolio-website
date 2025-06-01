@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { createContext, useContext, useState } from "react";
 
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -18,6 +19,48 @@ import { Textarea } from "../ui/textarea";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
+// Exporta el contexto y proveedor de idioma para uso global
+export const LanguageContext = createContext({
+  language: "es",
+  toggleLanguage: () => {},
+});
+
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState("es"); // 'es' o 'en'
+
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === "es" ? "en" : "es"));
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+// Translations
+const translations = {
+  es: {
+    title: "Cambia tu cabezera",
+    name: "Nombre",
+    description: "Descripción",
+    namePlaceholder: "Ingresa tu Nombre",
+    descPlaceholder: "Ingresa tu Descripción",
+    button: "Cambiar detalles",
+    loading: "Cargando...",
+  },
+  en: {
+    title: "Change your header",
+    name: "Name",
+    description: "Description",
+    namePlaceholder: "Enter your Name",
+    descPlaceholder: "Enter your Description",
+    button: "Change details",
+    loading: "Loading...",
+  },
+};
+
 const formSchema = z.object({
   name: z
     .string()
@@ -31,6 +74,9 @@ const formSchema = z.object({
 
 // Separate form component that only renders when data is available
 const HeaderForm = ({ data, createHeader }) => {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,9 +103,10 @@ const HeaderForm = ({ data, createHeader }) => {
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
           <CardHeader className="relative z-10 text-center pb-8">
+            {/* Título del formulario */}
             <CardTitle className="text-3xl font-bold mb-2">
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Cambia tu cabezera
+                {t.title}
               </span>
             </CardTitle>
           </CardHeader>
@@ -77,11 +124,11 @@ const HeaderForm = ({ data, createHeader }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Nombre
+                          {t.name}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa tu Nombre"
+                            placeholder={t.namePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -99,11 +146,11 @@ const HeaderForm = ({ data, createHeader }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Descripción
+                          {t.description}
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Ingresa tu Descripción"
+                            placeholder={t.descPlaceholder}
                             className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
                             {...field}
                           />
@@ -119,7 +166,7 @@ const HeaderForm = ({ data, createHeader }) => {
                     type="submit"
                     className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0"
                   >
-                    Cambiar detalles
+                    {t.button}
                   </Button>
                 </div>
               </form>
@@ -133,20 +180,32 @@ const HeaderForm = ({ data, createHeader }) => {
 
 // Main component that handles data loading
 const Dashboard = () => {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
+
   const data = useQuery(api.header.getHeader);
   const createHeader = useMutation(api.header.createHeader);
 
-  // Show loading state while data is being fetched
+  // Muestra un estado de carga mientras se obtienen los datos
   if (data === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg">{t.loading}</div>
       </div>
     );
   }
 
-  // Render the form only when data is available
+  // Renderiza el formulario solo cuando los datos están disponibles
   return <HeaderForm data={data} createHeader={createHeader} />;
+};
+
+// Componente principal envuelto con el proveedor de idioma
+const DashboardWithLanguage = () => {
+  return (
+    <LanguageProvider>
+      <Dashboard />
+    </LanguageProvider>
+  );
 };
 
 export default Dashboard;

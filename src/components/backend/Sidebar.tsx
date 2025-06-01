@@ -1,6 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MobileNavbar from "../MobileNavbar";
+import { LanguageContext } from "./Dashboard"; // Importa el contexto de idioma
+import { Button } from "../ui/button";
+import LanguageToggle from "../LanguageToggle";
 
 // Constants moved outside component to prevent re-creation
 const SIDEBAR_LINKS = [
@@ -333,6 +336,8 @@ const LeftSidebar = () => {
     handleLogout,
   } = useSidebarLogic();
 
+  const { language, toggleLanguage } = useContext(LanguageContext); // Usa el contexto de idioma
+
   // Memoize navigation items to prevent unnecessary re-renders
   const navigationItems = useMemo(
     () =>
@@ -374,28 +379,32 @@ const LeftSidebar = () => {
       >
         <div>
           {/* Logo */}
-          <button
-            onClick={handleLogoClick}
-            className="flex items-center justify-center gap-3 mb-8 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 hover:scale-105"
-            aria-label="Ir al inicio"
-          >
-            <img
-              src="/assets/dashboard/alonso_logo.png"
-              height={120}
-              width={120}
-              alt="Logo de Alonso"
-              className="rounded-full"
-              loading="eager"
-            />
-          </button>
+          <div className="flex justify-center w-full mb-8">
+            <button
+              onClick={handleLogoClick}
+              className="flex items-center justify-center gap-3 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 hover:scale-105"
+              aria-label="Ir al inicio"
+            >
+              <img
+                src="/assets/dashboard/alonso_logo.png"
+                height={120}
+                width={120}
+                alt="Logo de Alonso"
+                className="rounded-full"
+                loading="eager"
+              />
+            </button>
+          </div>
 
-          {/* Navigation Menu */}
+          <LanguageToggle language={language} toggleLanguage={toggleLanguage} />
+
+          {/* Menú de navegación */}
           <nav className="flex flex-1 flex-col gap-1" role="menubar">
             {navigationItems}
           </nav>
         </div>
 
-        {/* Logout Section */}
+        {/* Sección para cerrar sesión */}
         <div className="mt-auto pt-6 border-t border-gray-700">
           <button
             onClick={handleLogout}
