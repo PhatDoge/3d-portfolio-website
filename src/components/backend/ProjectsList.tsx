@@ -15,7 +15,7 @@ import {
 } from "../ui/alert-dialog";
 import ProjectUpdateForm from "./ProjectUpdate";
 
-const ProjectsDisplay = () => {
+const ProjectsList = () => {
   // Estado para el modo edición
   const [editingProject, setEditingProject] = useState<string | null>(null);
 
@@ -275,4 +275,4 @@ const ProjectsDisplay = () => {
   );
 };
 
-export default ProjectsDisplay;
+export default ProjectsList;

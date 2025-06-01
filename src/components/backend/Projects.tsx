@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -19,26 +19,30 @@ import { Textarea } from "../ui/textarea";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import ProjectDetails from "./ProjectDetails";
-
-const formSchema = z.object({
-  image: z.string().min(1, { message: "Please select an image." }),
-  cardTitle: z
-    .string()
-    .min(2, { message: "Card title must be at least 2 characters." })
-    .max(100),
-  cardDescription: z
-    .string()
-    .min(2, { message: "Card description must be at least 2 characters." })
-    .max(500),
-  tag: z.string().min(2, { message: "At least one tag is required." }),
-  githubLink: z.string().url({ message: "Please enter a valid GitHub URL." }),
-  websiteLink: z
-    .string()
-    .url({ message: "Please enter a valid website URL." })
-    .optional(),
-});
+import { LanguageContext } from "./Dashboard";
+import { projectTranslations } from "./translations";
 
 const ProjectCard = () => {
+  // Move context usage inside the component
+  const { language } = useContext(LanguageContext);
+  const t = projectTranslations[language];
+
+  // Move schema definition inside component so it has access to translations
+  const formSchema = z.object({
+    image: z.string().min(1, { message: t.imageRequired }),
+    cardTitle: z
+      .string()
+      .min(2, { message: t.titleMinLength })
+      .max(100, { message: t.titleMaxLength }),
+    cardDescription: z
+      .string()
+      .min(2, { message: t.descriptionMinLength })
+      .max(500, { message: t.descriptionMaxLength }),
+    tag: z.string().min(2, { message: t.tagRequired }),
+    githubLink: z.string().url({ message: t.validGithubUrl }),
+    websiteLink: z.string().url({ message: t.validWebsiteUrl }).optional(),
+  });
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -118,12 +122,12 @@ const ProjectCard = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!selectedImage) {
-      form.setError("image", { message: "Please select an image." });
+      form.setError("image", { message: t.imageRequired });
       return;
     }
 
     if (tags.length === 0) {
-      form.setError("tag", { message: "Please add at least one tag." });
+      form.setError("tag", { message: t.addOneTag });
       return;
     }
 
@@ -157,7 +161,7 @@ const ProjectCard = () => {
     } catch (error) {
       console.error("Failed to create project:", error);
       form.setError("root", {
-        message: "Failed to create project. Please try again.",
+        message: t.createProjectError,
       });
     } finally {
       setIsUploading(false);
@@ -174,7 +178,7 @@ const ProjectCard = () => {
             <div className="text-center pb-4 mb-6">
               <h3 className="text-2xl font-bold">
                 <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  Crear Proyecto
+                  {t.createProject}
                 </span>
               </h3>
             </div>
@@ -195,7 +199,7 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Imagen del Proyecto
+                          {t.projectImage}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-4">
@@ -212,7 +216,7 @@ const ProjectCard = () => {
                               <div className="mt-2">
                                 <img
                                   src={imagePreview}
-                                  alt="Preview"
+                                  alt={t.preview}
                                   className="w-full h-32 object-cover rounded-md border border-gray-600"
                                 />
                               </div>
@@ -233,11 +237,11 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Título del Proyecto
+                          {t.projectTitle}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa el título del proyecto"
+                            placeholder={t.projectTitlePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -256,11 +260,11 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Enlace de GitHub
+                          {t.githubLink}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa el enlace de GitHub"
+                            placeholder={t.githubLinkPlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -279,11 +283,11 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Direccion Web
+                          {t.websiteAddress}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa la direccion web"
+                            placeholder={t.websiteAddressPlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -302,11 +306,11 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Descripción del Proyecto
+                          {t.projectDescription}
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Describe tu proyecto en detalle"
+                            placeholder={t.projectDescriptionPlaceholder}
                             className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
                             {...field}
                           />
@@ -325,12 +329,12 @@ const ProjectCard = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Etiquetas
+                          {t.tags}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-2">
                             <Input
-                              placeholder="Escribe una etiqueta y presiona Enter o coma"
+                              placeholder={t.tagsPlaceholder}
                               value={currentTag}
                               onChange={(e) => setCurrentTag(e.target.value)}
                               onKeyDown={handleTagKeyPress}
@@ -369,7 +373,7 @@ const ProjectCard = () => {
                     disabled={isUploading}
                     className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isUploading ? "Creando proyecto..." : "Crear Proyecto"}
+                    {isUploading ? t.creatingProject : t.createProjectButton}
                   </Button>
                 </div>
               </form>
@@ -382,7 +386,7 @@ const ProjectCard = () => {
       </div>
 
       {/* Projects Display Component
-      <ProjectsDisplay /> */}
+      <ProjectsList /> */}
     </div>
   );
 };

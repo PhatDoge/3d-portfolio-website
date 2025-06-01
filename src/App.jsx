@@ -14,8 +14,8 @@ import {
 import Dashboard, { LanguageProvider } from "./components/backend/Dashboard";
 import WorkExperience from "./components/backend/Experience";
 import Introduction from "./components/backend/Introduction";
-import ProjectCard from "./components/backend/ProjectCard";
-import ProjectsDisplay from "./components/backend/ProjectsDisplay";
+import ProjectsList from "./components/backend/ProjectsList";
+import Projects from "./components/backend/Projects";
 import LeftSidebar from "./components/backend/Sidebar";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -132,7 +132,7 @@ const App = () => {
           path="/project-list"
           element={
             <DashboardLayout>
-              <ProjectsDisplay />
+              <ProjectsList />
             </DashboardLayout>
           }
         />
@@ -166,7 +166,7 @@ const App = () => {
           path="/create-project"
           element={
             <DashboardLayout>
-              <ProjectCard />
+              <Projects />
             </DashboardLayout>
           }
         />
