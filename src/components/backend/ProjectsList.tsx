@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
@@ -14,18 +14,13 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import ProjectUpdateForm from "./ProjectUpdate";
+import { LanguageContext } from "./Dashboard";
+import { projectsListTranslations } from "./translations";
 
 const ProjectsList = () => {
-  // Estado para el modo edición
-  const [editingProject, setEditingProject] = useState<string | null>(null);
-
-  // Consultas y mutaciones de Convex
-  const projects = useQuery(api.projects.getProjects);
-  const deleteProject = useMutation(api.projects.deleteProject);
-
-  // Funciones
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("es-ES", {
+  const formatDate = (timestamp: number, language: string) => {
+    const locale = language === "es" ? "es-ES" : "en-US";
+    return new Date(timestamp).toLocaleDateString(locale, {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -34,13 +29,24 @@ const ProjectsList = () => {
     });
   };
 
+  const { language } = useContext(LanguageContext);
+  const t = projectsListTranslations[language];
+  // Estado para el modo edición
+  const [editingProject, setEditingProject] = useState<string | null>(null);
+
+  // Consultas y mutaciones de Convex
+  const projects = useQuery(api.projects.getProjects);
+  const deleteProject = useMutation(api.projects.deleteProject);
+
+  // Funciones
+
   const handleDeleteProject = async (projectId: string) => {
     try {
       await deleteProject({ id: projectId as any });
-      console.log("Project deleted successfully");
+      console.log(t.messages.deleteSuccess);
     } catch (error) {
       console.error("Failed to delete project:", error);
-      alert("Error al eliminar el proyecto. Inténtalo de nuevo.");
+      alert(t.errors.deleteError);
     }
   };
 
@@ -61,20 +67,18 @@ const ProjectsList = () => {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">
           <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            Todos los Proyectos
+            {t.title}
           </span>
         </h2>
       </div>
 
       {projects === undefined ?
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-400 text-lg">Cargando proyectos...</div>
+          <div className="text-gray-400 text-lg">{t.loading}</div>
         </div>
       : projects.length === 0 ?
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-400 text-lg">
-            No hay proyectos creados aún.
-          </div>
+          <div className="text-gray-400 text-lg">{t.noProjects}</div>
         </div>
       : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
           <table className="w-full">
@@ -82,22 +86,22 @@ const ProjectsList = () => {
             <thead className="bg-gray-800/50 border-b border-gray-700">
               <tr>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
-                  Imagen
+                  {t.tableHeaders.image}
                 </th>
                 <th className="text-center p-4 text-sm font-medium text-gray-300">
-                  Título
+                  {t.tableHeaders.title}
                 </th>
                 <th className="text-center p-4 text-sm font-medium text-gray-300">
-                  Tags
+                  {t.tableHeaders.tags}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-40">
-                  Creado
+                  {t.tableHeaders.created}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
-                  Actualizado
+                  {t.tableHeaders.updated}
                 </th>
                 <th className="text-center p-4 text-sm font-medium text-gray-300 w-24">
-                  Acciones
+                  {t.tableHeaders.actions}
                 </th>
               </tr>
             </thead>
@@ -121,7 +125,7 @@ const ProjectsList = () => {
                         />
                       : <div className="w-16 h-12 bg-gray-700 rounded border border-gray-600 flex items-center justify-center">
                           <span className="text-gray-400 text-xs">
-                            Sin imagen
+                            {t.noImage}
                           </span>
                         </div>
                       }
@@ -164,7 +168,7 @@ const ProjectsList = () => {
                     {/* Fecha de creación */}
                     <td className="p-4 text-left">
                       <span className="text-gray-300 text-sm">
-                        {formatDate(project.createdAt)}
+                        {formatDate(project.createdAt, language)}
                       </span>
                     </td>
 
@@ -175,7 +179,7 @@ const ProjectsList = () => {
                           project.updatedAt &&
                           project.updatedAt !== project.createdAt
                         ) ?
-                          formatDate(project.updatedAt)
+                          formatDate(project.updatedAt, language)
                         : "-"}
                       </span>
                     </td>
@@ -233,22 +237,21 @@ const ProjectsList = () => {
                           <AlertDialogContent className="border border-gray-700 bg-gray-900">
                             <AlertDialogHeader>
                               <AlertDialogTitle className="text-gray-200">
-                                ¿Eliminar proyecto?
+                                {t.deleteDialog.title}
                               </AlertDialogTitle>
                               <AlertDialogDescription className="text-gray-400">
-                                Esta acción no se puede deshacer. El proyecto
-                                será eliminado permanentemente.
+                                {t.deleteDialog.description}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
-                                Cancelar
+                                {t.deleteDialog.cancel}
                               </AlertDialogCancel>
                               <AlertDialogAction
                                 className="bg-red-600 text-white hover:bg-red-700"
                                 onClick={() => handleDeleteProject(project._id)}
                               >
-                                Eliminar
+                                {t.deleteDialog.confirm}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>

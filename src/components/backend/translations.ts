@@ -355,3 +355,104 @@ export const projectDetailsTranslations = {
     descriptionMaxLength: "Description must not exceed 1000 characters.",
   },
 };
+
+export const projectUpdateTranslations = {
+  es: {
+    editProject: "Editar Proyecto",
+    projectImage: "Imagen del Proyecto",
+    projectTitle: "Título del Proyecto",
+    projectTitlePlaceholder: "Ingresa el título del proyecto",
+    projectDescription: "Descripción del Proyecto",
+    projectDescriptionPlaceholder: "Describe tu proyecto en detalle",
+    tags: "Etiquetas",
+    tagsPlaceholder: "Escribe una etiqueta y presiona Enter o coma",
+    cancel: "Cancelar",
+    updateProject: "Actualizar Proyecto",
+    updating: "Actualizando...",
+    // Form validation messages
+    imageRequired: "Por favor selecciona una imagen.",
+    titleMinLength: "El título debe tener al menos 2 caracteres.",
+    descriptionMinLength: "La descripción debe tener al menos 2 caracteres.",
+    tagRequired: "Se requiere al menos una etiqueta.",
+    addOneTag: "Por favor agrega al menos una etiqueta.",
+    updateFailed: "Error al actualizar el proyecto. Inténtalo de nuevo.",
+    preview: "Vista previa",
+  },
+  en: {
+    editProject: "Edit Project",
+    projectImage: "Project Image",
+    projectTitle: "Project Title",
+    projectTitlePlaceholder: "Enter the project title",
+    projectDescription: "Project Description",
+    projectDescriptionPlaceholder: "Describe your project in detail",
+    tags: "Tags",
+    tagsPlaceholder: "Write a tag and press Enter or comma",
+    cancel: "Cancel",
+    updateProject: "Update Project",
+    updating: "Updating...",
+    // Form validation messages
+    imageRequired: "Please select an image.",
+    titleMinLength: "Title must be at least 2 characters.",
+    descriptionMinLength: "Description must be at least 2 characters.",
+    tagRequired: "At least one tag is required.",
+    addOneTag: "Please add at least one tag.",
+    updateFailed: "Failed to update project. Please try again.",
+    preview: "Preview",
+  },
+};
+export const projectsListTranslations = {
+  es: {
+    title: "Todos los Proyectos",
+    loading: "Cargando proyectos...",
+    noProjects: "No hay proyectos creados aún.",
+    tableHeaders: {
+      image: "Imagen",
+      title: "Título",
+      tags: "Tags",
+      created: "Creado",
+      updated: "Actualizado",
+      actions: "Acciones",
+    },
+    noImage: "Sin imagen",
+    deleteDialog: {
+      title: "¿Eliminar proyecto?",
+      description:
+        "Esta acción no se puede deshacer. El proyecto será eliminado permanentemente.",
+      cancel: "Cancelar",
+      confirm: "Eliminar",
+    },
+    errors: {
+      deleteError: "Error al eliminar el proyecto. Inténtalo de nuevo.",
+    },
+    messages: {
+      deleteSuccess: "Project deleted successfully",
+    },
+  },
+  en: {
+    title: "All Projects",
+    loading: "Loading projects...",
+    noProjects: "No projects created yet.",
+    tableHeaders: {
+      image: "Image",
+      title: "Title",
+      tags: "Tags",
+      created: "Created",
+      updated: "Updated",
+      actions: "Actions",
+    },
+    noImage: "No image",
+    deleteDialog: {
+      title: "Delete project?",
+      description:
+        "This action cannot be undone. The project will be permanently deleted.",
+      cancel: "Cancel",
+      confirm: "Delete",
+    },
+    errors: {
+      deleteError: "Error deleting project. Please try again.",
+    },
+    messages: {
+      deleteSuccess: "Project deleted successfully",
+    },
+  },
+};

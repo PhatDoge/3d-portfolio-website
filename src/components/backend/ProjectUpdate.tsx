@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -17,19 +17,19 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { LanguageContext } from "./Dashboard";
+import { projectUpdateTranslations } from "./translations";
 
-const formSchema = z.object({
-  image: z.string().min(1, { message: "Please select an image." }),
-  cardTitle: z
-    .string()
-    .min(2, { message: "Card title must be at least 2 characters." })
-    .max(100),
-  cardDescription: z
-    .string()
-    .min(2, { message: "Card description must be at least 2 characters." })
-    .max(500),
-  tag: z.string().min(2, { message: "At least one tag is required." }),
-});
+const createFormSchema = (t: any) =>
+  z.object({
+    image: z.string().min(1, { message: t.imageRequired }),
+    cardTitle: z.string().min(2, { message: t.titleMinLength }).max(100),
+    cardDescription: z
+      .string()
+      .min(2, { message: t.descriptionMinLength })
+      .max(500),
+    tag: z.string().min(2, { message: t.tagRequired }),
+  });
 
 interface ProjectUpdateFormProps {
   project: any;
@@ -42,6 +42,9 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
   onCancel,
   onSuccess,
 }) => {
+  const { language } = useContext(LanguageContext);
+  const t = projectUpdateTranslations[language];
+
   const [editImage, setEditImage] = useState<File | null>(null);
   const [editImagePreview, setEditImagePreview] = useState<string>("");
   const [editTags, setEditTags] = useState<string[]>([]);
@@ -51,6 +54,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
   const updateProject = useMutation(api.projects.updateProject);
   const generateUploadUrl = useMutation(api.projects.generateUploadUrl);
 
+  const formSchema = createFormSchema(t);
   const editForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -134,7 +138,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
 
   const handleUpdateProject = async (values: z.infer<typeof formSchema>) => {
     if (editTags.length === 0) {
-      editForm.setError("tag", { message: "Please add at least one tag." });
+      editForm.setError("tag", { message: t.addOneTag });
       return;
     }
 
@@ -167,7 +171,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
     } catch (error) {
       console.error("Failed to update project:", error);
       editForm.setError("root", {
-        message: "Failed to update project. Please try again.",
+        message: t.updateFailed,
       });
     } finally {
       setIsUpdating(false);
@@ -188,7 +192,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
       <td colSpan={6} className="p-6">
         <div className="bg-gray-900/80 rounded-lg p-6 border border-gray-600">
           <h4 className="text-white text-lg font-semibold mb-4">
-            Editar Proyecto
+            {t.editProject}
           </h4>
 
           <Form {...editForm}>
@@ -205,7 +209,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Imagen del Proyecto
+                          {t.projectImage}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-2">
@@ -224,7 +228,7 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                               <div className="mt-2">
                                 <img
                                   src={editImagePreview}
-                                  alt="Preview"
+                                  alt={t.preview}
                                   className="w-full h-24 object-cover rounded-md border border-gray-600"
                                 />
                               </div>
@@ -245,11 +249,11 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Título del Proyecto
+                          {t.projectTitle}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Ingresa el título del proyecto"
+                            placeholder={t.projectTitlePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -269,11 +273,11 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 font-medium">
-                        Descripción del Proyecto
+                        {t.projectDescription}
                       </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Describe tu proyecto en detalle"
+                          placeholder={t.projectDescriptionPlaceholder}
                           className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-20"
                           {...field}
                         />
@@ -292,12 +296,12 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 font-medium">
-                        Etiquetas
+                        {t.tags}
                       </FormLabel>
                       <FormControl>
                         <div className="space-y-2">
                           <Input
-                            placeholder="Escribe una etiqueta y presiona Enter o coma"
+                            placeholder={t.tagsPlaceholder}
                             value={editCurrentTag}
                             onChange={(e) => setEditCurrentTag(e.target.value)}
                             onKeyDown={handleEditTagKeyPress}
@@ -338,14 +342,14 @@ const ProjectUpdateForm: React.FC<ProjectUpdateFormProps> = ({
                   variant="ghost"
                   className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-700/50 transition-all duration-300"
                 >
-                  Cancelar
+                  {t.cancel}
                 </Button>
                 <Button
                   type="submit"
                   disabled={isUpdating}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isUpdating ? "Actualizando..." : "Actualizar Proyecto"}
+                  {isUpdating ? t.updating : t.updateProject}
                 </Button>
               </div>
             </form>
