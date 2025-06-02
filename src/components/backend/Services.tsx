@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -25,6 +25,8 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { LanguageContext } from "./Dashboard";
+import { serviceTranslations } from "./translations";
 
 const formSchema = z.object({
   // Front Side Content
@@ -102,6 +104,9 @@ const formSchema = z.object({
 });
 
 const Services = () => {
+  const { language } = useContext(LanguageContext);
+  const t = serviceTranslations[language];
+
   const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
   const [iconPreview, setIconPreview] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -238,21 +243,19 @@ const Services = () => {
     }
 
     if (!selectedIcon) {
-      form.setError("icon", { message: "Please select an icon." });
+      form.setError("icon", { message: t.selectIcon });
       return;
     }
 
     if (keyFeatures.length === 0) {
-      form.setError("keyFeatures", {
-        message: "Please add at least one key feature.",
-      });
+      form.setError("keyFeatures", { message: t.addFeature });
+
       return;
     }
 
     if (technologies.length === 0) {
-      form.setError("technologies", {
-        message: "Please add at least one technology.",
-      });
+      form.setError("technologies", { message: t.addTechnology });
+
       return;
     }
 
@@ -299,9 +302,7 @@ const Services = () => {
       window.location.href = "/"; // Navigate to the root route
     } catch (error) {
       console.error("Failed to create service:", error);
-      form.setError("root", {
-        message: "Failed to create service. Please try again.",
-      });
+      form.setError("root", { message: t.createError });
     } finally {
       setIsUploading(false);
     }
@@ -316,7 +317,7 @@ const Services = () => {
           <CardHeader className="relative z-10 text-center pb-8">
             <CardTitle className="text-3xl font-bold mb-2">
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Crear Nuevo Servicio
+                {t.pageTitle}
               </span>
             </CardTitle>
           </CardHeader>
@@ -331,7 +332,7 @@ const Services = () => {
                   {/* Left Column - Front Side Content */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-semibold text-purple-400 border-b border-purple-400/30 pb-2">
-                      Crea un Nuevo Servicio
+                      {t.frontSideHeader}
                     </h3>
 
                     {/* Title Field */}
@@ -341,11 +342,11 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Título del Servicio *
+                            {t.serviceTitle} {t.required}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="ej. Diseño Web, Desarrollador React"
+                              placeholder={t.titlePlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                             />
@@ -362,7 +363,7 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Icono del Servicio *
+                            {t.serviceIcon} {t.required}
                           </FormLabel>
                           <FormControl>
                             <div className="space-y-4">
@@ -400,11 +401,11 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Subtítulo (Opcional)
+                            {t.subtitle}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="ej. UI/UX Design, Frontend Development"
+                              placeholder={t.subtitlePlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                             />
@@ -421,11 +422,11 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Texto de Etiqueta (Opcional)
+                            {t.badgeText}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="ej. Popular, Nuevo, Especialidad"
+                              placeholder={t.badgePlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                             />
@@ -442,7 +443,7 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Color de Acento (Opcional)
+                            {t.accentColor}
                           </FormLabel>
                           <FormControl>
                             <div className="flex gap-2">
@@ -478,11 +479,11 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Descripción Detallada *
+                            {t.detailedDescription} {t.required}
                           </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Descripción detallada del servicio..."
+                              placeholder={t.descriptionPlaceholder}
                               {...field}
                               rows={4}
                               className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 resize-none"
@@ -500,12 +501,12 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Características Clave *
+                            {t.keyFeatures} {t.required}
                           </FormLabel>
                           <FormControl>
                             <div className="space-y-2">
                               <Input
-                                placeholder="Escribe una característica y presiona Enter"
+                                placeholder={t.featurePlaceholder}
                                 value={currentFeature}
                                 onChange={(e) =>
                                   setCurrentFeature(e.target.value)
@@ -551,12 +552,12 @@ const Services = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Tecnologías *
+                            {t.technologies} {t.required}
                           </FormLabel>
                           <FormControl>
                             <div className="space-y-2">
                               <Input
-                                placeholder="Escribe una tecnología y presiona Enter"
+                                placeholder={t.technologyPlaceholder}
                                 value={currentTechnology}
                                 onChange={(e) =>
                                   setCurrentTechnology(e.target.value)
@@ -603,7 +604,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Nivel de Experiencia *
+                          {t.experienceLevel} {t.required}
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
@@ -616,16 +617,16 @@ const Services = () => {
                           </FormControl>
                           <SelectContent className="bg-gray-800 border-gray-600">
                             <SelectItem value="Beginner" className="text-white">
-                              Principiante
+                              {t.beginner}
                             </SelectItem>
                             <SelectItem
                               value="Intermediate"
                               className="text-white"
                             >
-                              Intermedio
+                              {t.intermediate}
                             </SelectItem>
                             <SelectItem value="Expert" className="text-white">
-                              Experto
+                              {t.expert}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -641,7 +642,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Número de Proyectos *
+                          {t.projectCount} {t.required}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -667,7 +668,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Categoría *
+                          {t.category} {t.required}
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
@@ -680,19 +681,19 @@ const Services = () => {
                           </FormControl>
                           <SelectContent className="bg-gray-800 border-gray-600">
                             <SelectItem value="design" className="text-white">
-                              Diseño
+                              {t.design}
                             </SelectItem>
                             <SelectItem
                               value="development"
                               className="text-white"
                             >
-                              Desarrollo
+                              {t.development}
                             </SelectItem>
                             <SelectItem
                               value="consulting"
                               className="text-white"
                             >
-                              Consultoría
+                              {t.consulting}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -710,11 +711,11 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Texto del Botón *
+                          {t.buttonText} {t.required}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="ej. Ver Proyectos, Contactar"
+                            placeholder={t.ctaTextPlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -730,11 +731,11 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Enlace del Botón *
+                          {t.buttonLink} {t.required}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="ej. /portfolio/design, /contact"
+                            placeholder={t.ctaLinkPlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
                           />
@@ -753,7 +754,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Precio Inicial (Opcional)
+                          {t.startingPrice}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -780,7 +781,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Moneda
+                          {t.currency}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -800,7 +801,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Tipo de Precio
+                          {t.priceType}
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
@@ -813,13 +814,13 @@ const Services = () => {
                           </FormControl>
                           <SelectContent className="bg-gray-800 border-gray-600">
                             <SelectItem value="project" className="text-white">
-                              Por Proyecto
+                              {t.perProject}
                             </SelectItem>
                             <SelectItem value="hour" className="text-white">
-                              Por Hora
+                              {t.perHour}
                             </SelectItem>
                             <SelectItem value="fixed" className="text-white">
-                              Precio Fijo
+                              {t.fixedPrice}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -834,7 +835,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Tiempo de Entrega
+                          {t.deliveryTime}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -857,7 +858,7 @@ const Services = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Orden de Visualización *
+                          {t.displayOrder}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -873,7 +874,7 @@ const Services = () => {
                           />
                         </FormControl>
                         <p className="text-sm text-gray-400 mt-1">
-                          Número más bajo aparece primero (1-100)
+                          {t.orderHelper}
                         </p>
                         <FormMessage className="text-red-400" />
                       </FormItem>
@@ -900,9 +901,9 @@ const Services = () => {
                     {isUploading ?
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Creando Servicio...
+                        {t.creatingService}
                       </div>
-                    : "Crear Servicio"}
+                    : t.createService}
                   </Button>
                 </div>
               </form>

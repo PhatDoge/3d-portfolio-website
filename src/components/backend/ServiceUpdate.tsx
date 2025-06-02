@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,6 +24,8 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { LanguageContext } from "./Dashboard";
+import { serviceUpdateTranslations } from "./translations";
 
 // Same form schema as create form
 const formSchema = z.object({
@@ -103,6 +105,9 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
   onCancel,
   onSuccess,
 }) => {
+  const { language } = useContext(LanguageContext);
+  const t = serviceUpdateTranslations[language];
+
   const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
   const [iconPreview, setIconPreview] = useState<string>(service.iconUrl || "");
   const [isUploading, setIsUploading] = useState(false);
@@ -252,14 +257,14 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
 
     if (keyFeatures.length === 0) {
       form.setError("keyFeatures", {
-        message: "Please add at least one key feature.",
+        message: t.addFeatureError,
       });
       return;
     }
 
     if (technologies.length === 0) {
       form.setError("technologies", {
-        message: "Please add at least one technology.",
+        message: t.addTechnologyError,
       });
       return;
     }
@@ -303,7 +308,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
     } catch (error) {
       console.error("Failed to update service:", error);
       form.setError("root", {
-        message: "Failed to update service. Please try again.",
+        message: t.updateError,
       });
     } finally {
       setIsUploading(false);
@@ -316,7 +321,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
         <div className="bg-gray-900/80 border border-gray-600 rounded-lg p-6">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-semibold text-blue-400">
-              Editar Servicio: {service.title}
+              {t.editService}: {service.title}
             </h3>
             <Button
               onClick={onCancel}
@@ -334,7 +339,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                 {/* Left Column - Front Side Content */}
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-purple-400 border-b border-purple-400/30 pb-2">
-                    Contenido Frontal
+                    {t.frontContent}
                   </h4>
 
                   {/* Title Field */}
@@ -344,11 +349,11 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Título del Servicio *
+                          {t.serviceTitle} {t.required}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="ej. Diseño Web"
+                            placeholder={t.titlePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                           />
@@ -365,7 +370,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Icono del Servicio
+                          {t.serviceIcon}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-2">
@@ -403,11 +408,11 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Subtítulo
+                          {t.subtitle}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="ej. UI/UX Design"
+                            placeholder={t.subtitlePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                           />
@@ -424,11 +429,11 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Texto de Etiqueta
+                          {t.badgeText}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="ej. Popular"
+                            placeholder={t.badgePlaceholder}
                             {...field}
                             className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                           />
@@ -445,12 +450,12 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Color de Acento
+                          {t.accentColor}
                         </FormLabel>
                         <FormControl>
                           <div className="flex gap-2">
                             <Input
-                              placeholder="#00cea8"
+                              placeholder={t.colorPlaceholder}
                               {...field}
                               className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                             />
@@ -471,7 +476,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                 {/* Right Column - Back Side Content */}
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-green-400 border-b border-green-400/30 pb-2">
-                    Contenido Posterior
+                    {t.backContent}
                   </h4>
 
                   {/* Description Field */}
@@ -481,11 +486,12 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Descripción *
+                          {t.description}
+                          {t.required}
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Descripción detallada..."
+                            placeholder={t.descriptionPlaceholder}
                             {...field}
                             rows={3}
                             className="bg-gray-800/50 border-gray-600 text-white text-sm resize-none"
@@ -503,12 +509,13 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Características Clave *
+                          {t.keyFeatures}
+                          {t.required}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-2">
                             <Input
-                              placeholder="Añadir característica (Enter)"
+                              placeholder={t.featurePlaceholder}
                               value={currentFeature}
                               onChange={(e) =>
                                 setCurrentFeature(e.target.value)
@@ -552,12 +559,13 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 text-sm">
-                          Tecnologías *
+                          {t.technologies} {t.required}
                         </FormLabel>
+
                         <FormControl>
                           <div className="space-y-2">
                             <Input
-                              placeholder="Añadir tecnología (Enter)"
+                              placeholder={t.technologyPlaceholder}
                               value={currentTechnology}
                               onChange={(e) =>
                                 setCurrentTechnology(e.target.value)
@@ -604,7 +612,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Nivel de Experiencia *
+                        {t.experienceLevel} {t.required}
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -612,15 +620,15 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                       >
                         <FormControl>
                           <SelectTrigger className="bg-gray-800/50 border-gray-600 text-white h-9">
-                            <SelectValue placeholder="Seleccionar" />
+                            <SelectValue placeholder={t.selectOption} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-gray-800 border-gray-600">
-                          <SelectItem value="Beginner">Principiante</SelectItem>
+                          <SelectItem value="Beginner">{t.beginner}</SelectItem>
                           <SelectItem value="Intermediate">
-                            Intermedio
+                            {t.intermediate}
                           </SelectItem>
-                          <SelectItem value="Expert">Experto</SelectItem>
+                          <SelectItem value="Expert">{t.expert}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-red-400 text-xs" />
@@ -635,7 +643,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Proyectos *
+                        {t.projects} {t.required}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -660,7 +668,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Categoría *
+                        {t.category} {t.required}
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -672,12 +680,12 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-gray-800 border-gray-600">
-                          <SelectItem value="design">Diseño</SelectItem>
+                          <SelectItem value="design">{t.design}</SelectItem>
                           <SelectItem value="development">
-                            Desarrollo
+                            {t.development}
                           </SelectItem>
                           <SelectItem value="consulting">
-                            Consultoría
+                            {t.consulting}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -695,11 +703,11 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Texto del Botón *
+                        {t.buttonText} {t.required}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Ver Proyectos"
+                          placeholder={t.buttonTextPlaceholder}
                           {...field}
                           className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                         />
@@ -715,11 +723,11 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Enlace del Botón *
+                        {t.buttonLink} {t.required}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="/portfolio"
+                          placeholder={t.buttonLinkPlaceholder}
                           {...field}
                           className="bg-gray-800/50 border-gray-600 text-white text-sm h-9"
                         />
@@ -735,13 +743,13 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Precio Inicial
+                        {t.startingPrice}
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="number"
                           min="0"
-                          placeholder="500"
+                          placeholder={t.pricePlaceholder}
                           {...field}
                           onChange={(e) =>
                             field.onChange(
@@ -762,7 +770,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-gray-200 text-sm">
-                        Orden *
+                        {t.displayOrder} {t.required}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -799,7 +807,7 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   variant="ghost"
                   className="text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
                 >
-                  Cancelar
+                  {t.cancel}
                 </Button>
                 <Button
                   type="submit"
@@ -809,9 +817,9 @@ const ServiceUpdate: React.FC<ServiceUpdateProps> = ({
                   {isUploading ?
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Actualizando...
+                      {t.updating}
                     </div>
-                  : "Actualizar Servicio"}
+                  : t.updateService}
                 </Button>
               </div>
             </form>

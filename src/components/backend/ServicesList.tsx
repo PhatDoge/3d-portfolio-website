@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
@@ -14,8 +14,13 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import ServiceUpdate from "./ServiceUpdate";
+import { LanguageContext } from "./Dashboard";
+import { serviceListTranslations } from "./translations";
 
 const ServicesList = () => {
+  const { language } = useContext(LanguageContext);
+  const t = serviceListTranslations[language];
+
   // Estado de edición para el formulario de actualización
   const [editingService, setEditingService] = useState<string | null>(null);
 
@@ -40,7 +45,7 @@ const ServicesList = () => {
       console.log("Service deleted successfully");
     } catch (error) {
       console.error("Failed to delete service:", error);
-      alert("Error al eliminar el servicio. Inténtalo de nuevo.");
+      alert(t.deleteError);
     }
   };
 
@@ -62,9 +67,9 @@ const ServicesList = () => {
   // Devuelve la etiqueta de la categoría en español
   const getCategoryLabel = (category: string) => {
     const categories = {
-      design: "Diseño",
-      development: "Desarrollo",
-      consulting: "Consultoría",
+      design: t.design,
+      development: t.development,
+      consulting: t.consulting,
     };
     return categories[category as keyof typeof categories] || category;
   };
@@ -72,9 +77,9 @@ const ServicesList = () => {
   // Devuelve la etiqueta del nivel de experiencia en español
   const getExperienceLevelLabel = (level: string) => {
     const levels = {
-      Beginner: "Principiante",
-      Intermediate: "Intermedio",
-      Expert: "Experto",
+      Beginner: t.beginner,
+      Intermediate: t.intermediate,
+      Expert: t.expert,
     };
     return levels[level as keyof typeof levels] || level;
   };
@@ -82,9 +87,9 @@ const ServicesList = () => {
   // Devuelve la etiqueta del tipo de precio en español
   const getPriceTypeLabel = (type: string) => {
     const types = {
-      project: "Por Proyecto",
-      hour: "Por Hora",
-      fixed: "Precio Fijo",
+      project: t.project,
+      hour: t.hour,
+      fixed: t.fixed,
     };
     return types[type as keyof typeof types] || type;
   };
@@ -102,7 +107,7 @@ const ServicesList = () => {
       console.log("Service status updated successfully");
     } catch (error) {
       console.error("Failed to update service status:", error);
-      alert("Error al actualizar el estado del servicio.");
+      alert(t.statusUpdateError);
     }
   };
 
@@ -113,7 +118,7 @@ const ServicesList = () => {
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Todos los Servicios
+              {t.allServices}
             </span>
           </h2>
         </div>
@@ -121,14 +126,12 @@ const ServicesList = () => {
         {services === undefined ?
           // Estado de carga: muestra mensaje mientras se obtienen los servicios
           <div className="flex justify-center items-center py-12">
-            <div className="text-gray-400 text-lg">Cargando servicios...</div>
+            <div className="text-gray-400 text-lg">{t.loadingServices}</div>
           </div>
         : services.length === 0 ?
           // Estado vacío: no hay servicios creados
           <div className="flex justify-center items-center py-12">
-            <div className="text-gray-400 text-lg">
-              No hay servicios creados aún.
-            </div>
+            <div className="text-gray-400 text-lg">{t.noServicesYet}</div>
           </div>
         : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
             <table className="w-full">
@@ -136,31 +139,31 @@ const ServicesList = () => {
               <thead className="bg-gray-800/50 border-b border-gray-700">
                 <tr>
                   <th className="text-left p-4 text-sm font-medium text-gray-300 w-16">
-                    Icono
+                    {t.icon}
                   </th>
                   <th className="text-center p-4 text-sm font-medium text-gray-300 min-w-[280px]">
-                    Título / Tag
+                    {t.titleTag}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300">
-                    Categoría
+                    {t.category}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300">
-                    Experiencia
+                    {t.experience}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300 ">
-                    Proyectos
+                    {t.projects}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300">
-                    Precio
+                    {t.price}
                   </th>
                   <th className="p-4 text-sm font-medium text-gray-300 text-center w-20">
-                    Orden
+                    {t.order}
                   </th>
                   <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
-                    Estado / Activo
+                    {t.status}
                   </th>
                   <th className="text-center p-4 text-sm font-medium text-gray-300 w-24">
-                    Acciones
+                    {t.actions}
                   </th>
                 </tr>
               </thead>
@@ -184,7 +187,7 @@ const ServicesList = () => {
                           />
                         : <div className="w-12 h-12 bg-gray-700 rounded border border-gray-600 flex items-center justify-center">
                             <span className="text-gray-400 text-xs">
-                              Sin icono
+                              {t.noIcon}
                             </span>
                           </div>
                         }
@@ -284,7 +287,7 @@ const ServicesList = () => {
                               : "bg-red-600/20 text-red-400 border border-red-600/30"
                             }`}
                           >
-                            {service.isActive ? "Activo" : "Inactivo"}
+                            {service.isActive ? t.active : t.inactive}
                           </span>
 
                           {/* Checkbox para activar/desactivar el servicio */}
@@ -301,7 +304,7 @@ const ServicesList = () => {
                               className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
                             />
                             <span className="text-xs text-gray-400">
-                              Activo
+                              {t.active}
                             </span>
                           </label>
 
@@ -323,7 +326,7 @@ const ServicesList = () => {
                             variant="ghost"
                             size="sm"
                             className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-2 h-8 w-8"
-                            title="Editar servicio"
+                            title={t.editService}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -348,7 +351,7 @@ const ServicesList = () => {
                                 variant="ghost"
                                 size="sm"
                                 className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-2 h-8 w-8"
-                                title="Eliminar servicio"
+                                title={t.deleteService}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -369,16 +372,15 @@ const ServicesList = () => {
                             <AlertDialogContent className="border border-gray-700 bg-gray-900">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="text-gray-200">
-                                  ¿Eliminar servicio?
+                                  {t.deleteServiceTitle}
                                 </AlertDialogTitle>
                                 <AlertDialogDescription className="text-gray-400">
-                                  Esta acción no se puede deshacer. El servicio
-                                  será marcado como inactivo.
+                                  {t.deleteConfirmation}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
-                                  Cancelar
+                                  {t.cancel}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-600 text-white hover:bg-red-700"
@@ -386,7 +388,7 @@ const ServicesList = () => {
                                     handleDeleteService(service._id)
                                   }
                                 >
-                                  Eliminar
+                                  {t.delete}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

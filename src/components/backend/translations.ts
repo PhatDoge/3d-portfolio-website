@@ -1,3 +1,4 @@
+//admin-backend translations
 export const userTranslations = {
   es: {
     title: "Cambia tu cabezera",
@@ -630,5 +631,386 @@ export const experienceUpdateTranslations = {
     updateFailed: "Failed to update work experience. Please try again.",
     endDateValidation:
       "End date must be after start date, or check 'Current Job' if this is your current position.",
+  },
+};
+
+export const serviceTranslations = {
+  es: {
+    // Page Title
+    pageTitle: "Crear Nuevo Servicio",
+
+    // Section Headers
+    frontSideHeader: "Crea un Nuevo Servicio",
+
+    // Form Fields Labels
+    serviceTitle: "Título del Servicio",
+    serviceIcon: "Icono del Servicio",
+    subtitle: "Subtítulo (Opcional)",
+    badgeText: "Texto de Etiqueta (Opcional)",
+    accentColor: "Color de Acento (Opcional)",
+    detailedDescription: "Descripción Detallada",
+    keyFeatures: "Características Clave",
+    technologies: "Tecnologías",
+    experienceLevel: "Nivel de Experiencia",
+    projectCount: "Número de Proyectos",
+    category: "Categoría",
+    buttonText: "Texto del Botón",
+    buttonLink: "Enlace del Botón",
+    startingPrice: "Precio Inicial (Opcional)",
+    currency: "Moneda",
+    priceType: "Tipo de Precio",
+    deliveryTime: "Tiempo de Entrega",
+    displayOrder: "Orden de Visualización",
+
+    // Placeholders
+    titlePlaceholder: "ej. Diseño Web, Desarrollador React",
+    subtitlePlaceholder: "ej. UI/UX Design, Frontend Development",
+    badgePlaceholder: "ej. Popular, Nuevo, Especialidad",
+    descriptionPlaceholder: "Descripción detallada del servicio...",
+    featurePlaceholder: "Escribe una característica y presiona Enter",
+    technologyPlaceholder: "Escribe una tecnología y presiona Enter",
+    ctaTextPlaceholder: "ej. Ver Proyectos, Contactar",
+    ctaLinkPlaceholder: "ej. /portfolio/design, /contact",
+    pricePlaceholder: "500",
+    currencyPlaceholder: "$",
+    deliveryPlaceholder: "ej. 2-3 semanas",
+    orderPlaceholder: "1",
+
+    // Select Options
+    selectLevel: "Seleccionar nivel",
+    selectCategory: "Seleccionar categoría",
+    selectPriceType: "Tipo",
+    beginner: "Principiante",
+    intermediate: "Intermedio",
+    expert: "Experto",
+    design: "Diseño",
+    development: "Desarrollo",
+    consulting: "Consultoría",
+    perProject: "Por Proyecto",
+    perHour: "Por Hora",
+    fixedPrice: "Precio Fijo",
+
+    // Buttons and Actions
+    createService: "Crear Servicio",
+    creatingService: "Creando Servicio...",
+
+    // Helper Text
+    orderHelper: "Número más bajo aparece primero (1-100)",
+
+    // Required Fields
+    required: "*",
+
+    // Error Messages
+    selectIcon: "Por favor selecciona un icono.",
+    addFeature: "Por favor agrega al menos una característica clave.",
+    addTechnology: "Por favor agrega al menos una tecnología.",
+    createError: "Error al crear servicio. Por favor intenta de nuevo.",
+  },
+  en: {
+    // Page Title
+    pageTitle: "Create New Service",
+
+    // Section Headers
+    frontSideHeader: "Create a New Service",
+
+    // Form Fields Labels
+    serviceTitle: "Service Title",
+    serviceIcon: "Service Icon",
+    subtitle: "Subtitle (Optional)",
+    badgeText: "Badge Text (Optional)",
+    accentColor: "Accent Color (Optional)",
+    detailedDescription: "Detailed Description",
+    keyFeatures: "Key Features",
+    technologies: "Technologies",
+    experienceLevel: "Experience Level",
+    projectCount: "Project Count",
+    category: "Category",
+    buttonText: "Button Text",
+    buttonLink: "Button Link",
+    startingPrice: "Starting Price (Optional)",
+    currency: "Currency",
+    priceType: "Price Type",
+    deliveryTime: "Delivery Time",
+    displayOrder: "Display Order",
+
+    // Placeholders
+    titlePlaceholder: "e.g. Web Design, React Developer",
+    subtitlePlaceholder: "e.g. UI/UX Design, Frontend Development",
+    badgePlaceholder: "e.g. Popular, New, Specialty",
+    descriptionPlaceholder: "Detailed service description...",
+    featurePlaceholder: "Type a feature and press Enter",
+    technologyPlaceholder: "Type a technology and press Enter",
+    ctaTextPlaceholder: "e.g. View Projects, Contact",
+    ctaLinkPlaceholder: "e.g. /portfolio/design, /contact",
+    pricePlaceholder: "500",
+    currencyPlaceholder: "$",
+    deliveryPlaceholder: "e.g. 2-3 weeks",
+    orderPlaceholder: "1",
+
+    // Select Options
+    selectLevel: "Select level",
+    selectCategory: "Select category",
+    selectPriceType: "Type",
+    beginner: "Beginner",
+    intermediate: "Intermediate",
+    expert: "Expert",
+    design: "Design",
+    development: "Development",
+    consulting: "Consulting",
+    perProject: "Per Project",
+    perHour: "Per Hour",
+    fixedPrice: "Fixed Price",
+
+    // Buttons and Actions
+    createService: "Create Service",
+    creatingService: "Creating Service...",
+
+    // Helper Text
+    orderHelper: "Lower number appears first (1-100)",
+
+    // Required Fields
+    required: "*",
+
+    // Error Messages
+    selectIcon: "Please select an icon.",
+    addFeature: "Please add at least one key feature.",
+    addTechnology: "Please add at least one technology.",
+    createError: "Failed to create service. Please try again.",
+  },
+};
+
+export const serviceListTranslations = {
+  es: {
+    // Page title
+    allServices: "Todos los Servicios",
+
+    // Loading and empty states
+    loadingServices: "Cargando servicios...",
+    noServicesYet: "No hay servicios creados aún.",
+
+    // Table headers
+    icon: "Icono",
+    titleTag: "Título/Tag",
+    category: "Categoría",
+    experience: "Experiencia",
+    projects: "Proyectos",
+    price: "Precio",
+    order: "Orden",
+    status: "Estado",
+    actions: "Acciones",
+
+    // Categories
+    design: "Diseño",
+    development: "Desarrollo",
+    consulting: "Consultoría",
+
+    // Experience levels
+    beginner: "Principiante",
+    intermediate: "Intermedio",
+    expert: "Experto",
+
+    // Price types
+    project: "Por Proyecto",
+    hour: "Por Hora",
+    fixed: "Precio Fijo",
+
+    // Status
+    active: "Activo",
+    inactive: "Inactivo",
+
+    // Icons and placeholders
+    noIcon: "Sin icono",
+
+    // Action buttons
+    editService: "Editar servicio",
+    deleteService: "Eliminar servicio",
+
+    // Delete confirmation dialog
+    deleteServiceTitle: "¿Eliminar servicio?",
+    deleteConfirmation:
+      "Esta acción no se puede deshacer. El servicio será marcado como inactivo.",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+
+    // Error messages
+    deleteError: "Error al eliminar el servicio. Inténtalo de nuevo.",
+    statusUpdateError: "Error al actualizar el estado del servicio.",
+  },
+  en: {
+    // Page title
+    allServices: "All Services",
+
+    // Loading and empty states
+    loadingServices: "Loading services...",
+    noServicesYet: "No services created yet.",
+
+    // Table headers
+    icon: "Icon",
+    titleTag: "Title/Tag",
+    category: "Category",
+    experience: "Experience",
+    projects: "Projects",
+    price: "Price",
+    order: "Order",
+    status: "Status",
+    actions: "Actions",
+
+    // Categories
+    design: "Design",
+    development: "Development",
+    consulting: "Consulting",
+
+    // Experience levels
+    beginner: "Beginner",
+    intermediate: "Intermediate",
+    expert: "Expert",
+
+    // Price types
+    project: "Per Project",
+    hour: "Per Hour",
+    fixed: "Fixed Price",
+
+    // Status
+    active: "Active",
+    inactive: "Inactive",
+
+    // Icons and placeholders
+    noIcon: "No icon",
+
+    // Action buttons
+    editService: "Edit service",
+    deleteService: "Delete service",
+
+    // Delete confirmation dialog
+    deleteServiceTitle: "Delete service?",
+    deleteConfirmation:
+      "This action cannot be undone. The service will be marked as inactive.",
+    cancel: "Cancel",
+    delete: "Delete",
+
+    // Error messages
+    deleteError: "Error deleting service. Please try again.",
+    statusUpdateError: "Error updating service status.",
+  },
+};
+
+export const serviceUpdateTranslations = {
+  es: {
+    // Header
+    editService: "Editar Servicio",
+
+    // Section Headers
+    frontContent: "Contenido Frontal",
+    backContent: "Contenido Posterior",
+
+    // Form Labels
+    serviceTitle: "Título del Servicio",
+    serviceIcon: "Icono del Servicio",
+    subtitle: "Subtítulo",
+    badgeText: "Texto de Etiqueta",
+    accentColor: "Color de Acento",
+    description: "Descripción",
+    keyFeatures: "Características Clave",
+    technologies: "Tecnologías",
+    experienceLevel: "Nivel de Experiencia",
+    projects: "Proyectos",
+    category: "Categoría",
+    buttonText: "Texto del Botón",
+    buttonLink: "Enlace del Botón",
+    startingPrice: "Precio Inicial",
+    displayOrder: "Orden",
+
+    // Placeholders
+    titlePlaceholder: "ej. Diseño Web",
+    subtitlePlaceholder: "ej. UI/UX Design",
+    badgePlaceholder: "ej. Popular",
+    colorPlaceholder: "#00cea8",
+    descriptionPlaceholder: "Descripción detallada...",
+    featurePlaceholder: "Añadir característica (Enter)",
+    technologyPlaceholder: "Añadir tecnología (Enter)",
+    buttonTextPlaceholder: "Ver Proyectos",
+    buttonLinkPlaceholder: "/portafolio",
+    pricePlaceholder: "500",
+
+    // Select Options
+    selectOption: "Seleccionar",
+    beginner: "Principiante",
+    intermediate: "Intermedio",
+    expert: "Experto",
+    design: "Diseño",
+    development: "Desarrollo",
+    consulting: "Consultoría",
+
+    // Buttons
+    cancel: "Cancelar",
+    updateService: "Actualizar Servicio",
+    updating: "Actualizando...",
+
+    // Error Messages
+    addFeatureError: "Please add at least one key feature.",
+    addTechnologyError: "Please add at least one technology.",
+    updateError: "Failed to update service. Please try again.",
+
+    // Required indicator
+    required: "*",
+  },
+  en: {
+    // Header
+    editService: "Edit Service",
+
+    // Section Headers
+    frontContent: "Front Content",
+    backContent: "Back Content",
+
+    // Form Labels
+    serviceTitle: "Service Title",
+    serviceIcon: "Service Icon",
+    subtitle: "Subtitle",
+    badgeText: "Badge Text",
+    accentColor: "Accent Color",
+    description: "Description",
+    keyFeatures: "Key Features",
+    technologies: "Technologies",
+    experienceLevel: "Experience Level",
+    projects: "Projects",
+    category: "Category",
+    buttonText: "Button Text",
+    buttonLink: "Button Link",
+    startingPrice: "Starting Price",
+    displayOrder: "Display Order",
+
+    // Placeholders
+    titlePlaceholder: "e.g. Web Design",
+    subtitlePlaceholder: "e.g. UI/UX Design",
+    badgePlaceholder: "e.g. Popular",
+    colorPlaceholder: "#00cea8",
+    descriptionPlaceholder: "Detailed description...",
+    featurePlaceholder: "Add feature (Enter)",
+    technologyPlaceholder: "Add technology (Enter)",
+    buttonTextPlaceholder: "View Projects",
+    buttonLinkPlaceholder: "/portfolio",
+    pricePlaceholder: "500",
+
+    // Select Options
+    selectOption: "Select",
+    beginner: "Beginner",
+    intermediate: "Intermediate",
+    expert: "Expert",
+    design: "Design",
+    development: "Development",
+    consulting: "Consulting",
+
+    // Buttons
+    cancel: "Cancel",
+    updateService: "Update Service",
+    updating: "Updating...",
+
+    // Error Messages
+    addFeatureError: "Please add at least one key feature.",
+    addTechnologyError: "Please add at least one technology.",
+    updateError: "Failed to update service. Please try again.",
+
+    // Required indicator
+    required: "*",
   },
 };
