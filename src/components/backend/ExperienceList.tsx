@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui/button";
@@ -14,8 +14,21 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import ExperienceUpdate from "./ExperienceUpdate";
+import { experienceListTranslations } from "./translations";
+import { LanguageContext } from "./Dashboard";
 
 const ExperienceList = () => {
+  const formatDate = (timestamp: number, language: string) => {
+    const locale = language === "es" ? "es-ES" : "en-US";
+    return new Date(timestamp).toLocaleDateString(locale, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const { language } = useContext(LanguageContext);
+  const t = experienceListTranslations[language];
   // Edit mode state
   const [editingExperience, setEditingExperience] = useState<string | null>(
     null
@@ -26,13 +39,13 @@ const ExperienceList = () => {
   const deleteExperience = useMutation(api.workExperience.deleteWorkExperience);
 
   // Functions
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+  // const formatDate = (timestamp: number) => {
+  //   return new Date(timestamp).toLocaleDateString("es-ES", {
+  //     year: "numeric",
+  //     month: "short",
+  //     day: "numeric",
+  //   });
+  // };
 
   const handleDeleteExperience = async (experienceId: string) => {
     try {
@@ -40,7 +53,7 @@ const ExperienceList = () => {
       console.log("Experience deleted successfully");
     } catch (error) {
       console.error("Failed to delete experience:", error);
-      alert("Error al eliminar la experiencia. Inténtalo de nuevo.");
+      alert(t.deleteError);
     }
   };
 
@@ -61,20 +74,18 @@ const ExperienceList = () => {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold">
           <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            Todas las Experiencias
+            {t.title}
           </span>
         </h2>
       </div>
 
       {experiences === undefined ?
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-400 text-lg">Cargando experiencias...</div>
+          <div className="text-gray-400 text-lg">{t.loading}</div>
         </div>
       : experiences.length === 0 ?
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-400 text-lg">
-            No hay experiencias creadas aún.
-          </div>
+          <div className="text-gray-400 text-lg">{t.noExperiences}</div>
         </div>
       : <div className="backdrop-blur-sm bg-gray-900/80 border border-gray-700 rounded-lg overflow-hidden shadow-2xl">
           <table className="w-full">
@@ -82,25 +93,25 @@ const ExperienceList = () => {
             <thead className="bg-gray-800/50 border-b border-gray-700">
               <tr>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-20">
-                  Icono
+                  {t.tableHeaders.icon}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
-                  Empresa
+                  {t.tableHeaders.company}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
-                  Puesto
+                  {t.tableHeaders.position}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300">
-                  Descripción
+                  {t.tableHeaders.description}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
-                  Inicio
+                  {t.tableHeaders.startDate}
                 </th>
                 <th className="text-left p-4 text-sm font-medium text-gray-300 w-32">
-                  Fin
+                  {t.tableHeaders.endDate}
                 </th>
                 <th className="text-center p-4 text-sm font-medium text-gray-300 w-24">
-                  Acciones
+                  {t.tableHeaders.actions}
                 </th>
               </tr>
             </thead>
@@ -124,7 +135,7 @@ const ExperienceList = () => {
                         />
                       : <div className="w-16 h-12 bg-gray-700 rounded border border-gray-600 flex items-center justify-center">
                           <span className="text-gray-400 text-xs">
-                            Sin icono
+                            {t.noIcon}
                           </span>
                         </div>
                       }
@@ -170,7 +181,8 @@ const ExperienceList = () => {
                               ))}
                             {experience.descriptionArray.length > 2 && (
                               <span className="text-gray-400 text-xs">
-                                +{experience.descriptionArray.length - 2} más
+                                +{experience.descriptionArray.length - 2}{" "}
+                                {t.moreItems}
                               </span>
                             )}
                           </div>
@@ -179,21 +191,21 @@ const ExperienceList = () => {
                     </td>
 
                     {/* Start Date */}
-                    <td className="p-4 text-center">
-                      <span className="text-gray-300 text-sm">
-                        {formatDate(experience.startDate)}
+                    <td className="p-4 ">
+                      <span className="text-gray-300 text-sm text-left">
+                        {formatDate(experience.startDate, language)}
                       </span>
                     </td>
 
                     {/* End Date */}
-                    <td className="p-4 text-center">
-                      <span className="text-gray-300 text-sm">
+                    <td className="p-4 ">
+                      <span className="text-gray-300 text-sm text-left">
                         {experience.isCurrentJob ?
                           <span className="text-green-400 font-medium">
-                            Actual
+                            {t.current}
                           </span>
                         : experience.endDate ?
-                          formatDate(experience.endDate)
+                          formatDate(experience.endDate, language)
                         : "-"}
                       </span>
                     </td>
@@ -251,16 +263,15 @@ const ExperienceList = () => {
                           <AlertDialogContent className="border border-gray-700 bg-gray-900">
                             <AlertDialogHeader>
                               <AlertDialogTitle className="text-gray-200">
-                                ¿Eliminar experiencia?
+                                {t.deleteDialog.title}
                               </AlertDialogTitle>
                               <AlertDialogDescription className="text-gray-400">
-                                Esta acción no se puede deshacer. La experiencia
-                                será eliminada permanentemente.
+                                {t.deleteDialog.description}
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel className="border-gray-600 hover:bg-gray-700/50">
-                                Cancelar
+                                {t.deleteDialog.cancel}
                               </AlertDialogCancel>
                               <AlertDialogAction
                                 className="bg-red-600 text-white hover:bg-red-700"
@@ -268,7 +279,7 @@ const ExperienceList = () => {
                                   handleDeleteExperience(experience._id)
                                 }
                               >
-                                Eliminar
+                                {t.deleteDialog.confirm}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>

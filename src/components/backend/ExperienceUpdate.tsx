@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { format } from "date-fns";
@@ -23,44 +23,38 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { LanguageContext } from "./Dashboard";
+import { experienceUpdateTranslations } from "./translations";
 
-const formSchema = z
-  .object({
-    icon: z.string().optional(),
-    workplace: z
-      .string()
-      .min(2, { message: "Workplace must be at least 2 characters." })
-      .max(100),
-    workTitle: z
-      .string()
-      .min(2, { message: "Work title must be at least 2 characters." })
-      .max(100),
-    description: z
-      .string()
-      .min(10, { message: "Description must be at least 10 characters." })
-      .max(1000),
-    startDate: z.date({
-      required_error: "Start date is required.",
-    }),
-    endDate: z.date().optional(),
-    isCurrentJob: z.boolean().default(false),
-  })
-  .refine(
-    (data) => {
-      if (!data.isCurrentJob && !data.endDate) {
-        return false;
+const createFormSchema = (t: any) =>
+  z
+    .object({
+      icon: z.string().optional(),
+      workplace: z.string().min(2, { message: t.workplaceMinLength }).max(100),
+      workTitle: z.string().min(2, { message: t.workTitleMinLength }).max(100),
+      description: z
+        .string()
+        .min(10, { message: t.descriptionMinLength })
+        .max(1000),
+      startDate: z.date({ required_error: t.startDateRequired }),
+      endDate: z.date().optional(),
+      isCurrentJob: z.boolean().default(false),
+    })
+    .refine(
+      (data) => {
+        if (!data.isCurrentJob && !data.endDate) {
+          return false;
+        }
+        if (data.endDate && data.startDate) {
+          return data.endDate >= data.startDate;
+        }
+        return true;
+      },
+      {
+        message: t.endDateValidation,
+        path: ["endDate"],
       }
-      if (data.endDate && data.startDate) {
-        return data.endDate >= data.startDate;
-      }
-      return true;
-    },
-    {
-      message:
-        "End date must be after start date, or check 'Current Job' if this is your current position.",
-      path: ["endDate"],
-    }
-  );
+    );
 
 // Register Spanish locale for react-datepicker
 registerLocale("es", es);
@@ -76,12 +70,16 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
   onCancel,
   onSuccess,
 }) => {
+  const { language } = useContext(LanguageContext);
+  const t = experienceUpdateTranslations[language];
   const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
   const [iconPreview, setIconPreview] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
   const [descriptions, setDescriptions] = useState<string[]>([]);
   const [currentDescription, setCurrentDescription] = useState<string>("");
 
+  // Use translation-aware schema
+  const formSchema = createFormSchema(t);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -199,7 +197,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
 
     if (descriptions.length === 0) {
       form.setError("description", {
-        message: "Please add at least one description bullet point.",
+        message: t.addOneDescription,
       });
       return;
     }
@@ -234,7 +232,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
     } catch (error) {
       console.error("Failed to update work experience:", error);
       form.setError("root", {
-        message: "Failed to update work experience. Please try again.",
+        message: t.updateFailed,
       });
     } finally {
       setIsUploading(false);
@@ -247,7 +245,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
         <div className="bg-gray-800/50 border-t border-gray-600 p-6">
           <div className="max-w-4xl mx-auto">
             <h3 className="text-lg font-semibold text-white mb-4">
-              Editar Experiencia
+              {t.editExperience}
             </h3>
 
             <Form {...form}>
@@ -264,7 +262,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Icono de la Empresa
+                            {t.companyIcon}
                           </FormLabel>
                           <FormControl>
                             <div className="space-y-2">
@@ -304,11 +302,11 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Empresa
+                            {t.company}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Nombre de la empresa"
+                              placeholder={t.companyPlaceholder}
                               {...field}
                               className="bg-gray-700/50 border-gray-500 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
                             />
@@ -327,11 +325,11 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-200 font-medium">
-                            Título del Puesto
+                            {t.jobTitle}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Tu puesto de trabajo"
+                              placeholder={t.jobTitlePlaceholder}
                               {...field}
                               className="bg-gray-700/50 border-gray-500 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20"
                             />
@@ -358,7 +356,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                           </FormControl>
                           <div className="space-y-1 leading-none">
                             <FormLabel className="text-gray-200 font-medium">
-                              Trabajo Actual
+                              {t.currentJob}
                             </FormLabel>
                           </div>
                         </FormItem>
@@ -374,7 +372,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="text-gray-200 font-medium">
-                            Fecha de Inicio
+                            {t.startDate}
                           </FormLabel>
                           <Popover>
                             <PopoverTrigger asChild>
@@ -387,7 +385,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                                 >
                                   {field.value ?
                                     format(field.value, "PPP", { locale: es })
-                                  : <span>Selecciona fecha de inicio</span>}
+                                  : <span>{t.selectStartDate}</span>}
                                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -425,7 +423,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
                             <FormLabel className="text-gray-200 font-medium">
-                              Fecha de Finalización
+                              {t.endDate}
                             </FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
@@ -438,10 +436,7 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                                   >
                                     {field.value ?
                                       format(field.value, "PPP", { locale: es })
-                                    : <span>
-                                        Selecciona fecha de finalización
-                                      </span>
-                                    }
+                                    : <span>{t.selectEndDate}</span>}
                                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                   </Button>
                                 </FormControl>
@@ -480,12 +475,12 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-gray-200 font-medium">
-                          Descripción de Responsabilidades
+                          {t.responsibilitiesDescription}
                         </FormLabel>
                         <FormControl>
                           <div className="space-y-2">
                             <Input
-                              placeholder="Escribe una responsabilidad y presiona Enter"
+                              placeholder={t.responsibilityPlaceholder}
                               value={currentDescription}
                               onChange={(e) =>
                                 setCurrentDescription(e.target.value)
@@ -533,14 +528,14 @@ const ExperienceUpdate: React.FC<ExperienceUpdateProps> = ({
                     onClick={onCancel}
                     className="border-gray-500 text-gray-300 hover:bg-gray-700/50"
                   >
-                    Cancelar
+                    {t.cancel}
                   </Button>
                   <Button
                     type="submit"
                     disabled={isUploading}
                     className="px-4 py-2 bg-gradient-to-r from-green-500 to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isUploading ? "Actualizando..." : "Actualizar Experiencia"}
+                    {isUploading ? t.updating : t.updateExperience}
                   </Button>
                 </div>
               </form>

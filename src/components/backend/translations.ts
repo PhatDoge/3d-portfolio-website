@@ -400,6 +400,7 @@ export const projectUpdateTranslations = {
     preview: "Preview",
   },
 };
+
 export const projectsListTranslations = {
   es: {
     title: "Todos los Proyectos",
@@ -454,5 +455,180 @@ export const projectsListTranslations = {
     messages: {
       deleteSuccess: "Project deleted successfully",
     },
+  },
+};
+
+export const workExperienceTranslations = {
+  es: {
+    // Form title
+    cardTitle: "Crear Experiencia Laboral",
+
+    // Form labels
+    companyIcon: "Icono de la Empresa",
+    company: "Empresa",
+    jobTitle: "Título del Puesto",
+    startDate: "Fecha de Inicio",
+    endDate: "Fecha de Finalización",
+    currentJob: "Trabajo Actual",
+    responsibilities: "Descripción de Responsabilidades",
+
+    // Placeholders
+    companyPlaceholder: "Nombre de la empresa",
+    jobTitlePlaceholder: "Tu puesto de trabajo",
+    startDatePlaceholder: "Selecciona fecha de inicio",
+    endDatePlaceholder: "Selecciona fecha de finalización",
+    responsibilityPlaceholder: "Escribe una responsabilidad y presiona Enter",
+
+    // Button states
+    submitButton: "Crear Experiencia",
+    submitButtonLoading: "Creando experiencia...",
+
+    // Validation messages
+    iconRequired: "Please select an icon image.",
+    iconRequiredCustom: "Please select an icon.",
+    workplaceMinLength: "Workplace must be at least 2 characters.",
+    workTitleMinLength: "Work title must be at least 2 characters.",
+    descriptionMinLength: "Description must be at least 10 characters.",
+    startDateRequired: "Start date is required.",
+    endDateValidation:
+      "End date must be after start date, or check 'Current Job' if this is your current position.",
+    descriptionRequired: "Please add at least one description bullet point.",
+    submissionError: "Failed to create work experience. Please try again.",
+  },
+  en: {
+    // Form title
+    cardTitle: "Create Work Experience",
+
+    // Form labels
+    companyIcon: "Company Icon",
+    company: "Company",
+    jobTitle: "Job Title",
+    startDate: "Start Date",
+    endDate: "End Date",
+    currentJob: "Current Job",
+    responsibilities: "Job Responsibilities",
+
+    // Placeholders
+    companyPlaceholder: "Company name",
+    jobTitlePlaceholder: "Your job position",
+    startDatePlaceholder: "Select start date",
+    endDatePlaceholder: "Select end date",
+    responsibilityPlaceholder: "Write a responsibility and press Enter",
+
+    // Button states
+    submitButton: "Create Experience",
+    submitButtonLoading: "Creating experience...",
+
+    // Validation messages
+    iconRequired: "Please select an icon image.",
+    iconRequiredCustom: "Please select an icon.",
+    workplaceMinLength: "Workplace must be at least 2 characters.",
+    workTitleMinLength: "Work title must be at least 2 characters.",
+    descriptionMinLength: "Description must be at least 10 characters.",
+    startDateRequired: "Start date is required.",
+    endDateValidation:
+      "End date must be after start date, or check 'Current Job' if this is your current position.",
+    descriptionRequired: "Please add at least one description bullet point.",
+    submissionError: "Failed to create work experience. Please try again.",
+  },
+};
+
+export const experienceListTranslations = {
+  es: {
+    title: "Todas las Experiencias",
+    loading: "Cargando experiencias...",
+    noExperiences: "No hay experiencias creadas aún.",
+    tableHeaders: {
+      icon: "Icono",
+      company: "Empresa",
+      position: "Puesto",
+      description: "Descripción",
+      startDate: "Inicio",
+      endDate: "Fin",
+      actions: "Acciones",
+    },
+    noIcon: "Sin icono",
+    current: "Actual",
+    moreItems: "más",
+    deleteDialog: {
+      title: "¿Eliminar experiencia?",
+      description:
+        "Esta acción no se puede deshacer. La experiencia será eliminada permanentemente.",
+      cancel: "Cancelar",
+      confirm: "Eliminar",
+    },
+    deleteError: "Error al eliminar la experiencia. Inténtalo de nuevo.",
+  },
+  en: {
+    title: "All Experiences",
+    loading: "Loading experiences...",
+    noExperiences: "No experiences created yet.",
+    tableHeaders: {
+      icon: "Icon",
+      company: "Company",
+      position: "Position",
+      description: "Description",
+      startDate: "Start",
+      endDate: "End",
+      actions: "Actions",
+    },
+    noIcon: "No icon",
+    current: "Current",
+    moreItems: "more",
+    deleteDialog: {
+      title: "Delete experience?",
+      description:
+        "This action cannot be undone. The experience will be permanently deleted.",
+      cancel: "Cancel",
+      confirm: "Delete",
+    },
+    deleteError: "Error deleting experience. Please try again.",
+  },
+};
+
+export const experienceUpdateTranslations = {
+  es: {
+    editExperience: "Editar Experiencia",
+    companyIcon: "Icono de la Empresa",
+    company: "Empresa",
+    companyPlaceholder: "Nombre de la empresa",
+    jobTitle: "Título del Puesto",
+    jobTitlePlaceholder: "Tu puesto de trabajo",
+    currentJob: "Trabajo Actual",
+    startDate: "Fecha de Inicio",
+    endDate: "Fecha de Finalización",
+    selectStartDate: "Selecciona fecha de inicio",
+    selectEndDate: "Selecciona fecha de finalización",
+    responsibilitiesDescription: "Descripción de Responsabilidades",
+    responsibilityPlaceholder: "Escribe una responsabilidad y presiona Enter",
+    cancel: "Cancelar",
+    updating: "Actualizando...",
+    updateExperience: "Actualizar Experiencia",
+    addOneDescription: "Please add at least one description bullet point.",
+    updateFailed: "Failed to update work experience. Please try again.",
+    endDateValidation:
+      "End date must be after start date, or check 'Current Job' if this is your current position.",
+  },
+  en: {
+    editExperience: "Edit Experience",
+    companyIcon: "Company Icon",
+    company: "Company",
+    companyPlaceholder: "Company name",
+    jobTitle: "Job Title",
+    jobTitlePlaceholder: "Your job position",
+    currentJob: "Current Job",
+    startDate: "Start Date",
+    endDate: "End Date",
+    selectStartDate: "Select start date",
+    selectEndDate: "Select end date",
+    responsibilitiesDescription: "Responsibilities Description",
+    responsibilityPlaceholder: "Write a responsibility and press Enter",
+    cancel: "Cancel",
+    updating: "Updating...",
+    updateExperience: "Update Experience",
+    addOneDescription: "Please add at least one description bullet point.",
+    updateFailed: "Failed to update work experience. Please try again.",
+    endDateValidation:
+      "End date must be after start date, or check 'Current Job' if this is your current position.",
   },
 };
