@@ -381,9 +381,6 @@ const ProjectCard = () => {
                 </div>
               </form>
             </Form>
-            <div className="w-full max-w-2xl px-6 py-10 mt-8">
-              <ProjectDetails />
-            </div>
           </CardContent>
         </Card>
       </div>

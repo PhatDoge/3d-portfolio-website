@@ -60,6 +60,11 @@ const getSidebarLinks = (t: any) => [
         title: t.allProjects,
         path: "/project-list",
       },
+      {
+        id: "project-details",
+        title: t.projectDetails,
+        path: "/project-details",
+      },
     ],
   },
   {

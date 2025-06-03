@@ -320,7 +320,7 @@ export const projectTranslations = {
 
 export const projectDetailsTranslations = {
   es: {
-    headerDetails: "Detalles de Cabezera",
+    headerDetails: "Detalles de Proyecto",
     header: "Cabezera",
     headerPlaceholder: "Ingresa tu Cabezera",
     title: "Titulo",
@@ -338,7 +338,7 @@ export const projectDetailsTranslations = {
     descriptionMaxLength: "Description must not exceed 1000 characters.",
   },
   en: {
-    headerDetails: "Header Details",
+    headerDetails: "Project Details",
     header: "Header",
     headerPlaceholder: "Enter your Header",
     title: "Title",
@@ -1076,6 +1076,7 @@ export const sidebarTranslations = {
     createService: "Crear Servicio",
     allServices: "Todos los Servicios",
     serviceDetails: "Cambiar detalles",
+    projectDetails: "Cambiar detalles",
 
     // Actions and accessibility
     logout: "Cerrar Sesión",
@@ -1108,6 +1109,7 @@ export const sidebarTranslations = {
     createService: "Create Service",
     allServices: "All Services",
     serviceDetails: "Change details",
+    projectDetails: "Change details",
 
     // Actions and accessibility
     logout: "Logout",
