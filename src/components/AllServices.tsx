@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import ServiceCard from "./ServiceCard";
-
+import { styles } from "../styles";
 interface Service {
   _id: string;
   category: string;
@@ -140,6 +140,17 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
 
   return (
     <section id="services" className="services-section">
+      <p className={`${styles.sectionSubText} text-center`}>introduccion</p>
+      <h2 className={`${styles.heroHeadText} text-center`}>
+        Contrata servicios
+      </h2>
+      <div className="description-wrapper mb-8">
+        <p className="description-text">
+          Esto es una descripción de la sección, aqui podría ir una breve
+          explicación de lo que se ofrece en esta sección. como tal podría ir
+          una breve explicación de lo que se ofrece en esta sección.
+        </p>
+      </div>
       {/* Filter Buttons */}
       {shouldShowFilters && categories.length > 1 && (
         <FilterButtons

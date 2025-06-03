@@ -4,16 +4,32 @@ import { mutation, query } from "./_generated/server";
 // Create a new project details entry
 export const createProjectDetails = mutation({
   args: {
-    title: v.string(),
-    header: v.string(),
-    description: v.string(),
+    projectTitle: v.optional(v.string()),
+    projectHeader: v.optional(v.string()),
+    projectDescription: v.optional(v.string()),
+    serviceTitle: v.optional(v.string()),
+    serviceHeader: v.optional(v.string()),
+    serviceDescription: v.optional(v.string()),
   },
-  handler: async (ctx, { title, header, description }) => {
+  handler: async (
+    ctx,
+    {
+      projectTitle,
+      projectHeader,
+      projectDescription,
+      serviceTitle,
+      serviceHeader,
+      serviceDescription,
+    }
+  ) => {
     try {
       const newId = await ctx.db.insert("projectdetails", {
-        title,
-        header,
-        description,
+        projectTitle,
+        projectHeader,
+        projectDescription,
+        serviceTitle,
+        serviceHeader,
+        serviceDescription,
       });
       return newId;
     } catch (error) {
@@ -39,12 +55,16 @@ export const getProjectDetailsById = query({
 });
 
 // Update a project details entry
+// Update a project details entry
 export const updateProjectDetails = mutation({
   args: {
     id: v.id("projectdetails"),
-    title: v.optional(v.string()),
-    header: v.optional(v.string()),
-    description: v.optional(v.string()),
+    projectTitle: v.optional(v.string()),
+    projectHeader: v.optional(v.string()),
+    projectDescription: v.optional(v.string()),
+    serviceTitle: v.optional(v.string()),
+    serviceHeader: v.optional(v.string()),
+    serviceDescription: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...updates }) => {
     try {

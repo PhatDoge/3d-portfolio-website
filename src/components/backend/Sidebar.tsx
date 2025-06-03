@@ -98,6 +98,11 @@ const getSidebarLinks = (t: any) => [
         title: t.allServices,
         path: "/service-list",
       },
+      {
+        id: "service-details",
+        title: t.serviceDetails,
+        path: "/service-details",
+      },
     ],
   },
 ];

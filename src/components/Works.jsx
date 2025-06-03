@@ -365,12 +365,12 @@ const Works = () => {
         className="relative z-10"
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          {details?.header || "Mis Proyectos (header)."}
+          {details?.projectHeader || "Mis Proyectos (header)."}
         </p>
         <h2
           className={`${styles.sectionHeadText} text-center bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent`}
         >
-          {details?.title || "Mis Proyectos (title)."}
+          {details?.projectTitle || "Mis Proyectos (title)."}
         </h2>
         <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mt-4"></div>
       </motion.div>
@@ -384,7 +384,7 @@ const Works = () => {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-8 text-gray-300 text-lg max-w-4xl leading-relaxed"
         >
-          {details?.description || "Mis proyectos (description)."}
+          {details?.projectDescription || "Mis proyectos (description)."}
         </motion.p>
       </div>
 

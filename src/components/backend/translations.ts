@@ -357,6 +357,45 @@ export const projectDetailsTranslations = {
   },
 };
 
+export const serviceDetailsTranslations = {
+  es: {
+    headerDetails: "Detalles de Servicios",
+    header: "Cabezera de Servicio",
+    headerPlaceholder: "Ingresa la cabezera de tu servicio",
+    title: "Titulo del Servicio",
+    titlePlaceholder: "Ingresa el titulo de tu servicio",
+    summary: "Descripción del Servicio",
+    summaryPlaceholder: "Ingresa la descripción de tu servicio",
+    saveDetails: "Guardar Detalles del Servicio",
+    loadingServiceDetails: "Cargando detalles del servicio...",
+    // Form validation messages
+    titleMinLength: "El titulo debe tener al menos 2 caracteres.",
+    titleMaxLength: "El titulo no debe exceder 50 caracteres.",
+    headerMinLength: "La cabezera debe tener al menos 2 caracteres.",
+    headerMaxLength: "La cabezera no debe exceder 50 caracteres.",
+    descriptionMinLength: "La descripción debe tener al menos 2 caracteres.",
+    descriptionMaxLength: "La descripción no debe exceder 1000 caracteres.",
+  },
+  en: {
+    headerDetails: "Service Details",
+    header: "Service Header",
+    headerPlaceholder: "Enter your service header",
+    title: "Service Title",
+    titlePlaceholder: "Enter your service title",
+    summary: "Service Description",
+    summaryPlaceholder: "Enter your service description",
+    saveDetails: "Save Service Details",
+    loadingServiceDetails: "Loading service details...",
+    // Form validation messages
+    titleMinLength: "Title must be at least 2 characters.",
+    titleMaxLength: "Title must not exceed 50 characters.",
+    headerMinLength: "Header must be at least 2 characters.",
+    headerMaxLength: "Header must not exceed 50 characters.",
+    descriptionMinLength: "Description must be at least 2 characters.",
+    descriptionMaxLength: "Description must not exceed 1000 characters.",
+  },
+};
+
 export const projectUpdateTranslations = {
   es: {
     editProject: "Editar Proyecto",
@@ -1036,6 +1075,7 @@ export const sidebarTranslations = {
     allExperiences: "Todas las Experiencias",
     createService: "Crear Servicio",
     allServices: "Todos los Servicios",
+    serviceDetails: "Cambiar detalles",
 
     // Actions and accessibility
     logout: "Cerrar Sesión",
@@ -1067,6 +1107,7 @@ export const sidebarTranslations = {
     allExperiences: "All Experiences",
     createService: "Create Service",
     allServices: "All Services",
+    serviceDetails: "Change details",
 
     // Actions and accessibility
     logout: "Logout",

@@ -809,13 +809,13 @@ html {
 }
 
 /* Description */
-.description-wrapper {
+/* .description-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
+} */
 
 .description-text {
   margin-top: 1rem;
@@ -1339,4 +1339,522 @@ html {
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
   }
+}
+
+/* Enhanced SkillCard Styles with 'about-' prefix */
+
+/* 3D Card Transforms */
+.about-perspective-1000 {
+  perspective: 1000px !important;
+}
+
+.about-transform-style-preserve-3d {
+  transform-style: preserve-3d !important;
+}
+
+.about-backface-hidden {
+  backface-visibility: hidden !important;
+}
+
+.about-rotate-y-180 {
+  transform: rotateY(180deg) !important;
+}
+
+/* Animated gradient background */
+@keyframes about-gradient-x {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+/* .about-animate-gradient-x {
+  animation: about-gradient-x 8s ease-in-out infinite;
+} */
+
+/* Custom line clamp utility */
+.about-line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Enhanced hover effects */
+.about-card-inner:hover {
+  transform: rotateY(180deg) scale(1.02) !important;
+}
+
+/* Floating particles animation */
+@keyframes about-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.about-animate-float {
+  animation: about-float 3s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes about-pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+  }
+}
+
+.about-animate-pulse-glow {
+  animation: about-pulse-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer effect for cards */
+@keyframes about-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.about-card-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.about-card-container:hover::before {
+  left: 100%;
+}
+
+/* Enhanced tilt effect */
+.about-card-container {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.about-card-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Skill Card specific styles */
+.about-skill-card-wrapper {
+  transition: all 0.3s ease;
+}
+
+.about-skill-card-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.about-skill-card-tilt {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.about-skill-icon-wrapper {
+  transition: all 0.3s ease;
+}
+
+.about-skill-icon-wrapper:hover .about-skill-icon-glow {
+  transform: scale(1.1);
+}
+
+.about-skill-icon {
+  transition: all 0.3s ease;
+}
+
+.about-skill-icon:hover {
+  transform: scale(1.05);
+}
+
+.about-skill-icon-fallback {
+  transition: all 0.3s ease;
+}
+
+.about-skill-icon-fallback:hover {
+  transform: scale(1.1);
+}
+
+/* Card face transitions */
+.about-card-face {
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.about-card-front {
+  position: relative;
+}
+
+.about-card-back {
+  position: relative;
+}
+
+/* Content area styles */
+.about-front-content {
+  transition: all 0.3s ease;
+}
+
+.about-back-content {
+  transition: all 0.3s ease;
+}
+
+.about-skill-title {
+  transition: all 0.3s ease;
+}
+
+.about-back-title {
+  transition: all 0.3s ease;
+}
+
+.about-description-container {
+  transition: all 0.3s ease;
+}
+
+.about-description-container:hover {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* CTA Button styles */
+.about-cta-container {
+  transition: all 0.3s ease;
+}
+
+.about-cta-link {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.about-cta-button {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.about-cta-button:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.about-cta-icon {
+  transition: all 0.2s ease;
+}
+
+.about-cta-glow {
+  transition: all 0.3s ease;
+}
+
+/* Sparkle animations */
+.about-sparkle-1 {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.about-sparkle-2 {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.about-sparkle-3 {
+  animation: bounce 1s infinite;
+}
+
+/* Particle effects */
+.about-particles-container {
+  pointer-events: none;
+}
+
+.about-particle-1,
+.about-particle-2,
+.about-particle-3 {
+  transition: all 0.3s ease;
+}
+
+/* Background effects */
+.about-front-bg-primary,
+.about-back-bg-primary {
+  transition: all 0.5s ease;
+}
+
+.about-front-bg-radial,
+.about-back-bg-radial {
+  transition: all 0.5s ease;
+}
+
+.about-mesh-overlay {
+  transition: all 0.3s ease;
+}
+
+.about-mesh-gradient {
+  transition: all 0.3s ease;
+}
+
+/* Accent elements */
+.about-accent-line {
+  transition: all 0.3s ease;
+}
+
+.about-card-wrapper:hover .about-accent-line {
+  opacity: 100;
+  height: 2px;
+}
+
+.about-mini-icon {
+  transition: all 0.3s ease;
+}
+
+.about-mini-icon:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+/* Hover hints */
+.about-flip-hint {
+  transition: all 0.3s ease;
+}
+
+.about-flip-icon {
+  transition: all 0.3s ease;
+}
+
+.about-action-hint {
+  transition: all 0.3s ease;
+}
+
+/* Gradient text effect */
+.about-gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.about-glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba;
+}
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Animated gradient background */
+@keyframes gradient-x {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 8s ease-in-out infinite;
+}
+
+/* Custom line clamp utility */
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Enhanced hover effects */
+.card-inner:hover {
+  transform: rotateY(180deg) scale(1.02);
+}
+
+/* Floating particles animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer effect for cards */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.card-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.card-container:hover::before {
+  left: 100%;
+}
+
+/* Enhanced tilt effect */
+.card-container {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-inner:hover {
+    transform: rotateY(180deg) scale(1.01);
+  }
+
+  .card-container:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Loading skeleton styles for About component */
+.skeleton-card {
+  @apply w-full max-w-sm mx-auto my-4;
+}
+
+.skeleton-card-wrapper {
+  @apply w-full bg-gradient-to-br from-gray-800 to-gray-900 p-[2px] rounded-[24px] animate-pulse;
+}
+
+.skeleton-card-content {
+  @apply bg-gray-800 rounded-[22px] min-h-[320px] flex flex-col items-center justify-center px-8 py-6;
+}
+
+.skeleton-icon {
+  @apply w-20 h-20 bg-gray-700 rounded-2xl mb-6 animate-pulse;
+}
+
+.skeleton-text {
+  @apply w-32 h-6 bg-gray-700 rounded-lg animate-pulse;
+}
+
+.skeleton-container {
+  @apply mt-20 flex justify-center;
+}
+
+.skeleton-cards-wrapper {
+  @apply flex flex-wrap justify-center gap-6 max-w-6xl;
+}
+
+.loading-section {
+  @apply max-w-7xl mx-auto relative z-0 px-6 sm:px-16 py-10 sm:py-16;
+}
+
+/* About section styling */
+.about-section {
+  @apply max-w-7xl mx-auto relative z-0 px-6 sm:px-16 py-10 sm:py-16;
+}
+
+.description-wrapper {
+  @apply mt-4 flex justify-center;
+}
+
+.description-text {
+  @apply mt-4 text-secondary text-[17px] max-w-3xl leading-[30px] text-center;
+}
+
+.skills-section {
+  @apply mt-20 flex justify-center;
+}
+
+.carousel-container {
+  @apply w-full max-w-6xl;
+}
+
+.skill-slide {
+  @apply px-3;
+}
+
+/* Custom slick carousel overrides */
+.slick-dots {
+  @apply bottom-[-50px] !important;
+}
+
+.slick-dots li button:before {
+  @apply text-white opacity-50 text-lg !important;
+}
+
+.slick-dots li.slick-active button:before {
+  @apply opacity-100 !important;
+  color: #8b5cf6 !important;
 }

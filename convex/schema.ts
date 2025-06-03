@@ -35,9 +35,12 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   }),
   projectdetails: defineTable({
-    title: v.string(),
-    header: v.string(),
-    description: v.string(),
+    projectTitle: v.optional(v.string()),
+    projectHeader: v.optional(v.string()),
+    projectDescription: v.optional(v.string()),
+    serviceTitle: v.optional(v.string()),
+    serviceHeader: v.optional(v.string()),
+    serviceDescription: v.optional(v.string()),
   }),
 
   workExperience: defineTable({

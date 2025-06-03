@@ -26,6 +26,7 @@ import ServicesList from "./components/backend/ServicesList";
 import Skills from "./components/backend/Skills";
 import SkillsList from "./components/backend/SkillsList";
 import TechnologyManagement from "./components/backend/Technology";
+import ServiceDetails from "./components/backend/ServiceDetails";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -193,6 +194,14 @@ const App = () => {
           element={
             <DashboardLayout>
               <ServicesList />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/service-details"
+          element={
+            <DashboardLayout>
+              <ServiceDetails />
             </DashboardLayout>
           }
         />

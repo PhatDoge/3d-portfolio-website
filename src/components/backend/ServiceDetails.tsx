@@ -18,17 +18,17 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useContext } from "react";
 import { LanguageContext } from "./Dashboard";
-import { projectDetailsTranslations } from "./translations";
+import { serviceDetailsTranslations } from "./translations";
 
 // Separate form component that only renders when data is available
-const ProjectDetailsForm = ({
+const ServiceDetailsForm = ({
   data,
-  createProjectDetails,
-  updateProjectDetails,
+  updateServiceDetails,
+  createServiceDetails,
 }) => {
   // Move context usage inside the component
   const { language } = useContext(LanguageContext);
-  const t = projectDetailsTranslations[language];
+  const t = serviceDetailsTranslations[language];
 
   // Move schema definition inside component so it has access to translations
   const formSchema = z.object({
@@ -52,9 +52,9 @@ const ProjectDetailsForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: data[0]?.projectTitle || "",
-      header: data[0]?.projectHeader || "",
-      description: data[0]?.projectDescription || "",
+      title: data[0]?.serviceTitle || "",
+      header: data[0]?.serviceHeader || "",
+      description: data[0]?.serviceDescription || "",
     },
   });
 
@@ -62,34 +62,32 @@ const ProjectDetailsForm = ({
     try {
       const recordId = data[0]?._id;
 
-      // Map the form values to match your schema field names
       const mappedValues = {
-        projectTitle: values.title,
-        projectHeader: values.header,
-        projectDescription: values.description,
+        serviceTitle: values.title,
+        serviceHeader: values.header,
+        serviceDescription: values.description,
       };
 
       let id;
       if (recordId) {
         // Update existing record
-        id = await updateProjectDetails({
+        id = await updateServiceDetails({
           id: recordId,
           ...mappedValues,
         });
-        console.log("Project details updated with ID:", id);
+        console.log("Service details updated with ID:", id);
       } else {
         // Create new record
-        id = await createProjectDetails(mappedValues);
-        console.log("Project details created with ID:", id);
+        id = await createServiceDetails(mappedValues);
+        console.log("Service details created with ID:", id);
       }
 
       form.reset();
       window.location.href = "/";
     } catch (error) {
-      console.error("Failed to save project details:", error);
+      console.error("Failed to save service details:", error);
     }
   }
-
   return (
     <div className="w-full mt-5">
       {/* Section Header */}
@@ -188,36 +186,36 @@ const ProjectDetailsForm = ({
 };
 
 // Main component that handles data loading
-const ProjectDetails = () => {
+const ServiceDetails = () => {
   // Move context usage inside component
   const { language } = useContext(LanguageContext);
-  const t = projectDetailsTranslations[language];
+  const t = serviceDetailsTranslations[language];
 
   const data = useQuery(api.projectdetails.getProjectDetails);
-  const createProjectDetails = useMutation(
-    api.projectdetails.createProjectDetails
-  );
-  const updateProjectDetails = useMutation(
+  const updateServiceDetails = useMutation(
     api.projectdetails.updateProjectDetails
+  );
+  const createServiceDetails = useMutation(
+    api.projectdetails.createProjectDetails
   );
 
   // Show loading state while data is being fetched
   if (data === undefined) {
     return (
       <div className="w-full mt-5 flex items-center justify-center">
-        <div className="text-white text-lg">{t.loadingProjectDetails}</div>
+        <div className="text-white text-lg">{t.loadingServiceDetails}</div>
       </div>
     );
   }
 
   // Render the form only when data is available
   return (
-    <ProjectDetailsForm
+    <ServiceDetailsForm
       data={data}
-      createProjectDetails={createProjectDetails}
-      updateProjectDetails={updateProjectDetails}
+      updateServiceDetails={updateServiceDetails}
+      createServiceDetails={createServiceDetails}
     />
   );
 };
 
-export default ProjectDetails;
+export default ServiceDetails;
