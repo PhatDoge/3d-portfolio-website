@@ -150,8 +150,10 @@ const Navbar = () => {
               height={200}
             />
             <p className="text-white text-[18px] font-bold cursor-pointer flex">
-              Alonso &nbsp;
-              <span className="md:block hidden">|&nbsp; Castillo</span>
+              <span className="max-[900px]:block hidden lg:block">
+                Alonso &nbsp;
+              </span>
+              <span className="hidden lg:block">|&nbsp; Castillo</span>
             </p>
           </Link>
 
@@ -160,9 +162,9 @@ const Navbar = () => {
             {filteredNavLinks.map((link) => (
               <li
                 key={link.id}
-                className={`${
-                  active === link.title ? "text-white" : "text-secondary"
-                } hover:text-white text-[18px] font-medium cursor-pointer transition-colors duration-200`}
+                className={`font-medium cursor-pointer transition-colors duration-200 text-[18px] lg:text-[18px] md:text-[16px] sm:text-[14px] max-[500px]:text-[12px]
+                  ${active === link.title ? "text-white" : "text-secondary hover:text-gray-200"}
+                `}
                 onClick={(e) => {
                   e.preventDefault();
                   handleSmoothScroll(link.id, link.title);
@@ -191,9 +193,9 @@ const Navbar = () => {
                 {filteredNavLinks.map((link) => (
                   <li
                     key={link.id}
-                    className={`${
-                      active === link.title ? "text-white" : "text-secondary"
-                    } font-poppins font-medium cursor-pointer text-[16px] transition-colors duration-200`}
+                    className={`font-poppins font-medium cursor-pointer transition-colors duration-200 text-[16px] lg:text-[16px] sm:text-[14px] max-[500px]:text-[12px]
+                      ${active === link.title ? "text-white" : "text-secondary hover:text-gray-200"}
+                    `}
                     onClick={(e) =>
                       handleMobileMenuClick(e, link.id, link.title)
                     }

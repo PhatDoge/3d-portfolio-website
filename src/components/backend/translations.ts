@@ -1014,3 +1014,69 @@ export const serviceUpdateTranslations = {
     required: "*",
   },
 };
+
+//SIDEBAR TRANSLATIONS
+export const sidebarTranslations = {
+  es: {
+    // Main navigation items
+    user: "Usuario",
+    introduction: "Introducción",
+    skills: "Habilidades",
+    technologies: "Tecnologías",
+    projects: "Proyectos",
+    experience: "Experiencia",
+    services: "Servicios",
+
+    // Submenu items
+    createSkill: "Crear Habilidad",
+    allSkills: "Todas las Habilidades",
+    createProject: "Crear Proyecto",
+    allProjects: "Todos los Proyectos",
+    createExperience: "Crear Experiencia",
+    allExperiences: "Todas las Experiencias",
+    createService: "Crear Servicio",
+    allServices: "Todos los Servicios",
+
+    // Actions and accessibility
+    logout: "Cerrar Sesión",
+    mainNavigation: "Navegación principal",
+    goToHome: "Ir al inicio",
+    navigateTo: "Navegar a",
+    expand: "Expandir",
+    collapse: "Contraer",
+    submenu: "submenú",
+    submenuOf: "Submenú de",
+    logoAlt: "Logo de Alonso",
+  },
+  en: {
+    // Main navigation items
+    user: "User",
+    introduction: "Introduction",
+    skills: "Skills",
+    technologies: "Technologies",
+    projects: "Projects",
+    experience: "Experience",
+    services: "Services",
+
+    // Submenu items
+    createSkill: "Create Skill",
+    allSkills: "All Skills",
+    createProject: "Create Project",
+    allProjects: "All Projects",
+    createExperience: "Create Experience",
+    allExperiences: "All Experiences",
+    createService: "Create Service",
+    allServices: "All Services",
+
+    // Actions and accessibility
+    logout: "Logout",
+    mainNavigation: "Main navigation",
+    goToHome: "Go to home",
+    navigateTo: "Navigate to",
+    expand: "Expand",
+    collapse: "Collapse",
+    submenu: "submenu",
+    submenuOf: "Submenu of",
+    logoAlt: "Alonso's Logo",
+  },
+};

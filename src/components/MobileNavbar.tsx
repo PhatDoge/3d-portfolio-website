@@ -1,5 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { LanguageContext } from "./backend/Dashboard";
+import { sidebarTranslations } from "./backend/translations";
+import LanguageToggle from "./LanguageToggle";
 
 // Menu icon component
 const MenuIcon = () => (
@@ -76,97 +79,97 @@ const LogoutIcon = () => (
 );
 
 // Sidebar links (updated to match Sidebar.tsx)
-const SIDEBAR_LINKS = [
+const getSidebarLinks = (t: any) => [
   {
     id: "dashboard",
-    title: "Usuario",
+    title: t.user,
     path: "/user",
     icon: "/assets/dashboard/programmer.png",
   },
   {
     id: "introduction",
-    title: "Introducción",
+    title: t.introduction,
     path: "/create-introduction",
     icon: "/assets/dashboard/introduction.png",
   },
   {
     id: "skills",
-    title: "Habilidades",
+    title: t.skills,
     path: "/create-skill",
     icon: "/assets/dashboard/skill.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-skill",
-        title: "Crear Habilidad",
+        title: t.createSkill,
         path: "/create-skill",
       },
       {
         id: "skill-list",
-        title: "Todas las Habilidades",
+        title: t.allSkills,
         path: "/skill-list",
       },
     ],
   },
   {
     id: "technologies",
-    title: "Tecnologías",
+    title: t.technologies,
     path: "/create-technology",
     icon: "/assets/dashboard/technologies.png",
   },
   {
     id: "project-card",
-    title: "Proyectos",
+    title: t.projects,
     path: "/create-project",
     icon: "/assets/dashboard/project.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-project",
-        title: "Crear Proyecto",
+        title: t.createProject,
         path: "/create-project",
       },
       {
         id: "project-list",
-        title: "Todos los Proyectos",
+        title: t.allProjects,
         path: "/project-list",
       },
     ],
   },
   {
     id: "experience",
-    title: "Experiencia",
+    title: t.experience,
     path: "/experience",
     icon: "/assets/dashboard/experience.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-experience",
-        title: "Crear Experiencia",
+        title: t.createExperience,
         path: "/create-experience",
       },
       {
         id: "experience-list",
-        title: "Todas las Experiencias",
+        title: t.allExperiences,
         path: "/experience-list",
       },
     ],
   },
   {
     id: "services",
-    title: "Servicios",
+    title: t.services,
     path: "/services",
     icon: "/assets/dashboard/payment.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-service",
-        title: "Crear Servicio",
+        title: t.createService,
         path: "/create-service",
       },
       {
         id: "service-list",
-        title: "Todos los Servicios",
+        title: t.allServices,
         path: "/service-list",
       },
     ],
@@ -182,6 +185,12 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
   className = "",
   onMenuToggle,
 }) => {
+  // Language context and translations
+  const { language, toggleLanguage } = useContext(LanguageContext);
+  const t = sidebarTranslations[language];
+  // Generate sidebar links with current translations
+  const SIDEBAR_LINKS = useMemo(() => getSidebarLinks(t), [t]);
+
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
@@ -254,7 +263,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
       <button
         onClick={toggleMenu}
         className={`md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-slate-800 shadow-lg ${className}`}
-        aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+        aria-label={isOpen ? t.closeMenu : t.openMenu}
       >
         {isOpen ?
           <CloseIcon />
@@ -276,7 +285,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="navigation"
-        aria-label="Navegación móvil"
+        aria-label={t.mobileNavigation}
       >
         <div className="flex flex-col h-full">
           {/* Header with logo */}
@@ -284,17 +293,25 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
             <button
               onClick={handleLogoClick}
               className="flex items-center justify-center w-full mb-8 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-              aria-label="Ir al inicio"
+              aria-label={t.goToHome}
             >
               <img
                 src="/assets/dashboard/alonso_logo.png"
                 height={80}
                 width={80}
-                alt="Logo de Alonso"
+                alt={t.logoAlt}
                 className="rounded-full"
                 loading="eager"
               />
             </button>
+          </div>
+
+          {/* Language toggle */}
+          <div className="px-6 pb-2">
+            <LanguageToggle
+              language={language}
+              toggleLanguage={toggleLanguage}
+            />
           </div>
 
           {/* Navigation menu */}
@@ -319,9 +336,9 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                       aria-label={
                         item.hasSubmenu ?
                           `${item.title} - ${
-                            isSubmenuOpen ? "Contraer" : "Expandir"
-                          } submenú`
-                        : `Navegar a ${item.title}`
+                            isSubmenuOpen ? t.collapse : t.expand
+                          } ${t.submenu}`
+                        : `${t.navigateTo} ${item.title}`
                       }
                     >
                       <div className="flex items-center gap-3">
@@ -334,7 +351,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                           loading="lazy"
                         />
                         <span
-                          className={`${
+                          className={`$${
                             isActive ? "font-bold" : "font-medium"
                           } text-sm`}
                         >
@@ -349,7 +366,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 
                     {/* Submenu */}
                     {item.hasSubmenu && isSubmenuOpen && (
-                      <div className="ml-4 mt-1 space-y-1">
+                      <div
+                        className="ml-4 mt-1 space-y-1"
+                        role="menu"
+                        aria-label={`${t.submenuOf} ${item.title}`}
+                      >
                         {item.submenu.map((subItem) => {
                           const isSubActive =
                             location.pathname === subItem.path;
@@ -362,11 +383,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                                   "bg-blue-500 text-white"
                                 : "text-gray-400 hover:text-gray-200 hover:bg-slate-800"
                               }`}
-                              aria-label={`Navegar a ${subItem.title}`}
+                              aria-label={`${t.navigateTo} ${subItem.title}`}
                             >
                               <div className="w-2 h-2 rounded-full bg-current opacity-70" />
                               <span
-                                className={`${
+                                className={`$${
                                   isSubActive ? "font-semibold" : "font-medium"
                                 } text-sm`}
                               >
@@ -388,11 +409,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
             <button
               onClick={handleLogout}
               className="w-full flex items-center justify-center gap-3 p-3 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
-              aria-label="Cerrar sesión"
+              aria-label={t.logout}
             >
               <LogoutIcon />
               <span className="font-semibold text-white text-sm">
-                Cerrar Sesión
+                {t.logout}
               </span>
             </button>
           </div>

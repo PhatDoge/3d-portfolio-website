@@ -1,102 +1,101 @@
 import React, { useState, useCallback, useMemo, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MobileNavbar from "../MobileNavbar";
-import { LanguageContext } from "./Dashboard"; // Importa el contexto de idioma
-import { Button } from "../ui/button";
 import LanguageToggle from "../LanguageToggle";
+import { sidebarTranslations } from "./translations";
+import { LanguageContext } from "./Dashboard";
 
-// Constants moved outside component to prevent re-creation
-const SIDEBAR_LINKS = [
+const getSidebarLinks = (t) => [
   {
     id: "dashboard",
-    title: "Usuario",
+    title: t.user,
     path: "/user",
     icon: "/assets/dashboard/programmer.png",
   },
   {
     id: "introduction",
-    title: "Introducción",
+    title: t.introduction,
     path: "/create-introduction",
     icon: "/assets/dashboard/introduction.png",
   },
   {
     id: "skills",
-    title: "Habilidades",
+    title: t.skills,
     path: "/create-skill",
     icon: "/assets/dashboard/skill.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-skill",
-        title: "Crear Habilidad",
+        title: t.createSkill,
         path: "/create-skill",
       },
       {
         id: "skill-list",
-        title: "Todas las Habilidades",
+        title: t.allSkills,
         path: "/skill-list",
       },
     ],
   },
   {
     id: "technologies",
-    title: "Tecnologías",
+    title: t.technologies,
     path: "/create-technology",
     icon: "/assets/dashboard/technologies.png",
   },
   {
     id: "project-card",
-    title: "Proyectos",
+    title: t.projects,
     path: "/create-project",
     icon: "/assets/dashboard/project.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-project",
-        title: "Crear Proyecto",
+        title: t.createProject,
         path: "/create-project",
       },
       {
         id: "project-list",
-        title: "Todos los Proyectos",
+        title: t.allProjects,
         path: "/project-list",
       },
     ],
   },
   {
     id: "experience",
-    title: "Experiencia",
+    title: t.experience,
     path: "/experience",
     icon: "/assets/dashboard/experience.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-experience",
-        title: "Crear Experiencia",
+        title: t.createExperience,
         path: "/create-experience",
       },
       {
         id: "experience-list",
-        title: "Todas las Experiencias",
+        title: t.allExperiences,
         path: "/experience-list",
       },
     ],
   },
   {
     id: "services",
-    title: "Servicios",
+    title: t.services,
     path: "/services",
     icon: "/assets/dashboard/payment.png",
     hasSubmenu: true,
     submenu: [
       {
         id: "create-service",
-        title: "Crear Servicio",
+        title: t.createService,
         path: "/create-service",
       },
       {
         id: "service-list",
-        title: "Todos los Servicios",
+        title: t.allServices,
         path: "/service-list",
       },
     ],
@@ -141,7 +140,7 @@ const LogoutIcon = () => (
 );
 
 // Custom hook for sidebar logic
-const useSidebarLogic = () => {
+const useSidebarLogic = (sidebarLinks) => {
   const [selectedMainItem, setSelectedMainItem] = useState(null);
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const location = useLocation();
@@ -160,7 +159,7 @@ const useSidebarLogic = () => {
 
   const handleLinkClick = useCallback(
     (linkPath, itemId) => {
-      const item = SIDEBAR_LINKS.find((link) => link.id === itemId);
+      const item = sidebarLinks.find((link) => link.id === itemId);
       if (item?.hasSubmenu) {
         setOpenSubmenu((prev) => (prev === itemId ? null : itemId));
         setSelectedMainItem(itemId);
@@ -170,7 +169,7 @@ const useSidebarLogic = () => {
         setOpenSubmenu(null); // Close any open submenus
       }
     },
-    [navigate]
+    [navigate, sidebarLinks]
   );
 
   const handleSubmenuClick = useCallback(
@@ -206,14 +205,17 @@ const useSidebarLogic = () => {
     handleLogout,
   };
 };
+
 interface SubmenuItemProps {
   subItem: any;
   currentPath: any;
   onSubmenuClick: any;
+  t: any;
 }
+
 // Submenu Item Component
 const SubmenuItem = React.memo(
-  ({ subItem, currentPath, onSubmenuClick }: SubmenuItemProps) => {
+  ({ subItem, currentPath, onSubmenuClick, t }: SubmenuItemProps) => {
     const isSubActive = currentPath === subItem.path;
 
     return (
@@ -224,7 +226,7 @@ const SubmenuItem = React.memo(
             "bg-blue-500 text-white"
           : "text-gray-400 hover:text-gray-200 hover:bg-slate-800"
         }`}
-        aria-label={`Navegar a ${subItem.title}`}
+        aria-label={`${t.navigateTo} ${subItem.title}`}
       >
         <div
           className="w-2 h-2 rounded-full bg-current opacity-70"
@@ -244,14 +246,16 @@ const SubmenuItem = React.memo(
 
 SubmenuItem.displayName = "SubmenuItem";
 
-interface MainMenuprops {
+interface MainMenuProps {
   item: any;
   isActive: any;
   isSubmenuOpen: any;
   onLinkClick: any;
   onSubmenuClick: any;
   currentPath: any;
+  t: any;
 }
+
 // Main Item Component
 const MainMenuItem = React.memo(
   ({
@@ -261,7 +265,8 @@ const MainMenuItem = React.memo(
     onLinkClick,
     onSubmenuClick,
     currentPath,
-  }: MainMenuprops) => (
+    t,
+  }: MainMenuProps) => (
     <div>
       <button
         onClick={() => onLinkClick(item.path, item.id)}
@@ -273,8 +278,8 @@ const MainMenuItem = React.memo(
         aria-expanded={item.hasSubmenu ? isSubmenuOpen : undefined}
         aria-label={
           item.hasSubmenu ?
-            `${item.title} - ${isSubmenuOpen ? "Contraer" : "Expandir"} submenú`
-          : `Navegar a ${item.title}`
+            `${item.title} - ${isSubmenuOpen ? t.collapse : t.expand} ${t.submenu}`
+          : `${t.navigateTo} ${item.title}`
         }
       >
         <div className="flex items-center gap-4">
@@ -305,7 +310,7 @@ const MainMenuItem = React.memo(
         <div
           className="ml-6 mt-2 space-y-1"
           role="menu"
-          aria-label={`Submenú de ${item.title}`}
+          aria-label={`${t.submenuOf} ${item.title}`}
         >
           {item.submenu.map((subItem) => (
             <SubmenuItem
@@ -313,6 +318,7 @@ const MainMenuItem = React.memo(
               subItem={subItem}
               currentPath={currentPath}
               onSubmenuClick={onSubmenuClick}
+              t={t}
             />
           ))}
         </div>
@@ -325,6 +331,14 @@ MainMenuItem.displayName = "MainMenuItem";
 
 const LeftSidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Get language context and translations
+  const { language, toggleLanguage } = useContext(LanguageContext);
+  const t = sidebarTranslations[language];
+
+  // Generate sidebar links with current translations
+  const sidebarLinks = useMemo(() => getSidebarLinks(t), [t]);
+
   const {
     selectedMainItem,
     openSubmenu,
@@ -334,14 +348,12 @@ const LeftSidebar = () => {
     handleSubmenuClick,
     handleLogoClick,
     handleLogout,
-  } = useSidebarLogic();
-
-  const { language, toggleLanguage } = useContext(LanguageContext); // Usa el contexto de idioma
+  } = useSidebarLogic(sidebarLinks);
 
   // Memoize navigation items to prevent unnecessary re-renders
   const navigationItems = useMemo(
     () =>
-      SIDEBAR_LINKS.map((item) => {
+      sidebarLinks.map((item) => {
         const isActive = isItemActive(item, currentPath, selectedMainItem);
         const isSubmenuOpen = openSubmenu === item.id;
 
@@ -354,16 +366,19 @@ const LeftSidebar = () => {
             onLinkClick={handleLinkClick}
             onSubmenuClick={handleSubmenuClick}
             currentPath={currentPath}
+            t={t}
           />
         );
       }),
     [
+      sidebarLinks,
       selectedMainItem,
       openSubmenu,
       currentPath,
       isItemActive,
       handleLinkClick,
       handleSubmenuClick,
+      t,
     ]
   );
 
@@ -375,7 +390,7 @@ const LeftSidebar = () => {
           isMobileMenuOpen ? "md:hidden" : ""
         }`}
         role="navigation"
-        aria-label="Navegación principal"
+        aria-label={t.mainNavigation}
       >
         <div>
           {/* Logo */}
@@ -383,13 +398,13 @@ const LeftSidebar = () => {
             <button
               onClick={handleLogoClick}
               className="flex items-center justify-center gap-3 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 hover:scale-105"
-              aria-label="Ir al inicio"
+              aria-label={t.goToHome}
             >
               <img
                 src="/assets/dashboard/alonso_logo.png"
                 height={120}
                 width={120}
-                alt="Logo de Alonso"
+                alt={t.logoAlt}
                 className="rounded-full"
                 loading="eager"
               />
@@ -409,11 +424,11 @@ const LeftSidebar = () => {
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-start gap-4 p-4 rounded-lg cursor-pointer bg-gradient-to-r from-red-600 to-red-800 text-white hover:from-red-700 hover:to-red-900 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-            aria-label="Cerrar sesión"
+            aria-label={t.logout}
           >
             <LogoutIcon />
             <span className="font-semibold max-lg:hidden text-white">
-              Cerrar Sesión
+              {t.logout}
             </span>
           </button>
         </div>
