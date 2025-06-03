@@ -229,9 +229,11 @@ const WorkExperience = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 mt-4">
-      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700">
-        <Card className="backdrop-blur-sm bg-gray-900/80 border-gray-700 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-6 flex items-center justify-center">
+      <div className="w-full max-w-2xl px-6 py-10 relative">
+        {/* Glowing border effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl pointer-events-none"></div>
+        <Card className="relative z-10 backdrop-blur-md bg-gray-800/60 border border-gray-600/50 rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
           <CardHeader className="relative z-10 text-center pb-8">
@@ -267,7 +269,7 @@ const WorkExperience = () => {
                                 handleIconSelect(e);
                                 field.onChange(e.target.files?.[0]?.name || "");
                               }}
-                              className="bg-gray-800/50 border-gray-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 hover:file:bg-purple-700 transition-all duration-300"
+                              className="bg-gray-800/50 border border-gray-600/50 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 hover:file:bg-purple-700 transition-all duration-300 rounded-lg shadow-inner px-4 py-2"
                             />
                             {iconPreview && (
                               <div className="mt-2">
@@ -300,7 +302,7 @@ const WorkExperience = () => {
                           <Input
                             placeholder={t.companyPlaceholder}
                             {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-500/20 transition-all duration-300 rounded-lg shadow-inner px-4 py-2"
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -323,7 +325,7 @@ const WorkExperience = () => {
                           <Input
                             placeholder={t.jobTitlePlaceholder}
                             {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-500/20 transition-all duration-300 rounded-lg shadow-inner px-4 py-2"
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -347,7 +349,7 @@ const WorkExperience = () => {
                             <FormControl>
                               <Button
                                 variant="outline"
-                                className={`w-full pl-3 text-left font-normal bg-gray-800/50 border-gray-600 text-white hover:bg-gray-700/50 hover:text-white ${
+                                className={`w-full pl-3 text-left font-normal bg-gray-800/50 border border-gray-600/50 text-white hover:bg-gray-700/50 hover:text-white rounded-lg shadow-inner px-4 py-2 transition-all duration-300 ${
                                   !field.value && "text-gray-400"
                                 }`}
                               >
@@ -360,7 +362,7 @@ const WorkExperience = () => {
                           </PopoverTrigger>
 
                           <PopoverContent
-                            className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
+                            className="w-auto p-0 bg-gray-800 border border-gray-600 calendar-popover"
                             align="start"
                           >
                             <DatePicker
@@ -423,7 +425,7 @@ const WorkExperience = () => {
                               <FormControl>
                                 <Button
                                   variant="outline"
-                                  className={`w-full pl-3 text-left font-normal bg-gray-800/50 border-gray-600 text-white hover:bg-gray-700/50 hover:text-white ${
+                                  className={`w-full pl-3 text-left font-normal bg-gray-800/50 border border-gray-600/50 text-white hover:bg-gray-700/50 hover:text-white rounded-lg shadow-inner px-4 py-2 transition-all duration-300 ${
                                     !field.value && "text-gray-400"
                                   }`}
                                 >
@@ -435,7 +437,7 @@ const WorkExperience = () => {
                               </FormControl>
                             </PopoverTrigger>
                             <PopoverContent
-                              className="w-auto p-0 bg-gray-800 border-gray-600 calendar-popover"
+                              className="w-auto p-0 bg-gray-800 border border-gray-600 calendar-popover"
                               align="start"
                             >
                               <DatePicker
@@ -482,7 +484,7 @@ const WorkExperience = () => {
                                 setCurrentDescription(e.target.value)
                               }
                               onKeyDown={handleDescriptionKeyPress}
-                              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                              className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-500/20 transition-all duration-300 rounded-lg shadow-inner px-4 py-2"
                             />
                             {descriptions.length > 0 && (
                               <div className="space-y-2 mt-2">
@@ -520,7 +522,7 @@ const WorkExperience = () => {
                   <Button
                     type="submit"
                     disabled={isUploading}
-                    className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isUploading ? t.submitButtonLoading : t.submitButton}
                   </Button>
