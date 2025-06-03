@@ -169,9 +169,11 @@ const ProjectCard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 mt-4">
-      <div className="w-full max-w-2xl px-6 py-10 bg-gray-800/20 rounded-2xl shadow-inner border border-gray-700 mb-8">
-        <Card className="backdrop-blur-sm bg-gray-900/80 border-gray-700 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-6 flex items-center justify-center">
+      <div className="w-full max-w-2xl px-6 py-10 relative">
+        {/* Glowing border effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl pointer-events-none"></div>
+        <Card className="relative z-10 backdrop-blur-md bg-gray-900/80 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
 
           <CardHeader className="relative z-10 text-center pb-8">
@@ -181,6 +183,7 @@ const ProjectCard = () => {
                   {t.createProject}
                 </span>
               </h3>
+              <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mt-2"></div>
             </div>
           </CardHeader>
 
@@ -210,14 +213,14 @@ const ProjectCard = () => {
                                 handleImageSelect(e);
                                 field.onChange(e.target.files?.[0]?.name || "");
                               }}
-                              className="bg-gray-800/50 border-gray-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 hover:file:bg-purple-700 transition-all duration-300"
+                              className="bg-gray-800/50 border border-gray-600/50 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 hover:file:bg-purple-700 transition-all duration-300 rounded-lg shadow-lg focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20"
                             />
                             {imagePreview && (
                               <div className="mt-2">
                                 <img
                                   src={imagePreview}
                                   alt={t.preview}
-                                  className="w-full h-32 object-cover rounded-md border border-gray-600"
+                                  className="w-full h-32 object-cover rounded-md border border-gray-600/50 shadow-lg"
                                 />
                               </div>
                             )}
@@ -243,7 +246,7 @@ const ProjectCard = () => {
                           <Input
                             placeholder={t.projectTitlePlaceholder}
                             {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg"
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -266,7 +269,7 @@ const ProjectCard = () => {
                           <Input
                             placeholder={t.githubLinkPlaceholder}
                             {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg"
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -289,7 +292,7 @@ const ProjectCard = () => {
                           <Input
                             placeholder={t.websiteAddressPlaceholder}
                             {...field}
-                            className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                            className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg"
                           />
                         </FormControl>
                         <FormMessage className="text-red-400" />
@@ -311,7 +314,7 @@ const ProjectCard = () => {
                         <FormControl>
                           <Textarea
                             placeholder={t.projectDescriptionPlaceholder}
-                            className="resize-none bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 min-h-24"
+                            className="resize-none bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 min-h-24 rounded-lg shadow-lg"
                             {...field}
                           />
                         </FormControl>
@@ -338,20 +341,20 @@ const ProjectCard = () => {
                               value={currentTag}
                               onChange={(e) => setCurrentTag(e.target.value)}
                               onKeyDown={handleTagKeyPress}
-                              className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300"
+                              className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg"
                             />
                             {tags.length > 0 && (
                               <div className="flex flex-wrap gap-2 mt-2">
                                 {tags.map((tag, index) => (
                                   <span
                                     key={index}
-                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-600 text-white"
+                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-purple-600/70 text-white shadow-md border border-purple-400/30 hover:bg-purple-700/80 transition-all duration-300"
                                   >
                                     {tag}
                                     <button
                                       type="button"
                                       onClick={() => removeTag(tag)}
-                                      className="ml-2 text-purple-200 hover:text-white"
+                                      className="ml-2 text-purple-200 hover:text-white focus:outline-none"
                                     >
                                       ×
                                     </button>
@@ -371,7 +374,7 @@ const ProjectCard = () => {
                   <Button
                     type="submit"
                     disabled={isUploading}
-                    className="px-4 py-2 green-pink-gradient text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isUploading ? t.creatingProject : t.createProjectButton}
                   </Button>
@@ -384,9 +387,6 @@ const ProjectCard = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Projects Display Component
-      <ProjectsList /> */}
     </div>
   );
 };

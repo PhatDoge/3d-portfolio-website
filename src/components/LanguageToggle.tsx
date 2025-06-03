@@ -21,7 +21,7 @@ const LanguageToggle = ({ language, toggleLanguage }) => {
           }`}
           aria-label="Cambiar a Español"
         >
-          <span className="text-lg">🇪🇸</span>
+          <span className="text-xs">ES</span>
         </button>
 
         {/* English option */}
@@ -34,7 +34,7 @@ const LanguageToggle = ({ language, toggleLanguage }) => {
           }`}
           aria-label="Switch to English"
         >
-          <span className="text-lg">🇺🇸</span>
+          <span className=" text-xs">EN</span>
         </button>
       </div>
     </div>

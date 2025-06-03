@@ -68,9 +68,9 @@ const TechnologyItem = ({
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+    <div className="group flex items-center justify-between p-4 bg-gray-800/30 rounded-lg border border-gray-700 hover:bg-gradient-to-r hover:from-purple-500/10 hover:via-pink-500/5 hover:to-blue-500/10 transition-all duration-300 hover:shadow-lg hover:scale-[1.01] hover:border-l-4 hover:border-l-purple-400/50">
       <div className="flex items-center space-x-4">
-        <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
+        <div className="relative w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden group-hover:border-purple-400/50 transition-all duration-300">
           <img
             src={technology.icon}
             alt={technology.name}
@@ -80,10 +80,16 @@ const TechnologyItem = ({
               e.target.nextSibling.style.display = "block";
             }}
           />
+          <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-blue-500/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="hidden text-xs text-gray-400">❌</div>
         </div>
         <div>
-          <h3 className="text-white font-medium pb-2">{technology.name}</h3>
+          <div>
+            <h3 className="text-white font-medium pb-2 group-hover:text-purple-300 transition-colors duration-300">
+              {technology.name}
+            </h3>
+            <div className="w-0 group-hover:w-8 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 rounded-full"></div>
+          </div>{" "}
           <p className="text-sm text-gray-400">{technology.icon}</p>
         </div>
       </div>
@@ -98,7 +104,7 @@ const TechnologyItem = ({
           className="data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600 border-white"
         />
 
-        {/* Add this condition to check if it's NOT a system icon */}
+        {/*this condition is to check if the order is between 1 and 12 */}
         {!(
           technology.order &&
           technology.order >= 1 &&
@@ -444,77 +450,92 @@ const TechnologyManagement = () => {
   const totalCount = technologies.length;
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              {t.title}
-            </span>
-          </h1>
-          <p className="text-gray-400">{t.subtitle}</p>
-          <div className="mt-4 flex justify-center space-x-4">
-            <Badge
-              variant="outline"
-              className="text-green-400 border-green-400"
-            >
-              {visibleCount} {t.visibleBadge}
-            </Badge>
-            <Badge variant="outline" className="text-gray-400 border-gray-400">
-              {totalCount} {t.totalBadge}
-            </Badge>
+        <div className="relative">
+          {/* Glowing border effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl"></div>
+
+          <div className="relative backdrop-blur-md bg-gray-800/60 border border-gray-600/50 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="text-center mb-8 pt-8">
+              <h1 className="text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  {t.title}
+                </span>
+              </h1>
+              <p className="text-gray-400">{t.subtitle}</p>
+              <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mt-4"></div>
+              <div className="mt-4 flex justify-center space-x-4">
+                <Badge
+                  variant="outline"
+                  className="text-green-400 border-green-400"
+                >
+                  {visibleCount} {t.visibleBadge}
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className="text-gray-400 border-gray-400"
+                >
+                  {totalCount} {t.totalBadge}
+                </Badge>
+              </div>
+            </div>
+
+            <div className="px-6 pb-8">
+              <AddTechnologyForm onAdd={handleAddTechnology} />
+
+              {technologies.length === 0 ?
+                <Card className="bg-gray-900/80 border-gray-700 text-center p-8">
+                  <CardContent>
+                    <p className="text-gray-400 mb-4">{t.noTechnologies}</p>
+                    <Button
+                      onClick={initializeDefaultTechnologies}
+                      disabled={isInitializing}
+                      className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                    >
+                      {isInitializing ? t.initializing : t.initializeButton}
+                    </Button>
+                  </CardContent>
+                </Card>
+              : <Card className="bg-gray-900/80 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-white">
+                      {t.listTitle}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {technologies.map((technology) => (
+                        <div key={technology._id}>
+                          <TechnologyItem
+                            technology={technology}
+                            onToggle={handleToggleVisibility}
+                            onEdit={startEditing}
+                            onDelete={handleDeleteTechnology}
+                            isEditing={
+                              editingTechnology?._id === technology._id
+                            }
+                          />
+
+                          {/* Edit Form - Render below the technology item */}
+                          {editingTechnology?._id === technology._id && (
+                            <div className="mt-3">
+                              <TechnologyUpdate
+                                technology={editingTechnology}
+                                onCancel={cancelEditing}
+                                onSuccess={handleUpdateSuccess}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              }
+            </div>
           </div>
         </div>
-
-        <AddTechnologyForm onAdd={handleAddTechnology} />
-
-        {technologies.length === 0 ?
-          <Card className="bg-gray-900/80 border-gray-700 text-center p-8">
-            <CardContent>
-              <p className="text-gray-400 mb-4">{t.noTechnologies}</p>
-              <Button
-                onClick={initializeDefaultTechnologies}
-                disabled={isInitializing}
-                className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-              >
-                {isInitializing ? t.initializing : t.initializeButton}
-              </Button>
-            </CardContent>
-          </Card>
-        : <Card className="bg-gray-900/80 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">
-                {t.listTitle}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {technologies.map((technology) => (
-                  <div key={technology._id}>
-                    <TechnologyItem
-                      technology={technology}
-                      onToggle={handleToggleVisibility}
-                      onEdit={startEditing}
-                      onDelete={handleDeleteTechnology}
-                      isEditing={editingTechnology?._id === technology._id}
-                    />
-
-                    {/* Edit Form - Render below the technology item */}
-                    {editingTechnology?._id === technology._id && (
-                      <div className="mt-3">
-                        <TechnologyUpdate
-                          technology={editingTechnology}
-                          onCancel={cancelEditing}
-                          onSuccess={handleUpdateSuccess}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        }
       </div>
     </div>
   );

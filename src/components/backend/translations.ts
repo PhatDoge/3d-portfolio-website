@@ -177,9 +177,9 @@ export const technologyTranslations = {
     // Add Technology Form
     addFormTitle: "Agregar Tecnología",
     nameLabel: "Nombre de la Tecnología",
-    namePlaceholder: "e.g., React JS",
+    namePlaceholder: "ejemplo: Node JS, React JS",
     iconLabel: "URL de Icono",
-    iconPlaceholder: "https://example.com/icon.png",
+    iconPlaceholder: "https://ejemplo.com/icon.png",
     addButton: "Agregar Tecnología",
 
     // Technology List

@@ -5,7 +5,7 @@ import LanguageToggle from "../LanguageToggle";
 import { sidebarTranslations } from "./translations";
 import { LanguageContext } from "./Dashboard";
 
-const getSidebarLinks = (t) => [
+const getSidebarLinks = (t: any) => [
   {
     id: "dashboard",
     title: t.user,
