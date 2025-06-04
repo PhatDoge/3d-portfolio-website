@@ -63,60 +63,83 @@ const Contact = () => {
     >
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
+        className="flex-[0.75] relative w-full max-w-2xl px-6 py-10"
       >
-        <p className={styles.sectionSubText}>Ponte en contacto</p>
-        <h3 className={styles.sectionHeadText}>Contacto.</h3>
+        {/* Glowing border effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl pointer-events-none"></div>
+        <div className="relative z-10 backdrop-blur-md bg-gray-900/80 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 violet-gradient opacity-5"></div>
+          <div className="relative z-10 text-center pb-8 pt-6">
+            <p className="text-gray-300 text-base font-medium mb-2">
+              Ponte en contacto
+            </p>
+            <h3 className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                Contacto.
+              </span>
+            </h3>
+            <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mt-2 mb-2"></div>
+          </div>
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="mt-12 flex flex-col gap-8"
-        >
-          <label className="flex flex-col ">
-            <span className="text-white font-medium mb-4">Tu Nombre</span>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Escribe tu nombre"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
-            />
-          </label>
-
-          <label className="flex flex-col ">
-            <span className="text-white font-medium mb-4">Tu Email</span>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Escribe tu email"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
-            />
-          </label>
-
-          <label className="flex flex-col ">
-            <span className="text-white font-medium mb-4">Tu Mensaje</span>
-            <textarea
-              rows="7"
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Escribe tu mensaje"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
-            />
-          </label>
-          <button
-            className="bg-tertiary py-3 px-8 outline-none w-fit text-white font-bold shadow:md shadow-primary rounded-xl "
-            type="submit"
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="relative z-10 mt-4 flex flex-col gap-8 px-4 pb-8"
           >
-            {loading ? "Enviando..." : "Enviar"}
-          </button>
-          {success === true && <span>Gracias, te contactaremos pronto</span>}
-          {success === false && <span>Algo salió mal, inténtalo de nuevo</span>}
-        </form>
+            <label className="flex flex-col text-left">
+              <span className="text-gray-200 font-medium mb-4">Tu Nombre</span>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Escribe tu nombre"
+                className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg py-4 px-6 font-medium outline-none"
+              />
+            </label>
+
+            <label className="flex flex-col text-left">
+              <span className="text-gray-200 font-medium mb-4">Tu Email</span>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Escribe tu email"
+                className="bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 rounded-lg shadow-lg py-4 px-6 font-medium outline-none"
+              />
+            </label>
+
+            <label className="flex flex-col text-left">
+              <span className="text-gray-200 font-medium mb-4">Tu Mensaje</span>
+              <textarea
+                rows="7"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Escribe tu mensaje"
+                className="resize-none bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 min-h-24 rounded-lg shadow-lg py-4 px-6 font-medium outline-none"
+              />
+            </label>
+            <button
+              className="px-6 py-3 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105 border-0 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Enviando..." : "Enviar"}
+            </button>
+            {success === true && (
+              <span className="block text-green-400 text-sm font-medium text-center mt-2">
+                Gracias, te contactaremos pronto
+              </span>
+            )}
+            {success === false && (
+              <span className="block text-red-400 text-sm font-medium text-center mt-2">
+                Algo salió mal, inténtalo de nuevo
+              </span>
+            )}
+          </form>
+        </div>
       </motion.div>
 
       <motion.div

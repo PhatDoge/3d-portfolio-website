@@ -73,30 +73,167 @@ const SkillCard = ({ index, title, iconUrl, iconFile, description, link }) => {
                   </p>
                 </div>
                 <div className="about-cta-container flex justify-center mt-4">
-                  <a
+                  <motion.a
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="about-cta-link group/btn relative overflow-hidden"
-                    style={{ maxWidth: "2rem" }} // Ensures the button doesn't overflow
+                    className="about-cta-link group/btn relative"
+                    whileHover={{
+                      scale: 1.05,
+                      rotateY: 5,
+                      rotateX: 5,
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <div className="about-cta-button relative w-8 h-8 bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-white/30 flex items-center justify-center backdrop-blur-sm">
-                      <svg
-                        className="about-cta-icon size-5 text-white transform group-hover/btn:scale-100 transition-transform duration-200"
+                    {/* Outer rotating glow ring */}
+                    <div className="absolute -inset-2 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
+                      <div
+                        className="w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-500 blur-sm animate-spin"
+                        style={{ animationDuration: "3s" }}
+                      ></div>
+                    </div>
+
+                    {/* Circular progress loader */}
+                    <div className="absolute -inset-1 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                      <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                        <circle
+                          cx="24"
+                          cy="24"
+                          r="20"
+                          fill="none"
+                          stroke="rgba(147, 51, 234, 0.3)"
+                          strokeWidth="2"
+                        />
+                        <circle
+                          cx="24"
+                          cy="24"
+                          r="20"
+                          fill="none"
+                          stroke="url(#purpleGradient)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeDasharray="125.6"
+                          strokeDashoffset="125.6"
+                          className="group-hover/btn:animate-[drawCircle_2s_ease-in-out_infinite]"
+                        />
+                        <defs>
+                          <linearGradient
+                            id="purpleGradient"
+                            x1="0%"
+                            y1="0%"
+                            x2="100%"
+                            y2="100%"
+                          >
+                            <stop offset="0%" stopColor="#a855f7" />
+                            <stop offset="50%" stopColor="#8b5cf6" />
+                            <stop offset="100%" stopColor="#7c3aed" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+
+                    {/* Floating particles */}
+                    <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
+                      <div
+                        className="absolute -top-1 -left-1 w-1 h-1 bg-purple-400 rounded-full animate-bounce"
+                        style={{
+                          animationDelay: "0s",
+                          animationDuration: "1.5s",
+                        }}
+                      ></div>
+                      <div
+                        className="absolute -top-2 right-0 w-1 h-1 bg-violet-400 rounded-full animate-bounce"
+                        style={{
+                          animationDelay: "0.3s",
+                          animationDuration: "1.8s",
+                        }}
+                      ></div>
+                      <div
+                        className="absolute -bottom-1 -right-1 w-1 h-1 bg-indigo-400 rounded-full animate-bounce"
+                        style={{
+                          animationDelay: "0.6s",
+                          animationDuration: "1.2s",
+                        }}
+                      ></div>
+                      <div
+                        className="absolute -bottom-2 left-1 w-1 h-1 bg-purple-300 rounded-full animate-bounce"
+                        style={{
+                          animationDelay: "0.9s",
+                          animationDuration: "1.6s",
+                        }}
+                      ></div>
+                    </div>
+
+                    {/* Main button */}
+                    <div className="about-cta-button relative w-10 h-10 bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 rounded-full shadow-2xl transition-all duration-500 border-2 border-purple-400/40 flex items-center justify-center backdrop-blur-sm overflow-hidden group-hover/btn:shadow-purple-500/50">
+                      {/* Inner glow pulse */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-400/30 via-transparent to-indigo-400/30 rounded-full opacity-0 group-hover/btn:opacity-100 group-hover/btn:animate-pulse transition-opacity duration-300"></div>
+
+                      {/* Magical sparkle effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                        <div
+                          className="absolute top-2 left-2 w-0.5 h-0.5 bg-white rounded-full animate-ping"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
+                        <div
+                          className="absolute top-3 right-3 w-0.5 h-0.5 bg-purple-200 rounded-full animate-ping"
+                          style={{ animationDelay: "0.8s" }}
+                        ></div>
+                        <div
+                          className="absolute bottom-2 left-3 w-0.5 h-0.5 bg-violet-200 rounded-full animate-ping"
+                          style={{ animationDelay: "1.4s" }}
+                        ></div>
+                      </div>
+
+                      {/* Icon with breathing animation */}
+                      <motion.svg
+                        className="about-cta-icon w-5 h-5 text-white relative z-10"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        strokeWidth={2.5}
+                        animate={{
+                          scale: [1, 1.1, 1],
+                          rotate: [0, 2, -2, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
                           d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                         />
-                      </svg>
+                      </motion.svg>
                     </div>
-                  </a>
+
+                    {/* Enhanced tooltip with purple theme */}
+                    {/* <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-900/95 to-indigo-900/95 text-white text-xs px-4 py-2 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-all duration-300 pointer-events-none backdrop-blur-sm border border-purple-400/30 whitespace-nowrap shadow-xl">
+                      <span className="relative z-10">Explore Project</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-xl"></div>
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-purple-900/95"></div>
+                    </div> */}
+                  </motion.a>
                 </div>
+
+                {/* Custom keyframe animation styles */}
+                <style jsx>{`
+                  @keyframes drawCircle {
+                    0% {
+                      stroke-dashoffset: 125.6;
+                    }
+                    50% {
+                      stroke-dashoffset: 31.4;
+                    }
+                    100% {
+                      stroke-dashoffset: 125.6;
+                    }
+                  }
+                `}</style>
               </div>
             </div>
           </div>

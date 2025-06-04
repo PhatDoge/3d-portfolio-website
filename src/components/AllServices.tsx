@@ -151,15 +151,19 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
 
   return (
     <section id="services" className="services-section">
-      <p className="sm:text-[18px] text-[14px] text-secondary uppercase tracking-wider text-center">
-        {details.serviceHeader}
-      </p>
-      <h2 className="text-white font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[21px] text-center">
-        {details.serviceTitle}
-      </h2>
-      <div className="description-wrapper mb-8">
-        <p className="description-text">{details.serviceDescription}</p>
-      </div>
+      {activeServices.length > 0 && (
+        <>
+          <p className="sm:text-[18px] text-[14px] text-secondary uppercase tracking-wider text-center">
+            {details.serviceHeader}
+          </p>
+          <h2 className="text-white font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[21px] text-center">
+            {details.serviceTitle}
+          </h2>
+          <div className="description-wrapper mb-8">
+            <p className="description-text">{details.serviceDescription}</p>
+          </div>
+        </>
+      )}
       {/* Filter Buttons */}
       {shouldShowFilters && categories.length > 1 && (
         <FilterButtons
