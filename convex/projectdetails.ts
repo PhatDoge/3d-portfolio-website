@@ -10,6 +10,9 @@ export const createProjectDetails = mutation({
     serviceTitle: v.optional(v.string()),
     serviceHeader: v.optional(v.string()),
     serviceDescription: v.optional(v.string()),
+    ExperienceTitle: v.optional(v.string()),
+    ExperienceHeader: v.optional(v.string()),
+    ExperienceDescription: v.optional(v.string()),
   },
   handler: async (
     ctx,
@@ -20,6 +23,9 @@ export const createProjectDetails = mutation({
       serviceTitle,
       serviceHeader,
       serviceDescription,
+      ExperienceTitle,
+      ExperienceHeader,
+      ExperienceDescription,
     }
   ) => {
     try {
@@ -30,6 +36,9 @@ export const createProjectDetails = mutation({
         serviceTitle,
         serviceHeader,
         serviceDescription,
+        ExperienceTitle,
+        ExperienceHeader,
+        ExperienceDescription,
       });
       return newId;
     } catch (error) {
@@ -55,7 +64,6 @@ export const getProjectDetailsById = query({
 });
 
 // Update a project details entry
-// Update a project details entry
 export const updateProjectDetails = mutation({
   args: {
     id: v.id("projectdetails"),
@@ -65,6 +73,9 @@ export const updateProjectDetails = mutation({
     serviceTitle: v.optional(v.string()),
     serviceHeader: v.optional(v.string()),
     serviceDescription: v.optional(v.string()),
+    ExperienceTitle: v.optional(v.string()),
+    ExperienceHeader: v.optional(v.string()),
+    ExperienceDescription: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...updates }) => {
     try {

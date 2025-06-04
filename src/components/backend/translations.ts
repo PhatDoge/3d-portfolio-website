@@ -1077,6 +1077,7 @@ export const sidebarTranslations = {
     allServices: "Todos los Servicios",
     serviceDetails: "Cambiar detalles",
     projectDetails: "Cambiar detalles",
+    experienceDetails: "Cambiar detalles",
 
     // Actions and accessibility
     logout: "Cerrar Sesión",
@@ -1110,6 +1111,7 @@ export const sidebarTranslations = {
     allServices: "All Services",
     serviceDetails: "Change details",
     projectDetails: "Change details",
+    experienceDetails: "Change details",
 
     // Actions and accessibility
     logout: "Logout",
@@ -1121,5 +1123,42 @@ export const sidebarTranslations = {
     submenu: "submenu",
     submenuOf: "Submenu of",
     logoAlt: "Alonso's Logo",
+  },
+};
+
+export const experienceDetailsTranslations = {
+  es: {
+    headerDetails: "Detalles de Experiencia",
+    title: "Título",
+    header: "Cabecera",
+    summary: "Descripción",
+    titlePlaceholder: "Ingresa el título de tu experiencia",
+    headerPlaceholder: "Ingresa la cabecera de tu experiencia",
+    summaryPlaceholder: "Ingresa la descripción de tu experiencia",
+    saveDetails: "Guardar Detalles",
+    loadingExperienceDetails: "Cargando detalles de experiencia...",
+    titleMinLength: "El título debe tener al menos 2 caracteres",
+    titleMaxLength: "El título no puede exceder 50 caracteres",
+    headerMinLength: "La cabecera debe tener al menos 2 caracteres",
+    headerMaxLength: "La cabecera no puede exceder 50 caracteres",
+    descriptionMinLength: "La descripción debe tener al menos 2 caracteres",
+    descriptionMaxLength: "La descripción no puede exceder 1000 caracteres",
+  },
+  en: {
+    headerDetails: "Experience Details",
+    title: "Title",
+    header: "Header",
+    summary: "Description",
+    titlePlaceholder: "Enter your experience title",
+    headerPlaceholder: "Enter your experience header",
+    summaryPlaceholder: "Enter your experience description",
+    saveDetails: "Save Details",
+    loadingExperienceDetails: "Loading experience details...",
+    titleMinLength: "Title must be at least 2 characters long",
+    titleMaxLength: "Title cannot exceed 50 characters",
+    headerMinLength: "Header must be at least 2 characters long",
+    headerMaxLength: "Header cannot exceed 50 characters",
+    descriptionMinLength: "Description must be at least 2 characters long",
+    descriptionMaxLength: "Description cannot exceed 1000 characters",
   },
 };

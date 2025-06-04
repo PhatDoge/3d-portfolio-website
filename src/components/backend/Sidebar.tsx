@@ -84,6 +84,11 @@ const getSidebarLinks = (t: any) => [
         title: t.allExperiences,
         path: "/experience-list",
       },
+      {
+        id: "experience-details",
+        title: t.experienceDetails,
+        path: "/experience-details",
+      },
     ],
   },
   {

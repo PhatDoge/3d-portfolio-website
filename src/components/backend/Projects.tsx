@@ -18,7 +18,6 @@ import { Textarea } from "../ui/textarea";
 
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import ProjectDetails from "./ProjectDetails";
 import { LanguageContext } from "./Dashboard";
 import { projectTranslations } from "./translations";
 

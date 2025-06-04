@@ -135,7 +135,13 @@ ExperienceCard.propTypes = {
 
 const Experience = () => {
   const allExperiences = useQuery(api.workExperience.getAllWorkExperiences);
-
+  const experienceDetails = useQuery(api.projectdetails.getProjectDetails);
+  const details = experienceDetails?.[0] || {
+    ExperienceTitle: "Mi experiencia",
+    ExperienceHeader: "Experiencia",
+    ExperienceDescription:
+      "Tengo experiencia en diferentes tecnologias y frameworks, puedes verlas en la linea de tiempo.",
+  };
   if (!allExperiences) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
@@ -157,11 +163,14 @@ const Experience = () => {
         }}
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          ¿Qué he hecho hasta ahora?
+          {details.ExperienceHeader}
         </p>
         <h2 className={`${styles.sectionHeadText} text-center`}>
-          Mi Experiencia.
+          {details.ExperienceTitle}
         </h2>
+        <div className="description-wrapper mb-8">
+          <p className="description-text">{details.ExperienceDescription}</p>
+        </div>
       </motion.div>
 
       <div className="mt-20 flex flex-col">

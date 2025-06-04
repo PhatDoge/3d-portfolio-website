@@ -41,6 +41,9 @@ export default defineSchema({
     serviceTitle: v.optional(v.string()),
     serviceHeader: v.optional(v.string()),
     serviceDescription: v.optional(v.string()),
+    ExperienceTitle: v.optional(v.string()),
+    ExperienceHeader: v.optional(v.string()),
+    ExperienceDescription: v.optional(v.string()),
   }),
 
   workExperience: defineTable({

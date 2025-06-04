@@ -158,12 +158,16 @@ const Navbar = () => {
               />
             </div>
             <div className="text-white text-[20px] font-bold cursor-pointer flex items-center">
-              <span className="bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent max-[900px]:block hidden lg:block">
-                Alonso &nbsp;
+              {/* Always show "Alonso" on all screen sizes */}
+              <span className="bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
+                Alonso
               </span>
-              <span className="hidden lg:block text-purple-400">|</span>
+              {/* Only show separator and "Castillo" on large screens */}
+              <span className="hidden lg:block text-purple-400">
+                &nbsp;|&nbsp;
+              </span>
               <span className="hidden lg:block bg-gradient-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent">
-                &nbsp; Castillo
+                Castillo
               </span>
             </div>
           </Link>
