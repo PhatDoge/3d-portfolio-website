@@ -82,7 +82,7 @@ export const skillTranslations = {
 
 export const skillListTranslations = {
   es: {
-    title: "Todas las Habilidades",
+    title: "Lista de Habilidades",
     loading: "Cargando habilidades...",
     noSkills: "No hay habilidades creadas aún.",
     iconHeader: "Icono",
@@ -575,7 +575,7 @@ export const workExperienceTranslations = {
 
 export const experienceListTranslations = {
   es: {
-    title: "Todas las Experiencias",
+    title: "Lista de Experiencias",
     loading: "Cargando experiencias...",
     noExperiences: "No hay experiencias creadas aún.",
     tableHeaders: {
@@ -1068,11 +1068,11 @@ export const sidebarTranslations = {
 
     // Submenu items
     createSkill: "Crear Habilidad",
-    allSkills: "Todas las Habilidades",
+    allSkills: "Lista de Habilidades",
     createProject: "Crear Proyecto",
     allProjects: "Todos los Proyectos",
     createExperience: "Crear Experiencia",
-    allExperiences: "Todas las Experiencias",
+    allExperiences: "Lista deExperiencias",
     createService: "Crear Servicio",
     allServices: "Todos los Servicios",
     serviceDetails: "Cambiar detalles",
