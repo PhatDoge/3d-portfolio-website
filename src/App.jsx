@@ -92,56 +92,56 @@ const HomeLayout = ({ children }) => {
     </div>
   );
 };
-
 HomeLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Home route */}
-        <Route path="/" element={<HomeLayout />} />
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Home route */}
+          <Route path="/" element={<HomeLayout />} />
 
-        {/* Dashboard routes with layout */}
-        <Route
-          path="/user"
-          element={
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          }
-        />
+          {/* Dashboard routes with layout */}
+          <Route
+            path="/user"
+            element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            }
+          />
 
-        {/* experience route */}
-        <Route
-          path="/create-experience"
-          element={
-            <DashboardLayout>
-              <WorkExperience />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/create-technology"
-          element={
-            <DashboardLayout>
-              <TechnologyManagement />
-            </DashboardLayout>
-          }
-        />
+          {/* experience route */}
+          <Route
+            path="/create-experience"
+            element={
+              <DashboardLayout>
+                <WorkExperience />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/create-technology"
+            element={
+              <DashboardLayout>
+                <TechnologyManagement />
+              </DashboardLayout>
+            }
+          />
 
-        <Route
-          path="/project-list"
-          element={
-            <DashboardLayout>
-              <ProjectsList />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/project-list"
+            element={
+              <DashboardLayout>
+                <ProjectsList />
+              </DashboardLayout>
+            }
+          />
 
-        {/* <Route
+          {/* <Route
           path="/create-introduction"
           element={
             <DashboardLayout>
@@ -149,110 +149,111 @@ const App = () => {
             </DashboardLayout>
           }
         /> */}
-        <Route
-          path="/create-skill"
-          element={
-            <DashboardLayout>
-              <Skills />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/skill-list"
-          element={
-            <DashboardLayout>
-              <SkillsList />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/create-skill"
+            element={
+              <DashboardLayout>
+                <Skills />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/skill-list"
+            element={
+              <DashboardLayout>
+                <SkillsList />
+              </DashboardLayout>
+            }
+          />
 
-        <Route
-          path="/create-project"
-          element={
-            <DashboardLayout>
-              <Projects />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/create-project"
+            element={
+              <DashboardLayout>
+                <Projects />
+              </DashboardLayout>
+            }
+          />
 
-        <Route
-          path="/create-service"
-          element={
-            <DashboardLayout>
-              <Services />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/create-service"
+            element={
+              <DashboardLayout>
+                <Services />
+              </DashboardLayout>
+            }
+          />
 
-        <Route
-          path="/experience-list"
-          element={
-            <DashboardLayout>
-              <ExperienceList />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/service-list"
-          element={
-            <DashboardLayout>
-              <ServicesList />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/service-details"
-          element={
-            <DashboardLayout>
-              <ServiceDetails />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/project-details"
-          element={
-            <DashboardLayout>
-              <ProjectDetails />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/experience-details"
-          element={
-            <DashboardLayout>
-              <ExperienceDetails />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/skill-details"
-          element={
-            <DashboardLayout>
-              <SkillDetails />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/experience-list"
+            element={
+              <DashboardLayout>
+                <ExperienceList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/service-list"
+            element={
+              <DashboardLayout>
+                <ServicesList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/service-details"
+            element={
+              <DashboardLayout>
+                <ServiceDetails />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/project-details"
+            element={
+              <DashboardLayout>
+                <ProjectDetails />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/experience-details"
+            element={
+              <DashboardLayout>
+                <ExperienceDetails />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/skill-details"
+            element={
+              <DashboardLayout>
+                <SkillDetails />
+              </DashboardLayout>
+            }
+          />
 
-        {/* Catch-all route for 404 */}
-        <Route
-          path="*"
-          element={
-            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold text-white mb-4">404</h1>
-                <p className="text-gray-400 mb-8">Página no encontrada</p>
-                <a
-                  href="/"
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Volver al inicio
-                </a>
+          {/* Catch-all route for 404 */}
+          <Route
+            path="*"
+            element={
+              <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold text-white mb-4">404</h1>
+                  <p className="text-gray-400 mb-8">Página no encontrada</p>
+                  <a
+                    href="/"
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Volver al inicio
+                  </a>
+                </div>
               </div>
-            </div>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 };
 

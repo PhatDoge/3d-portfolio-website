@@ -188,4 +188,5 @@ const Experience = () => {
   );
 };
 
-export default SectionWrapper(Experience, "work");
+const WrappedContact = SectionWrapper(Experience, "work");
+export default WrappedContact;

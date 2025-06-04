@@ -78,19 +78,13 @@ const LogoutIcon = () => (
   </svg>
 );
 
-// Sidebar links (updated to match Sidebar.tsx)
+// Sidebar links (synced with Sidebar.tsx)
 const getSidebarLinks = (t: any) => [
   {
     id: "dashboard",
     title: t.user,
     path: "/user",
     icon: "/assets/dashboard/programmer.png",
-  },
-  {
-    id: "introduction",
-    title: t.introduction,
-    path: "/create-introduction",
-    icon: "/assets/dashboard/introduction.png",
   },
   {
     id: "skills",
@@ -108,6 +102,11 @@ const getSidebarLinks = (t: any) => [
         id: "skill-list",
         title: t.allSkills,
         path: "/skill-list",
+      },
+      {
+        id: "skill-details",
+        title: t.skillDetails,
+        path: "/skill-details",
       },
     ],
   },
@@ -134,6 +133,11 @@ const getSidebarLinks = (t: any) => [
         title: t.allProjects,
         path: "/project-list",
       },
+      {
+        id: "project-details",
+        title: t.projectDetails,
+        path: "/project-details",
+      },
     ],
   },
   {
@@ -153,6 +157,11 @@ const getSidebarLinks = (t: any) => [
         title: t.allExperiences,
         path: "/experience-list",
       },
+      {
+        id: "experience-details",
+        title: t.experienceDetails,
+        path: "/experience-details",
+      },
     ],
   },
   {
@@ -171,6 +180,11 @@ const getSidebarLinks = (t: any) => [
         id: "service-list",
         title: t.allServices,
         path: "/service-list",
+      },
+      {
+        id: "service-details",
+        title: t.serviceDetails,
+        path: "/service-details",
       },
     ],
   },
@@ -193,6 +207,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [selectedMainItem, setSelectedMainItem] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -211,31 +226,40 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
     onMenuToggle?.(false);
   }, [onMenuToggle]);
 
-  const isItemActive = useCallback((item: any, currentPath: string) => {
-    return (
-      (currentPath.includes(item.path) && item.path.length > 1) ||
-      currentPath === item.path ||
-      (item.submenu &&
-        item.submenu.some((sub: any) => currentPath === sub.path))
-    );
-  }, []);
+  const isItemActive = useCallback(
+    (item: any, currentPath: string, selectedItem: string | null) => {
+      return (
+        selectedItem === item.id ||
+        (selectedItem === null &&
+          ((currentPath.includes(item.path) && item.path.length > 1) ||
+            currentPath === item.path ||
+            (item.submenu &&
+              item.submenu.some((sub: any) => currentPath === sub.path))))
+      );
+    },
+    []
+  );
 
   const handleLinkClick = useCallback(
     (linkPath: string, itemId: string) => {
       const item = SIDEBAR_LINKS.find((link) => link.id === itemId);
       if (item?.hasSubmenu) {
         setOpenSubmenu((prev) => (prev === itemId ? null : itemId));
+        setSelectedMainItem(itemId);
       } else {
         navigate(linkPath);
+        setSelectedMainItem(null);
+        setOpenSubmenu(null);
         closeMenu();
       }
     },
-    [navigate, closeMenu]
+    [navigate, SIDEBAR_LINKS, closeMenu]
   );
 
   const handleSubmenuClick = useCallback(
     (submenuPath: string) => {
       navigate(submenuPath);
+      setSelectedMainItem(null);
       closeMenu();
     },
     [navigate, closeMenu]
@@ -318,7 +342,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
           <nav className="flex-1 px-6 pb-6">
             <div className="space-y-2">
               {SIDEBAR_LINKS.map((item) => {
-                const isActive = isItemActive(item, location.pathname);
+                const isActive = isItemActive(
+                  item,
+                  location.pathname,
+                  selectedMainItem
+                );
                 const isSubmenuOpen = openSubmenu === item.id;
 
                 return (
@@ -335,9 +363,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                       }
                       aria-label={
                         item.hasSubmenu ?
-                          `${item.title} - ${
-                            isSubmenuOpen ? t.collapse : t.expand
-                          } ${t.submenu}`
+                          `${item.title} - ${isSubmenuOpen ? t.collapse : t.expand} ${t.submenu}`
                         : `${t.navigateTo} ${item.title}`
                       }
                     >
@@ -351,9 +377,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                           loading="lazy"
                         />
                         <span
-                          className={`$${
-                            isActive ? "font-bold" : "font-medium"
-                          } text-sm`}
+                          className={`${isActive ? "font-bold" : "font-medium"} text-sm`}
                         >
                           {item.title}
                         </span>
@@ -371,7 +395,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                         role="menu"
                         aria-label={`${t.submenuOf} ${item.title}`}
                       >
-                        {item.submenu.map((subItem) => {
+                        {item.submenu.map((subItem: any) => {
                           const isSubActive =
                             location.pathname === subItem.path;
                           return (
@@ -387,9 +411,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                             >
                               <div className="w-2 h-2 rounded-full bg-current opacity-70" />
                               <span
-                                className={`$${
-                                  isSubActive ? "font-semibold" : "font-medium"
-                                } text-sm`}
+                                className={`${isSubActive ? "font-semibold" : "font-medium"} text-sm`}
                               >
                                 {subItem.title}
                               </span>

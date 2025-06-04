@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
 
 import { Button } from "../ui/button";
 import {
@@ -20,6 +21,47 @@ import { useContext } from "react";
 import { LanguageContext } from "./Dashboard";
 import { experienceDetailsTranslations } from "./translations";
 
+// Tooltip component with image display
+const ImageTooltip = ({ imageUrl, children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div className="relative inline-block">
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        className="cursor-help"
+      >
+        {children}
+      </div>
+
+      {isVisible && imageUrl && (
+        <div className="fixed top-4 right-4 z-50 pointer-events-none">
+          <div className="relative">
+            {/* Glowing border effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-blue-500/30 rounded-lg blur-sm"></div>
+            <div className="relative bg-gray-900/95 border border-gray-600/50 rounded-lg shadow-2xl overflow-hidden backdrop-blur-md">
+              <img
+                src={imageUrl}
+                alt="Field example"
+                className="w-96 h-auto max-h-fit object-contain"
+                style={{ minWidth: "200px" }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Question mark icon component
+const QuestionIcon = () => (
+  <div className="inline-flex items-center justify-center w-4 h-4 ml-2 bg-gradient-to-r from-purple-400 to-blue-400 text-white text-xs font-bold rounded-full hover:from-purple-500 hover:to-blue-500 transition-all duration-200 hover:scale-110">
+    ?
+  </div>
+);
+
 // Separate form component that only renders when data is available
 const ExperienceDetailsForm = ({
   data,
@@ -29,6 +71,11 @@ const ExperienceDetailsForm = ({
   // Move context usage inside the component
   const { language } = useContext(LanguageContext);
   const t = experienceDetailsTranslations[language];
+
+  // Only keep header tooltip image
+  const tooltipImages = {
+    header: "/assets/tooltips/about_tooltip.png",
+  };
 
   // Move schema definition inside component so it has access to translations
   const formSchema = z.object({
@@ -97,6 +144,12 @@ const ExperienceDetailsForm = ({
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl pointer-events-none"></div>
         <div className="relative z-10 backdrop-blur-md bg-gray-900/80 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute inset-0 violet-gradient opacity-5"></div>
+          {/* Header Tooltip in the top-right corner */}
+          <div className="absolute top-4 right-4 z-20">
+            <ImageTooltip imageUrl={tooltipImages.header}>
+              <QuestionIcon />
+            </ImageTooltip>
+          </div>
           <div className="relative z-10 text-center pb-8">
             <div className="text-center py-6 mb-6">
               <h3 className="text-2xl font-bold">
@@ -120,7 +173,7 @@ const ExperienceDetailsForm = ({
                     name="header"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-200 font-medium">
+                        <FormLabel className="text-gray-200 font-medium flex items-center">
                           {t.header}
                         </FormLabel>
                         <FormControl>
@@ -142,7 +195,7 @@ const ExperienceDetailsForm = ({
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-200 font-medium">
+                        <FormLabel className="text-gray-200 font-medium flex items-center">
                           {t.title}
                         </FormLabel>
                         <FormControl>
@@ -164,7 +217,7 @@ const ExperienceDetailsForm = ({
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-200 font-medium">
+                        <FormLabel className="text-gray-200 font-medium flex items-center">
                           {t.summary}
                         </FormLabel>
                         <FormControl>
