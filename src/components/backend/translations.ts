@@ -1078,6 +1078,7 @@ export const sidebarTranslations = {
     serviceDetails: "Cambiar detalles",
     projectDetails: "Cambiar detalles",
     experienceDetails: "Cambiar detalles",
+    skillDetails: "Cambiar detalles",
 
     // Actions and accessibility
     logout: "Cerrar Sesión",
@@ -1112,6 +1113,7 @@ export const sidebarTranslations = {
     serviceDetails: "Change details",
     projectDetails: "Change details",
     experienceDetails: "Change details",
+    skillDetails: "Change details",
 
     // Actions and accessibility
     logout: "Logout",
@@ -1160,5 +1162,61 @@ export const experienceDetailsTranslations = {
     headerMaxLength: "Header cannot exceed 50 characters",
     descriptionMinLength: "Description must be at least 2 characters long",
     descriptionMaxLength: "Description cannot exceed 1000 characters",
+  },
+};
+
+export const skillDetailsTranslations = {
+  es: {
+    // Main header
+    headerDetails: "Detalles de Habilidades",
+
+    // Form labels
+    header: "Encabezado",
+    title: "Título",
+    summary: "Resumen",
+
+    // Placeholders
+    headerPlaceholder: "Ingresa el encabezado de tus habilidades",
+    titlePlaceholder: "Ingresa el título de tus habilidades",
+    summaryPlaceholder: "Ingresa un resumen de tus habilidades",
+
+    // Validation messages
+    titleMinLength: "El título debe tener al menos 2 caracteres",
+    titleMaxLength: "El título no puede tener más de 50 caracteres",
+    headerMinLength: "El encabezado debe tener al menos 2 caracteres",
+    headerMaxLength: "El encabezado no puede tener más de 50 caracteres",
+    descriptionMinLength: "La descripción debe tener al menos 2 caracteres",
+    descriptionMaxLength:
+      "La descripción no puede tener más de 1000 caracteres",
+
+    // Button and loading
+    saveDetails: "Guardar Detalles",
+    loadingSkillDetails: "Cargando detalles de habilidades...",
+  },
+  en: {
+    // Main header
+    headerDetails: "Skill Details",
+
+    // Form labels
+    header: "Header",
+    title: "Title",
+    summary: "Summary",
+
+    // Placeholders
+    headerPlaceholder: "Enter your skills header",
+    titlePlaceholder: "Enter your skills title",
+    summaryPlaceholder: "Enter a summary of your skills",
+
+    // Validation messages
+    titleMinLength: "Title must be at least 2 characters",
+    titleMaxLength: "Title cannot be more than 50 characters",
+    headerMinLength: "Header must be at least 2 characters",
+    headerMaxLength: "Header cannot be more than 50 characters",
+    descriptionMinLength: "Description must be at least 2 characters",
+    descriptionMaxLength: "Description cannot be more than 1000 characters",
+
+    // Button and loading
+    saveDetails: "Save Details",
+    loadingSkillDetails: "Loading skill details...",
   },
 };

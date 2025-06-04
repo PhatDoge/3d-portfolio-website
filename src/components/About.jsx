@@ -45,9 +45,15 @@ const LoadingSection = () => (
 );
 
 const About = () => {
-  const introductions = useQuery(api.introduction.getIntroductions);
   const skills = useQuery(api.skills.getAllSkills);
   const [isDataReady, setIsDataReady] = useState(false);
+  const skillDetails = useQuery(api.projectdetails.getProjectDetails);
+
+  const details = skillDetails?.[0] || {
+    skillTitle: "Mi Stack",
+    skillHeader: "Habilidades",
+    skillDescription: "Estas son las tecnologias con las que trabajo",
+  };
 
   // Memoize slider settings to prevent unnecessary re-renders
   const sliderSettings = useMemo(() => {
@@ -86,21 +92,19 @@ const About = () => {
 
   // Optimized data loading effect
   useEffect(() => {
-    if (introductions && skills && skills.length > 0) {
+    if (skillDetails && skills && skills.length > 0) {
       // Use requestAnimationFrame for smoother transition
       const timer = requestAnimationFrame(() => {
         setIsDataReady(true);
       });
       return () => cancelAnimationFrame(timer);
     }
-  }, [introductions, skills]);
+  }, [skillDetails, skills]);
 
   // Early return for loading state
-  if (!introductions || !skills || !isDataReady) {
+  if (!skillDetails || !skills || !isDataReady) {
     return <LoadingSection />;
   }
-
-  const introduction = introductions[0] || {};
 
   return (
     <section id="about" className="about-section">
@@ -111,10 +115,10 @@ const About = () => {
         viewport={{ once: true, amount: 0.25 }}
       >
         <p className={`${styles.sectionSubText} text-center`}>
-          {introduction.header || "header example"}
+          {details.skillHeader}
         </p>
         <h2 className={`${styles.heroHeadText} text-center`}>
-          {introduction.title || "title example"}
+          {details.skillTitle}
         </h2>
       </motion.div>
 
@@ -126,7 +130,7 @@ const About = () => {
           viewport={{ once: true, amount: 0.25 }}
           className="description-text"
         >
-          {introduction.description || "description example"}
+          {details.skillDescription}
         </motion.p>
       </div>
 

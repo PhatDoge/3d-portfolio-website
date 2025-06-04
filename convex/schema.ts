@@ -6,11 +6,7 @@ export default defineSchema({
     name: v.string(),
     description: v.string(),
   }),
-  introduction: defineTable({
-    header: v.string(),
-    description: v.string(),
-    title: v.string(),
-  }),
+
   technologies: defineTable({
     name: v.string(),
     icon: v.string(), // URL or path to the icon
@@ -44,6 +40,9 @@ export default defineSchema({
     ExperienceTitle: v.optional(v.string()),
     ExperienceHeader: v.optional(v.string()),
     ExperienceDescription: v.optional(v.string()),
+    skillTitle: v.optional(v.string()),
+    skillHeader: v.optional(v.string()),
+    skillDescription: v.optional(v.string()),
   }),
 
   workExperience: defineTable({

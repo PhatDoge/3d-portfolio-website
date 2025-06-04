@@ -12,12 +12,12 @@ const getSidebarLinks = (t: any) => [
     path: "/user",
     icon: "/assets/dashboard/programmer.png",
   },
-  {
-    id: "introduction",
-    title: t.introduction,
-    path: "/create-introduction",
-    icon: "/assets/dashboard/introduction.png",
-  },
+  // {
+  //   id: "introduction",
+  //   title: t.introduction,
+  //   path: "/create-introduction",
+  //   icon: "/assets/dashboard/introduction.png",
+  // },
   {
     id: "skills",
     title: t.skills,
@@ -34,6 +34,11 @@ const getSidebarLinks = (t: any) => [
         id: "skill-list",
         title: t.allSkills,
         path: "/skill-list",
+      },
+      {
+        id: "skill-details",
+        title: t.skillDetails,
+        path: "/skill-details",
       },
     ],
   },

@@ -13,6 +13,9 @@ export const createProjectDetails = mutation({
     ExperienceTitle: v.optional(v.string()),
     ExperienceHeader: v.optional(v.string()),
     ExperienceDescription: v.optional(v.string()),
+    skillTitle: v.optional(v.string()),
+    skillHeader: v.optional(v.string()),
+    skillDescription: v.optional(v.string()),
   },
   handler: async (
     ctx,
@@ -26,6 +29,9 @@ export const createProjectDetails = mutation({
       ExperienceTitle,
       ExperienceHeader,
       ExperienceDescription,
+      skillTitle,
+      skillHeader,
+      skillDescription,
     }
   ) => {
     try {
@@ -39,6 +45,9 @@ export const createProjectDetails = mutation({
         ExperienceTitle,
         ExperienceHeader,
         ExperienceDescription,
+        skillTitle,
+        skillHeader,
+        skillDescription,
       });
       return newId;
     } catch (error) {
@@ -76,6 +85,9 @@ export const updateProjectDetails = mutation({
     ExperienceTitle: v.optional(v.string()),
     ExperienceHeader: v.optional(v.string()),
     ExperienceDescription: v.optional(v.string()),
+    skillTitle: v.optional(v.string()),
+    skillHeader: v.optional(v.string()),
+    skillDescription: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...updates }) => {
     try {

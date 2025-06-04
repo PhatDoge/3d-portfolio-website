@@ -13,7 +13,7 @@ import {
 } from "./components";
 import Dashboard, { LanguageProvider } from "./components/backend/Dashboard";
 import WorkExperience from "./components/backend/Experience";
-import Introduction from "./components/backend/Introduction";
+// import Introduction from "./components/backend/Introduction";
 import ProjectsList from "./components/backend/ProjectsList";
 import Projects from "./components/backend/Projects";
 import LeftSidebar from "./components/backend/Sidebar";
@@ -29,6 +29,7 @@ import TechnologyManagement from "./components/backend/Technology";
 import ServiceDetails from "./components/backend/ServiceDetails";
 import ProjectDetails from "./components/backend/ProjectDetails";
 import ExperienceDetails from "./components/backend/ExperienceDetails";
+import SkillDetails from "./components/backend/SkillDetails";
 // import Documents from "./components/backend/Documents";
 
 // Layout component for dashboard routes
@@ -140,14 +141,14 @@ const App = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/create-introduction"
           element={
             <DashboardLayout>
               <Introduction />
             </DashboardLayout>
           }
-        />
+        /> */}
         <Route
           path="/create-skill"
           element={
@@ -220,6 +221,14 @@ const App = () => {
           element={
             <DashboardLayout>
               <ExperienceDetails />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/skill-details"
+          element={
+            <DashboardLayout>
+              <SkillDetails />
             </DashboardLayout>
           }
         />
