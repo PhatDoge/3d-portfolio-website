@@ -10,8 +10,8 @@ const OtpModal = ({ isOpen, onClose }) => {
   const validatePasskey = (e) => {
     e.preventDefault();
 
-    // For now, use a simple comparison - you can add encryption later
-    const adminPasskey = import.meta.env?.VITE_ADMIN_PASSKEY || "123456"; // fallback
+    // simple comparison - you can add encryption later
+    const adminPasskey = import.meta.env?.VITE_ADMIN_PASSKEY;
 
     if (passkey === adminPasskey) {
       try {

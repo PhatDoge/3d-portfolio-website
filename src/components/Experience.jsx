@@ -35,7 +35,6 @@ const earlyTextVariant = (delay = 0) => {
 
 // Helper function to format date range - handles both old and new data formats
 const formatDateRange = (experience) => {
-  // If the old dateRange field exists, use it (backward compatibility)
   if (experience.dateRange) {
     return experience.dateRange;
   }
@@ -159,7 +158,7 @@ const Experience = () => {
         viewport={{
           once: true,
           amount: 0.01, // Trigger when only 1% is visible
-          margin: "0px 0px -200px 0px", // Start animation 200px before element enters viewport
+          margin: "0px 0px -200px 0px", // Start animation 200px before element enters viewport, maybe change later
         }}
       >
         <p className={`${styles.sectionSubText} text-center`}>

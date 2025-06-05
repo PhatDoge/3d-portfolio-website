@@ -20,17 +20,14 @@ import { useContext } from "react";
 import { LanguageContext } from "./Dashboard";
 import { skillDetailsTranslations } from "./translations";
 
-// Separate form component that only renders when data is available
 const SkillDetailsForm = ({
   data,
   createProjectDetails,
   updateProjectDetails,
 }) => {
-  // Move context usage inside the component
   const { language } = useContext(LanguageContext);
   const t = skillDetailsTranslations[language];
 
-  // Move schema definition inside component so it has access to translations
   const formSchema = z.object({
     title: z
       .string()
@@ -62,14 +59,13 @@ const SkillDetailsForm = ({
     try {
       const recordId = data[0]?._id;
 
-      // Map the form values to match your schema field names
       const mappedValues = {
         skillTitle: values.title,
         skillHeader: values.header,
         skillDescription: values.description,
       };
 
-      let id;
+      let id: any;
       if (recordId) {
         // Update existing record
         id = await updateProjectDetails({
@@ -197,7 +193,6 @@ const SkillDetailsForm = ({
   );
 };
 
-// Main component that handles data loading
 const SkillDetails = () => {
   // Move context usage inside component
   const { language } = useContext(LanguageContext);
@@ -211,7 +206,6 @@ const SkillDetails = () => {
     api.projectdetails.updateProjectDetails
   );
 
-  // Show loading state while data is being fetched
   if (data === undefined) {
     return (
       <div className="w-full mt-5 flex items-center justify-center">

@@ -1,12 +1,13 @@
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, useState, useEffect } from "react";
 import { styles } from "../styles";
 import { github } from "../assets";
 import { SectionWrapper } from "../hoc";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ExternalLinkIcon } from "lucide-react";
+import PropTypes from "prop-types";
 
 // Moved animation variants outside component to prevent recreation
 const fadeInVariants = {
@@ -84,6 +85,231 @@ const getTagColor = (tagName, index) => {
 // Memoized Tilt options to prevent recreation
 const tiltOptions = { max: 25, scale: 1.02, speed: 450 };
 
+// Enhanced Loading Section
+const LoadingSection = () => (
+  <section className="min-h-screen w-full relative flex flex-col items-center justify-center">
+    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-blue-900/5 pointer-events-none"></div>
+
+    <motion.div
+      className="text-center p-8 mb-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Animated loading icon */}
+      <motion.div
+        className="w-20 h-20 mx-auto mb-8 flex items-center justify-center"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+      </motion.div>
+
+      {/* Animated title */}
+      <motion.h2
+        className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
+        animate={{ opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        Cargando Proyectos
+      </motion.h2>
+
+      {/* Animated description */}
+      <motion.p
+        className="text-gray-400 text-lg mb-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+      >
+        Preparando mi portafolio de proyectos...
+      </motion.p>
+
+      {/* Animated progress bar */}
+      <div className="w-80 h-2 bg-gray-700 rounded-full mx-auto overflow-hidden mb-8">
+        <motion.div
+          className="h-full bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 rounded-full"
+          initial={{ width: "0%" }}
+          animate={{ width: "100%" }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full"></div>
+    </motion.div>
+
+    {/* Skeleton project cards */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 justify-center items-start max-w-7xl mx-auto px-4">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <motion.div
+          key={i}
+          className="w-full p-4"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: i * 0.1, duration: 0.5 }}
+        >
+          <div className="relative">
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-xl"
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+            />
+
+            <div className="relative backdrop-blur-xl bg-gradient-to-br from-gray-800/40 via-slate-800/30 to-gray-900/40 border border-gray-600/30 rounded-2xl overflow-hidden shadow-xl">
+              {/* Image skeleton */}
+              <motion.div
+                className="w-full h-[280px] bg-gradient-to-br from-gray-700/50 to-gray-800/50"
+                animate={{ opacity: [0.4, 0.8, 0.4] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-pink-900/5 to-blue-900/10"></div>
+              </motion.div>
+
+              {/* Content skeleton */}
+              <div className="p-6 space-y-4">
+                <div className="space-y-3">
+                  <motion.div
+                    className="h-4 bg-gray-600/50 rounded-lg"
+                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: i * 0.15,
+                    }}
+                  />
+                  <motion.div
+                    className="h-4 bg-gray-600/30 rounded-lg w-4/5"
+                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: i * 0.15 + 0.2,
+                    }}
+                  />
+                  <motion.div
+                    className="h-4 bg-gray-600/20 rounded-lg w-3/5"
+                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: i * 0.15 + 0.4,
+                    }}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  {[1, 2, 3].map((j) => (
+                    <motion.div
+                      key={j}
+                      className="h-6 w-16 bg-gray-600/40 rounded-lg"
+                      animate={{ opacity: [0.3, 0.7, 0.3] }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        delay: i * 0.1 + j * 0.1,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </section>
+);
+
+// Enhanced Empty State component
+const EmptyStateSection = () => (
+  <section
+    id="projects"
+    className="min-h-screen w-full relative flex flex-col items-center justify-center"
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-blue-900/5 pointer-events-none"></div>
+
+    <motion.div
+      className="text-center p-8 max-w-2xl mx-auto"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Animated project icon */}
+      <motion.div
+        className="w-32 h-32 mx-auto mb-8 flex items-center justify-center"
+        animate={{
+          rotate: [0, -5, 5, -5, 0],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          repeatDelay: 2,
+        }}
+      >
+        <div className="w-24 h-24 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-purple-400/30">
+          <motion.span
+            className="text-6xl"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            💼
+          </motion.span>
+        </div>
+      </motion.div>
+
+      {/* Animated title */}
+      <motion.h2
+        className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
+        ¡Proyectos en Camino!
+      </motion.h2>
+
+      {/* Animated description */}
+      <motion.p
+        className="text-gray-400 text-xl mb-8 leading-relaxed"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+      >
+        Pronto habra proyectos para mostrar!
+      </motion.p>
+
+      <motion.p
+        className="text-gray-500 text-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+      >
+        ¡Vuelve pronto para ver mi trabajo!
+      </motion.p>
+
+      {/* Animated dots */}
+      <div className="flex justify-center gap-3 mt-8">
+        {[1, 2, 3, 4].map((i) => (
+          <motion.div
+            key={i}
+            className="w-4 h-4 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              delay: i * 0.2,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="w-32 h-1 bg-gradient-to-r from-purple-400 to-blue-400 mx-auto rounded-full mt-8"></div>
+    </motion.div>
+  </section>
+);
+
 // Memoized ProjectCard component
 const ProjectCard = memo(
   ({
@@ -139,8 +365,8 @@ const ProjectCard = memo(
         viewport={{ once: true, amount: 0.2 }}
         className="w-full p-4 group"
         whileHover={{ y: -8 }}
-        transition={{ duration: 0.15, ease: "easeOut" }} // Reduced duration for snappier hover
-        style={{ willChange: "transform" }} // Hint browser for GPU acceleration
+        transition={{ duration: 0.15, ease: "easeOut" }}
+        style={{ willChange: "transform" }}
       >
         <div className="relative" style={{ willChange: "transform" }}>
           {/* Simplified glowing border - removed complex animation */}
@@ -162,7 +388,7 @@ const ProjectCard = memo(
                 alt={cardTitle}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 onError={handleImageError}
-                loading="lazy" // Added lazy loading
+                loading="lazy"
                 style={{ willChange: "transform" }}
               />
 
@@ -247,112 +473,70 @@ const ProjectCard = memo(
   }
 );
 
+ProjectCard.propTypes = {
+  _id: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  cardTitle: PropTypes.string.isRequired,
+  cardDescription: PropTypes.string.isRequired,
+  githubLink: PropTypes.string,
+  websiteLink: PropTypes.string,
+  tag: PropTypes.string,
+  imageUrl: PropTypes.string,
+};
+
 ProjectCard.displayName = "ProjectCard";
-
-// Memoized LoadingCard component
-const LoadingCard = memo(({ index }) => {
-  const fadeInCustom = useMemo(
-    () => ({
-      type: "spring",
-      delay: index * 0.15,
-      duration: 0.6,
-    }),
-    [index]
-  );
-
-  return (
-    <motion.div
-      custom={fadeInCustom}
-      variants={fadeInVariants}
-      initial="hidden"
-      animate="show"
-      className="w-full p-4"
-    >
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse rounded-2xl"></div>
-
-        <div className="backdrop-blur-xl bg-gradient-to-br from-gray-800/40 via-slate-800/30 to-gray-900/40 border border-gray-600/30 rounded-2xl overflow-hidden shadow-xl">
-          <div className="w-full h-[280px] bg-gradient-to-br from-gray-700/50 to-gray-800/50 animate-pulse relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-pink-900/5 to-blue-900/10"></div>
-          </div>
-
-          <div className="p-6 space-y-4">
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-600/50 rounded-lg animate-pulse"></div>
-              <div className="h-4 bg-gray-600/30 rounded-lg animate-pulse w-4/5"></div>
-              <div className="h-4 bg-gray-600/20 rounded-lg animate-pulse w-3/5"></div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="h-6 w-16 bg-gray-600/40 rounded-lg animate-pulse"></div>
-              <div className="h-6 w-20 bg-gray-600/30 rounded-lg animate-pulse"></div>
-              <div className="h-6 w-14 bg-gray-600/20 rounded-lg animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-});
-
-LoadingCard.displayName = "LoadingCard";
-
-// Memoized EmptyState component
-const EmptyState = memo(() => (
-  <motion.div
-    custom={{ type: "spring", delay: 0, duration: 0.6 }}
-    variants={fadeInVariants}
-    initial="hidden"
-    whileInView="show"
-    viewport={{ once: true, amount: 0.2 }}
-    className="col-span-full text-center py-20"
-  >
-    <div className="backdrop-blur-xl bg-gradient-to-br from-gray-800/40 via-slate-800/30 to-gray-900/40 border border-gray-600/30 rounded-2xl p-12 shadow-2xl max-w-md mx-auto">
-      <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-        <svg
-          className="w-8 h-8 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-          />
-        </svg>
-      </div>
-      <p className="text-gray-300 text-xl font-medium mb-2">
-        No hay proyectos disponibles aún.
-      </p>
-      <p className="text-gray-400 text-sm">
-        ¡Agrega tu primer proyecto para comenzar!
-      </p>
-    </div>
-  </motion.div>
-));
-
-EmptyState.displayName = "EmptyState";
 
 const Works = () => {
   // Fetch projects from Convex
   const projects = useQuery(api.projects.getProjects);
   const projectsDetails = useQuery(api.projectdetails.getProjectDetails);
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [showEmptyState, setShowEmptyState] = useState(false);
 
   const details = projectsDetails?.[0];
 
-  // Memoize loading skeleton array
-  const loadingCards = useMemo(
-    () =>
-      Array.from({ length: 6 }, (_, index) => (
-        <LoadingCard key={`loading-${index}`} index={index} />
-      )),
-    []
-  );
+  // Enhanced data loading effect with timeout for empty state
+  useEffect(() => {
+    if (projectsDetails && projects !== undefined) {
+      if (projects.length > 0) {
+        // Use requestAnimationFrame for smoother transition
+        const timer = requestAnimationFrame(() => {
+          setIsDataReady(true);
+        });
+        return () => cancelAnimationFrame(timer);
+      } else {
+        // Show empty state after a brief delay
+        const emptyTimer = setTimeout(() => {
+          setShowEmptyState(true);
+        }, 1500);
+        return () => clearTimeout(emptyTimer);
+      }
+    }
+  }, [projectsDetails, projects]);
 
+  // Loading state - show while data is undefined
+  if (
+    !projectsDetails ||
+    projects === undefined ||
+    (!isDataReady && !showEmptyState)
+  ) {
+    return <LoadingSection />;
+  }
+
+  // Empty state - show when no projects are available
+  if (projects.length === 0 && showEmptyState) {
+    return <EmptyStateSection />;
+  }
+
+  // Main content with entrance animation
   return (
-    <section id="projects" className="min-h-screen w-full relative">
+    <motion.section
+      id="projects"
+      className="min-h-screen w-full relative"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/5 via-transparent to-blue-900/5 pointer-events-none"></div>
 
@@ -388,18 +572,19 @@ const Works = () => {
         </motion.p>
       </div>
 
-      <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 justify-center items-start relative z-10">
-        {projects === undefined ?
-          loadingCards
-        : projects.length === 0 ?
-          <EmptyState />
-        : projects.map((project, index) => (
-            <ProjectCard key={project._id} index={index} {...project} />
-          ))
-        }
-      </div>
-    </section>
+      <motion.div
+        className="mt-20 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 justify-center items-start relative z-10"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        {projects.map((project, index) => (
+          <ProjectCard key={project._id} index={index} {...project} />
+        ))}
+      </motion.div>
+    </motion.section>
   );
 };
 
-export default SectionWrapper(Works, "");
+const WrappedContact = SectionWrapper(Works, "");
+export default WrappedContact;

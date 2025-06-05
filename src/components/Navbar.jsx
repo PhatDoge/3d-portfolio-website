@@ -158,11 +158,9 @@ const Navbar = () => {
               />
             </div>
             <div className="text-white text-[20px] font-bold cursor-pointer flex items-center">
-              {/* Always show "Alonso" on all screen sizes */}
               <span className="bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
                 Alonso
               </span>
-              {/* Only show separator and "Castillo" on large screens */}
               <span className="hidden lg:block text-purple-400">
                 &nbsp;|&nbsp;
               </span>

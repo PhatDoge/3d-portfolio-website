@@ -1,12 +1,11 @@
+import { useQuery } from "convex/react";
 import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import ServiceCard from "./ServiceCard";
-import { styles } from "../styles";
-import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import ServiceCard from "./ServiceCard";
 
 interface Service {
   _id: string;
@@ -143,7 +142,7 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
 
   // Early returns
   if (!services || services.length === 0) {
-    return <EmptyServicesState />;
+    return null;
   }
 
   const getCategoryDisplayName = (category: string): string =>
@@ -195,26 +194,26 @@ const AllServices: React.FC<AllServicesProps> = ({ services }) => {
 };
 
 // Extracted Components
-const EmptyServicesState: React.FC = () => (
-  <div className="empty-services">
-    <div className="empty-services-card">
-      <p className="empty-services-text">No hay servicios disponibles.</p>
-      <a href="/admin/services" className="add-services-btn">
-        <span>Agregar servicios</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-      </a>
-    </div>
-  </div>
-);
+// const EmptyServicesState: React.FC = () => (
+//   <div className="empty-services">
+//     <div className="empty-services-card">
+//       <p className="empty-services-text">No hay servicios disponibles.</p>
+//       <a href="/admin/services" className="add-services-btn">
+//         <span>Agregar servicios</span>
+//         <svg
+//           width="16"
+//           height="16"
+//           viewBox="0 0 24 24"
+//           fill="none"
+//           stroke="currentColor"
+//           strokeWidth="2"
+//         >
+//           <path d="M12 5v14M5 12h14" />
+//         </svg>
+//       </a>
+//     </div>
+//   </div>
+// );
 
 interface FilterButtonsProps {
   categories: string[];

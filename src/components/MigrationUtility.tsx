@@ -4,13 +4,17 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "convex/_generated/api";
 
 // Updated technologies with correct paths - now using public folder
+//if you see import errors just ignore them lol its a issue with tsx and jsx compatibility i think
+
+//* * Important!! this folder must be on public since vercel doesnt recognize src/folders..
+
 const existingTechnologies = [
   {
     name: "HTML 5",
-    icon: "/tech/html.png", // Changed from /src/assets/tech/
+    icon: "/tech/html.png",
   },
   {
     name: "CSS 3",

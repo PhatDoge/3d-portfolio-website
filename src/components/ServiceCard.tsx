@@ -54,7 +54,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     .map((tech) => tech.trim())
     .filter((tech) => tech);
 
-  // Get gradient background based on index for variety
   const getCardGradient = (cardIndex: number) => {
     const gradients = [
       "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.05) 50%, rgba(59, 130, 246, 0.1) 100%)",
@@ -119,7 +118,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 * index }}
-      className="w-full h-full" // Changed: removed max-width and made it fully responsive
+      className="w-full h-full"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -187,7 +186,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               />
               <div className="relative w-full h-full p-1.5 sm:p-2 rounded-xl">
                 {" "}
-                {/* p-2 sm:p-3 -> p-1.5 sm:p-2 (icon padding) */}{" "}
+                {/* p-2 sm:p-3 -> p-1.5 sm:p-2 (icon padding) */}
                 <img
                   src={iconUrl || "/default-service-icon.png"}
                   alt={title}
@@ -200,8 +199,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               </div>
             </motion.div>
             <h3 className="text-white text-base sm:text-lg font-bold mb-1 leading-tight tracking-tight">
-              {" "}
-              {/* text-lg sm:text-xl -> text-base sm:text-lg (title font size) */}{" "}
+              {/* text-lg sm:text-xl -> text-base sm:text-lg (title font size) */}
               {title}
             </h3>
             {subtitle && (
