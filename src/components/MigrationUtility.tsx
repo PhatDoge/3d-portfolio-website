@@ -60,7 +60,6 @@ const existingTechnologies = [
     name: "Docker",
     icon: "/tech/docker.png",
   },
-  // Add more technologies as needed with the correct /tech/ path
 ];
 
 const MigrationUtility = () => {
@@ -140,11 +139,6 @@ const MigrationUtility = () => {
               <li>1. Move all icons from src/assets/tech/ to public/tech/</li>
               <li>2. All icon paths are now set to /tech/</li>
               <li>3. Run this migration once to populate your database</li>
-              <li>4. After migration, you can delete this component</li>
-              <li>
-                5. Use the Technology Management dashboard to manage your tech
-                stack
-              </li>
             </ol>
           </div>
         </CardContent>

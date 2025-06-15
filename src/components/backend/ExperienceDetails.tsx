@@ -34,7 +34,6 @@ const ImageTooltip = ({ imageUrl, children }) => {
       >
         {children}
       </div>
-
       {isVisible && imageUrl && (
         <div className="fixed top-4 right-4 z-50 pointer-events-none">
           <div className="relative">
