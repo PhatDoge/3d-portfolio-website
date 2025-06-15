@@ -1,10 +1,15 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
   "redirects": [
     {
       "source": "/google.com",
       "destination": "/",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!google\\.com$).*)",
+      "destination": "/"
     }
   ]
 }
