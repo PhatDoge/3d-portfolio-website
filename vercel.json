@@ -2,7 +2,7 @@
   "rewrites": [{ "source": "/(.*)", "destination": "/" }],
   "redirects": [
     {
-      "source": "/hidden-page",
+      "source": "/google.com",
       "destination": "/",
       "permanent": false
     }
